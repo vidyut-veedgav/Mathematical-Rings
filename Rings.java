@@ -20,40 +20,30 @@ public final class Rings<T> {
                 foundAny = true;
                 result = element;
             } else {
-                result = accumulator(result, element);
+                result = accumulator.apply(result, element);
             }
         }
-        return null;
+        return result;
     }
 
-    private static <T> T accumulator(T result, T element) {
-        
-        OperationType o_type;
+    public static final <T> T sum(List<T> args, Ring<T> ring) {
 
-        switch (o_type) {
-            case ZERO:
-                //do something
-            case IDENTITY:
-                //do something
-            case SUM:
-                //do something
-            case PRODUCT:
-                //do something
-        }
+        return reduce(args, ring.zero(), (x, y) -> ring.sum(x, y));
+    }
+
+    public static final <T> T product(List<T> args, Ring<T> ring) {
+
+        return reduce(args, ring.zero(), (x, y) -> ring.product(x, y));
     }
 
     public static void main(String[] args) {
         
-        List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8));
+        List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
         IntegerRing intRing = new IntegerRing();
-        BinaryOperator<Integer> binOpp = new BinaryOperator<>() {
+        Integer sum_result = sum(list, intRing);
+        System.out.println(sum_result);
 
-            @Override
-            public Integer apply(Integer t, Integer u) {
-                return t + u;
-            }
-            
-        };
-        
+        Integer product_result = product(list, intRing);
+        System.out.println(product_result);
     }
 }

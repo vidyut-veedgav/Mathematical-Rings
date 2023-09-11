@@ -1,3 +1,5 @@
+package RingPackage;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,18 +29,16 @@ public final class Rings<T> {
     }
 
     public static final <T> T sum(List<T> args, Ring<T> ring) {
-
         return reduce(args, ring.zero(), (x, y) -> ring.sum(x, y));
     }
 
     public static final <T> T product(List<T> args, Ring<T> ring) {
-
         return reduce(args, ring.zero(), (x, y) -> ring.product(x, y));
     }
 
     public static void main(String[] args) {
         
-        List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+        List<Integer> list = new ArrayList<>(Arrays.asList());
         IntegerRing intRing = new IntegerRing();
         Integer sum_result = sum(list, intRing);
         System.out.println(sum_result);

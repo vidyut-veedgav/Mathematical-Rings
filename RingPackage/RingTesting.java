@@ -8,12 +8,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Vidyut Veedgav
+ * a tester class for the Ring classes
+ */
 public class RingTesting {
 
-    List<Integer> intList;
+    //lists that store each of the number types
+    List<Integer> intList; 
     List<BigInteger> bigIntList;
     List<Double> doubleList = new ArrayList<>(Arrays.asList());
 
+    /**
+     * testing the sum method
+     */
     @Test
     public void testSum() {
 
@@ -80,6 +88,9 @@ public class RingTesting {
         assertEquals(Double.valueOf(18.08), Rings.sum(doubleList, doubleRing));
     }
 
+    /**
+     * testing the product method
+     */
     @Test
     public void testProduct() {
         //testing for the Integer type

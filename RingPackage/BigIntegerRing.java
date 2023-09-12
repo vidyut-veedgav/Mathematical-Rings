@@ -8,21 +8,33 @@ import java.math.BigInteger;
  */
 public class BigIntegerRing implements Ring<BigInteger> {
 
+    /**
+     * overriding the zero method
+     */
     @Override
     public BigInteger zero() {
         return BigInteger.ZERO;
     }
 
+    /**
+     * overridng the identity
+     */
     @Override
     public BigInteger identity() {
         return BigInteger.ONE;
     }
 
+    /**
+     * overriding the sum method
+     */
     @Override
     public BigInteger sum(BigInteger x, BigInteger y) {
         return x.add(y);
     }
 
+    /**
+     * overriding the product method 
+     */
     @Override
     public BigInteger product(BigInteger x, BigInteger y) {
         return x.multiply(y);

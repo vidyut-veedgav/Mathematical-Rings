@@ -19,6 +19,11 @@ public final class Rings<T> {
      */
     public static <T> T reduce(List<T> args, T zero, BinaryOperator<T> accumulator) {
 
+        //error handling: checks if the inputs are null and throws an exception depending on the validity of the preconditions
+        if (args == null || accumulator == null) {
+            throw new IllegalArgumentException("Please enter valid argments");
+        }
+
         boolean foundAny = false; //checks if the list contains elements
         T result = zero; //initializes the result as zero
 
@@ -43,7 +48,12 @@ public final class Rings<T> {
      * @param ring
      * @return
      */
-    public static final <T> T sum(List<T> args, Ring<T> ring) {
+    protected static final <T> T sum(List<T> args, Ring<T> ring) {
+
+        //error handling: asserts that the arguments must not be null
+        assert args != null : "Argument 'args' must not be null.";
+        assert ring != null : "Argument 'ring' must not be null.";
+
         return reduce(args, ring.zero(), (x, y) -> ring.sum(x, y));
     }
 
@@ -54,7 +64,12 @@ public final class Rings<T> {
      * @param ring
      * @return
      */
-    public static final <T> T product(List<T> args, Ring<T> ring) {
+    protected static final <T> T product(List<T> args, Ring<T> ring) {
+        
+        //error handling: asserts that the arguments must not be null
+        assert args != null : "Argument 'args' must not be null.";
+        assert ring != null : "Argument 'ring' must not be null.";
+
         return reduce(args, ring.zero(), (x, y) -> ring.product(x, y));
     }
 }

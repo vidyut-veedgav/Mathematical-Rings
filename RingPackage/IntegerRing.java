@@ -1,5 +1,7 @@
 package RingPackage;
 
+import java.util.Objects;
+
 /**
  * @author Vidyut Veedgav
  * a class to demonstrate the concept of Rings on Integers
@@ -27,6 +29,10 @@ public class IntegerRing implements Ring<Integer>{
      */
     @Override
     public Integer sum(Integer x, Integer y) {
+        //null checks
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+
         return x + y;
     }
 
@@ -35,6 +41,10 @@ public class IntegerRing implements Ring<Integer>{
      */
     @Override
     public Integer product(Integer x, Integer y) {
+        //null checks
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+        
         return x * y;
     }
 }

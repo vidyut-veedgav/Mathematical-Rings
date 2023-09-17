@@ -1,6 +1,7 @@
 package RingPackage;
 
 import java.math.BigInteger;
+import java.util.Objects;
 
 /**
  * @author Vidyut Veedgav
@@ -29,6 +30,10 @@ public class BigIntegerRing implements Ring<BigInteger> {
      */
     @Override
     public BigInteger sum(BigInteger x, BigInteger y) {
+        //null checks
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+
         return x.add(y);
     }
 
@@ -37,6 +42,10 @@ public class BigIntegerRing implements Ring<BigInteger> {
      */
     @Override
     public BigInteger product(BigInteger x, BigInteger y) {
+        //null checks
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+        
         return x.multiply(y);
     }
 }

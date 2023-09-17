@@ -21,7 +21,7 @@ public final class Rings<T> {
 
         //error handling: checks if the inputs are null and throws an exception depending on the validity of the preconditions
         if (args == null || accumulator == null || zero == null) {
-            throw new IllegalArgumentException("Arguments must not be null");
+            throw new NullPointerException("Arguments must not be null");
         }
 
         boolean foundAny = false; //checks if the list contains elements
@@ -29,6 +29,11 @@ public final class Rings<T> {
 
         //loops through elements in the input list
         for (T element : args) {
+
+            //Null check
+            if (element == null) {
+                throw new NullPointerException("Elements in the args list must be non-null"); 
+            }
 
             //checks if there are elements are present and converts the element to the result
             if (!foundAny) {
@@ -48,7 +53,7 @@ public final class Rings<T> {
      * @param ring
      * @return
      */
-    protected static final <T> T sum(List<T> args, Ring<T> ring) {
+    protected static <T> T sum(List<T> args, Ring<T> ring) {
 
         //error handling: asserts that the arguments must not be null
         assert args != null : "Arguments must not be null.";
@@ -64,12 +69,12 @@ public final class Rings<T> {
      * @param ring
      * @return
      */
-    protected static final <T> T product(List<T> args, Ring<T> ring) {
+    protected static <T> T product(List<T> args, Ring<T> ring) {
 
         //error handling: asserts that the arguments must not be null
         assert args != null : "Argument 'args' must not be null.";
         assert ring != null : "Argument 'ring' must not be null.";
 
-        return reduce(args, ring.zero(), (x, y) -> ring.product(x, y));
+        return reduce(args, ring.identity(), (x, y) -> ring.product(x, y));
     }
 }

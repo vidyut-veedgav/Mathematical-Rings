@@ -1,5 +1,7 @@
 package RingPackage;
 
+import java.util.Objects;
+
 /**
  * @author Vidyut Veedgav
  * a class to demonstrate the concept of Rings on Doubles
@@ -27,6 +29,10 @@ public class DoubleRing implements Ring<Double>{
      */
     @Override
     public Double sum(Double x, Double y) {
+        //null checks
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+
         return Double.valueOf(x + y);
     }
 
@@ -35,6 +41,10 @@ public class DoubleRing implements Ring<Double>{
      */
     @Override
     public Double product(Double x, Double y) {
+        //null checks
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+        
         return Double.valueOf(x * y);
     }
 }

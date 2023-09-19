@@ -1,12 +1,14 @@
 package RingPackage;
 
+import java.util.Objects;
+
 /**
  * @author Vidyut Veedgav
  * a class to demonstrate the concept of Rings on Polynomials
  */
 public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
 
-    private Ring<T> ring;
+    private Ring<T> ring; //a private field storing a ring 
 
     private PolynomialRing(Ring<T> ring) {
         this.ring = ring;
@@ -18,8 +20,7 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
     }
     @Override
     public Polynomial<T> zero() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'zero'");
+        return null;
     }
 
     @Override

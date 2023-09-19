@@ -68,27 +68,83 @@ public final class Polynomial<T> implements Iterable<T> {
         return coefficients.listIterator(i);
     }
 
+    /**
+     * a method to add two polynomials together
+     * Example:
+     * a: (1, 2, 3)
+     * b: (4, 5, 6)
+     * a + b = (5, 7, 9)
+     * @param other
+     * @param ring
+     * @return
+     */
     public Polynomial<T> plus(Polynomial<T> other, Ring<T> ring) {
 
-        //switch case to decide which add operation?
+        List<T> a = this.getCoefficients();
+        List<T> b = other.getCoefficients();
 
-        List<T> list = new ArrayList<>();
-        for (T element : this) {
-            //add the lists per the spec sheet
+        List<T> sum_list = longerList(a, b);
+
+        ListIterator<T> aIter; 
+        ListIterator<T> bIter;
+
+        for (int i = 0; i < sum_list.size(); i++) {
+            aIter = a.listIterator(i);
+            bIter = b.listIterator(i);
+
+            if (!aIter.hasNext() || !bIter.hasNext()) {
+                s
+            }
         }
-        return new Polynomial<>(list);
+        Polynomial<T> sum = new Polynomial<>(sum_list);
+        return null;
     }
 
+    /**
+     * a method to multiply two polynomials together
+     * @param other
+     * @param ring
+     * @return
+     */
     public Polynomial<T> times(Polynomial<T> other, Ring<T> ring) {
-        //implements the multiplication functionality
-        return null;
+        
+        int productLength = this.getCoefficients().size() + other.getCoefficients().size() + 1;
+        List<T> p_coefficients = new ArrayList<>(productLength);
+        List<T> temp;
+        ListIterator<T> pIter;
+        ListIterator<T> qIter;
+        for (int i = 0; i < productLength; i++) {
+
+            pIter = this.listIterator(i);
+            qIter = other.listIterator(0);
+            temp = new ArrayList<>();
+
+            while (true) {
+
+                temp.add(ring.product(pIter.next(), qIter.previous()));
+                if (!pIter.hasNext() || !pIter.hasPrevious()) {
+                    break;
+                }
+            }
+            p_coefficients.add(Rings.sum(temp, ring));
+            i++;
+        }        
+
+        Polynomial<T> product = new Polynomial<>(p_coefficients);
+        return product;
     }
 
     public static void main(String[] args) {
         
-        List<Integer> coefficients = List.of(1, 2, 3, 4, 5, 6,7, 8, 9, 10);
-        Polynomial<Integer> poly = new Polynomial<>(coefficients);
+        List<Integer> a = List.of(1, 2, 3, 4);
+        List<Integer> b = List.of(5, 6, 7);
+
+        Polynomial<Integer> polyA = new Polynomial<>(a);
+        Polynomial<Integer> polyB = new Polynomial<>(b);
+
+        Ring<Integer> intRing = new IntegerRing();
+
+        System.out.println((polyA.times(polyB, intRing)));
         
-        poly.listIterator(0);
     }
 }

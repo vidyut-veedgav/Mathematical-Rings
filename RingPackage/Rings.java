@@ -1,6 +1,7 @@
 package RingPackage;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BinaryOperator;
 
 /**
@@ -53,11 +54,11 @@ public final class Rings<T> {
      * @param ring
      * @return
      */
-    protected static <T> T sum(List<T> args, Ring<T> ring) {
+    public static <T> T sum(List<T> args, Ring<T> ring) {
 
-        //error handling: asserts that the arguments must not be null
-        assert args != null : "Arguments must not be null.";
-        assert ring != null : "Arguments must not be null.";
+        //null checks
+        Objects.requireNonNull(args);
+        Objects.requireNonNull(ring);
 
         return reduce(args, ring.zero(), (x, y) -> ring.sum(x, y));
     }
@@ -69,11 +70,11 @@ public final class Rings<T> {
      * @param ring
      * @return
      */
-    protected static <T> T product(List<T> args, Ring<T> ring) {
+    public static <T> T product(List<T> args, Ring<T> ring) {
 
-        //error handling: asserts that the arguments must not be null
-        assert args != null : "Argument 'args' must not be null.";
-        assert ring != null : "Argument 'ring' must not be null.";
+        //null checks
+        Objects.requireNonNull(args);
+        Objects.requireNonNull(ring);
 
         return reduce(args, ring.identity(), (x, y) -> ring.product(x, y));
     }

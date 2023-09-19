@@ -76,17 +76,17 @@ public final class Polynomial<T> implements Iterable<T> {
      * a + b = (5, 7, 9)
      * @param other
      * @param ring
-     * @return
+     * @return the sum
      */
     public Polynomial<T> plus(Polynomial<T> other, Ring<T> ring) {
 
-        List<T> a = this.getCoefficients();
-        List<T> b = other.getCoefficients();
+        List<T> a = this.getCoefficients(); //the first polynomial
+        List<T> b = other.getCoefficients(); //the second polynomial
 
-        int maxLength = Math.max(a.size(), b.size());
+        int maxLength = Math.max(a.size(), b.size()); //computing the length of the longer list
+        List<T> sum_list = new ArrayList<>(maxLength); //a new list storing the sum values
 
-        List<T> sum_list = new ArrayList<>(maxLength);
-
+        //iterating until the longer list's index is reached
         for (int i = 0; i < maxLength; i++) {
             T a_coefficient = (i < a.size()) ? a.get(i) : ring.zero();
             T b_coefficient = (i < b.size()) ? b.get(i) : ring.zero();
@@ -98,9 +98,19 @@ public final class Polynomial<T> implements Iterable<T> {
 
     /**
      * a method to multiply two polynomials together
+     * Example:
+     * a: (1, 2, 3)
+     * b: (4, 5, 6)
+     * a * b = (1 * 4),
+     *         ((1 * 5) + (2 * 4)),
+     *         ((1 * 6) + (2 * 5) + (3 * 4)),
+     *         ((1 * 0) + (2 * 6) + (3 * 5) + (0 * 4)),
+     *         ((1 * 0) + (2 * 0), (3 * 6) + (0 * 5) + (0 * 4))
+     * 
+     *       = (4, 13, 28, 27, 18)
      * @param other
      * @param ring
-     * @return
+     * @return the product
      */
     public Polynomial<T> times(Polynomial<T> other, Ring<T> ring) {
         
@@ -109,14 +119,13 @@ public final class Polynomial<T> implements Iterable<T> {
 
         int productLength = a.size() + b.size() - 1;
         List<T> p_coefficients = new ArrayList<>(productLength);
-       
         for (int i = 0; i < productLength; i++) {
 
             T product = ring.zero();
             for (int j = 0; j <= i; j++) {
 
                 if (j < a.size() && (i - j) < b.size()) {
-                    T a_coefficient = a.get(i);
+                    T a_coefficient = a.get(j);
                     T b_coefficient = b.get(i - j);
                     T result = ring.product(a_coefficient, b_coefficient);
                     product = ring.sum(product, result);
@@ -130,8 +139,8 @@ public final class Polynomial<T> implements Iterable<T> {
 
     public static void main(String[] args) {
         
-        List<Integer> a = List.of(1, 2, 3, 4);
-        List<Integer> b = List.of(5, 6, 7);
+        List<Integer> a = List.of(1, 2, 3);
+        List<Integer> b = List.of(4, 5, 6);
 
         Polynomial<Integer> polyA = new Polynomial<>(a);
         Polynomial<Integer> polyB = new Polynomial<>(b);
@@ -141,3 +150,4 @@ public final class Polynomial<T> implements Iterable<T> {
         System.out.println((polyA.times(polyB, intRing)));
     }
 }
+

@@ -9,7 +9,7 @@ import java.util.Objects;
  */
 public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
 
-    private Ring<T> ring; //a private field storing a ring 
+    private Ring<T> baseRing; //a private field storing a ring 
 
     /**
      * a constructor for the PolynomialRing class
@@ -19,7 +19,7 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
         //null check
         Objects.requireNonNull(ring, "ring cannot be null");
 
-        this.ring = ring;
+        this.baseRing = ring;
     }
 
     /**
@@ -47,7 +47,7 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
      */
     @Override
     public Polynomial<T> identity() {
-        return Polynomial.from(List.of(ring.identity()));
+        return Polynomial.from(List.of(baseRing.identity()));
     }
 
     /**
@@ -59,7 +59,7 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
         Objects.requireNonNull(x, "x cannot be null");
         Objects.requireNonNull(y, "y cannot be null");
 
-        return x.plus(y, ring);
+        return x.plus(y, baseRing);
     }
 
     /**
@@ -71,6 +71,6 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
         Objects.requireNonNull(x, "x cannot be null");
         Objects.requireNonNull(y, "y cannot be null");
 
-        return x.times(y, ring);
+        return x.times(y, baseRing);
     }
 }

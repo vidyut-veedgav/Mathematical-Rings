@@ -20,9 +20,9 @@ public final class Polynomial<T> implements Iterable<T> {
      * @param coefficients
      */
     private Polynomial(List<T> coefficients) {
-        //null check
-        Objects.requireNonNull(coefficients, "coefficients cannot be null");
-        this.coefficients = new ArrayList<>(coefficients);
+        //null check - (INCOMPLETE)CHANGE TO ASSERT
+        assert coefficients != null : "coefficients cannot be null";
+        this.coefficients = coefficients;
     }
 
     /**
@@ -35,7 +35,7 @@ public final class Polynomial<T> implements Iterable<T> {
         //null check
         Objects.requireNonNull(coefficients, "coefficients cannot be null");
 
-        return new Polynomial<>(coefficients); 
+        return new Polynomial<>(List.copyOf(coefficients)); 
     }
 
     /**
@@ -51,16 +51,16 @@ public final class Polynomial<T> implements Iterable<T> {
      */
     @Override
     public String toString() {
-        return coefficients.toString(); //utilizes the toString() method of List interface
+        return "Polynomial [coefficients=" + coefficients + "]";
     }
-
+    
     /**
      * ovrrides the abstract method of Iterable to return the iterator for the list
      * @return a new iterator
      */
     @Override
     public Iterator<T> iterator() {
-        return new PolynomialIterator<>(this.coefficients);
+        return coefficients.iterator();
     }
 
     /**
@@ -101,17 +101,29 @@ public final class Polynomial<T> implements Iterable<T> {
         ListIterator<T> bIter = b.listIterator();
 
         //iterating until the longer list's index is reached
-        for (int i = 0; i < maxLength; i++) {
+        for (int i = 0; i < maxLength; i++) { //use hasNext() to simplify
 
             //  for each of the lists, checks if the end of the list is reached, 
             //  and either assigns the addend to the coefficient at the index or zero
-            T a_addend = (i < a.size()) ? aIter.next() : ring.zero(); 
-            T b_addend = (i < b.size()) ? bIter.next() : ring.zero();
+            T a_addend = getAddend(ring, a, aIter, i); 
+            T b_addend = getAddend(ring, b, bIter, i);
 
             T sum = ring.sum(a_addend, b_addend); //computes the sum of the addends
             sum_list.add(sum); //adds the sum to the sum_list, which will be used to create the returned polynomial
         }
         return new Polynomial<>(sum_list);
+    }
+
+    /**
+     *  a helper method for the plus method to assign determine if an addend should be assigned to a value or zero
+     * @param ring
+     * @param list
+     * @param aIter
+     * @param i
+     * @return the assignemnt given the condition
+     */
+    private T getAddend(Ring<T> ring, List<T> list, ListIterator<T> aIter, int i) {
+        return (i < list.size()) ? aIter.next() : ring.zero();
     }
 
     /**

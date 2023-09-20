@@ -187,6 +187,7 @@ public final class Polynomial<T> implements Iterable<T> {
 
     /**
      * a helper method to handle the edge case where both polynomials have no coefficients in the times method
+     * avoids an OutOfBoundsException
      * @param args
      */
     private int computeProductLength(List<T> a, List<T> b) {

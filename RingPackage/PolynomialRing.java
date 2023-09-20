@@ -1,6 +1,7 @@
 package RingPackage;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Vidyut Veedgav
@@ -10,16 +11,26 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
 
     private Ring<T> ring; //a private field storing a ring 
 
+    /**
+     * a constructor for the PolynomialRing class
+     * @param ring
+     */
     private PolynomialRing(Ring<T> ring) {
+        //null check
+        Objects.requireNonNull(ring, "ring cannot be null");
+
         this.ring = ring;
     }
 
     /**
      * a static method to return a new polynomial
-     * @param <T>
+     * @param <T> a ring
      * @return a new polynomial
      */
     public static <T> PolynomialRing<T> instance(Ring<T> ring) {
+        //null check
+        Objects.requireNonNull(ring, "ring cannot be null");
+
         return new PolynomialRing<>(ring);
     }
 
@@ -44,6 +55,10 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
      */
     @Override
     public Polynomial<T> sum(Polynomial<T> x, Polynomial<T> y) {
+        //null checks
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+
         return x.plus(y, ring);
     }
 
@@ -52,6 +67,10 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
      */
     @Override
     public Polynomial<T> product(Polynomial<T> x, Polynomial<T> y) {
+        //null checks
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+
         return x.times(y, ring);
     }
 }

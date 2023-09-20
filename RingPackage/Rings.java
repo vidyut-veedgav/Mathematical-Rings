@@ -16,14 +16,14 @@ public final class Rings<T> {
      * @param args
      * @param zero
      * @param accumulator
-     * @return
+     * @return a single value which is the result of the reduction
      */
     public static <T> T reduce(List<T> args, T zero, BinaryOperator<T> accumulator) {
 
-        //error handling: checks if the inputs are null and throws an exception depending on the validity of the preconditions
-        if (args == null || accumulator == null || zero == null) {
-            throw new NullPointerException("Arguments must not be null");
-        }
+        //null checks
+        Objects.requireNonNull(args);
+        Objects.requireNonNull(zero);
+        Objects.requireNonNull(accumulator);
 
         boolean foundAny = false; //checks if the list contains elements
         T result = zero; //initializes the result as zero
@@ -31,10 +31,8 @@ public final class Rings<T> {
         //loops through elements in the input list
         for (T element : args) {
 
-            //Null check
-            if (element == null) {
-                throw new NullPointerException("Elements in the args list must be non-null"); 
-            }
+            //null check
+            Objects.requireNonNull(args);
 
             //checks if there are elements are present and converts the element to the result
             if (!foundAny) {
@@ -52,7 +50,7 @@ public final class Rings<T> {
      * @param <T>
      * @param args
      * @param ring
-     * @return
+     * @return a reduction based on addition
      */
     public static <T> T sum(List<T> args, Ring<T> ring) {
 
@@ -68,7 +66,7 @@ public final class Rings<T> {
      * @param <T>
      * @param args
      * @param ring
-     * @return
+     * @return a reduction based on multiplication
      */
     public static <T> T product(List<T> args, Ring<T> ring) {
 

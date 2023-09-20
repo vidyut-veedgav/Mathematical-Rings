@@ -21,7 +21,7 @@ public final class Polynomial<T> implements Iterable<T> {
      */
     private Polynomial(List<T> coefficients) {
         //null check
-        Objects.requireNonNull(coefficients);
+        Objects.requireNonNull(coefficients, "coefficients cannot be null");
         this.coefficients = new ArrayList<>(coefficients);
     }
 
@@ -32,6 +32,9 @@ public final class Polynomial<T> implements Iterable<T> {
      * @return a new polynomial
      */
     public static final <S> Polynomial<S> from(List<S> coefficients) {
+        //null check
+        Objects.requireNonNull(coefficients, "coefficients cannot be null");
+
         return new Polynomial<>(coefficients); 
     }
 
@@ -48,7 +51,7 @@ public final class Polynomial<T> implements Iterable<T> {
      */
     @Override
     public String toString() {
-        return coefficients.toString();
+        return coefficients.toString(); //utilizes the toString() method of List interface
     }
 
     /**
@@ -63,7 +66,7 @@ public final class Polynomial<T> implements Iterable<T> {
     /**
      * returns a list iterator over the coefficients 
      * initial call to next() return pi, initial call to previous returns pi-1
-     * @param i
+     * @param i the start index the iterator
      * @return
      */
     public ListIterator<T> listIterator(int i) {
@@ -83,12 +86,17 @@ public final class Polynomial<T> implements Iterable<T> {
      */
     public Polynomial<T> plus(Polynomial<T> other, Ring<T> ring) {
 
-        List<T> a = this.getCoefficients(); //the first polynomial
-        List<T> b = other.getCoefficients(); //the second polynomial
+        //null checks
+        Objects.requireNonNull(other, "the 'other' parameter cannot be null");
+        Objects.requireNonNull(ring, "the 'ring' parameter cannot be null");
+
+        List<T> a = this.getCoefficients(); //coefficients of the first polynomial
+        List<T> b = other.getCoefficients(); //coefficients of the second polynomial
 
         int maxLength = Math.max(a.size(), b.size()); //computing the length of the longer list
         List<T> sum_list = new ArrayList<>(maxLength); //a new list storing the sum values
 
+        //initializing the iterators
         ListIterator<T> aIter = a.listIterator();
         ListIterator<T> bIter = b.listIterator();
 
@@ -124,34 +132,43 @@ public final class Polynomial<T> implements Iterable<T> {
      * @return the product
      */
     public Polynomial<T> times(Polynomial<T> other, Ring<T> ring) {
+
+        //null checks
+        Objects.requireNonNull(other, "the 'other' parameter cannot be null");
+        Objects.requireNonNull(ring, "the 'ring' parameter cannot be null"); 
         
-        List<T> a = this.getCoefficients();
-        List<T> b = other.getCoefficients(); 
+        List<T> a = this.getCoefficients(); //coefficients of the first polynomial 
+        List<T> b = other.getCoefficients(); //coefficients of the second polynomial
 
-        int productLength = computeProductLength(a, b);
-        List<T> p_products = new ArrayList<>(productLength);
+        int productLength = computeProductLength(a, b);      //  edge case: if both lists are empty, product length will be 0                                                  //        if not, the 
+                                                             //  otherwise, it will be (size of a + size of b - 1)
+        List<T> product_list = new ArrayList<>(productLength); //creates the list of products that will be used to create the final polynomial
 
-        ListIterator<T> aIter = a.listIterator();
-        ListIterator<T> bIter = b.listIterator();
+        ListIterator<T> aIter = a.listIterator(); //iterator for list a 
+        ListIterator<T> bIter = b.listIterator(); //iterator for list b
 
-        int a_start = 0;
+        int a_start = 0; //start index of list a
+
+        //iterates until productLength is reached
         for (int i = 0; i < productLength; i++) {
 
-            T product = ring.zero();
-            a_start = computeStartIndex(i, a_start, b);
+            T product = ring.zero(); //initializing the product to zero
+            a_start = computeStartIndex(i, a_start, b); //adjusting the start index of a depending on whether b has more elements
 
+            //initializing the iterators to their respective start indices
             aIter = a.listIterator(a_start);
             bIter = b.listIterator(Math.min(i + 1, b.size()));
 
+            //iterates while aIter has a next element and bIter has a previous element
             while (aIter.hasNext() && bIter.hasPrevious()) {
-                T a_factor = aIter.next();
-                T b_factor = bIter.previous();
-                T result = ring.product(a_factor, b_factor);
-                product = ring.sum(product, result);
+                T a_factor = aIter.next(); //defining a's next value as the first factor
+                T b_factor = bIter.previous(); //defining b's previous value as second factor
+                T result = ring.product(a_factor, b_factor); //multiplies the factors
+                product = ring.sum(product, result); //sums the result of the multiplication with the previous result
             }
-            p_products.add(product);
+            product_list.add(product); //adds the product to the list of products
         }        
-       return new Polynomial<>(p_products);
+       return new Polynomial<>(product_list); 
     }
 
     /**
@@ -159,6 +176,9 @@ public final class Polynomial<T> implements Iterable<T> {
      * @param args
      */
     private int computeStartIndex(int currentIndex, int startIndex, List<T> list) {
+        //null check
+        Objects.requireNonNull(list, "list cannot be null");
+
         if ((currentIndex + 1) > list.size()) {
             startIndex = startIndex + 1;
         }
@@ -170,23 +190,15 @@ public final class Polynomial<T> implements Iterable<T> {
      * @param args
      */
     private int computeProductLength(List<T> a, List<T> b) {
+
+        //null checks
+        Objects.requireNonNull(a, "args cannot be null");
+        Objects.requireNonNull(b, "args cannot be null");
+
         if (a.isEmpty() && b.isEmpty()) {
             return 0;
         }
         return a.size() + b.size() - 1;
-    }
-
-    public static void main(String[] args) {
-        
-        List<Double> a = List.of(Double.valueOf(1), Double.valueOf(2), Double.valueOf(3));
-        List<Double> b = List.of(Double.valueOf(4), Double.valueOf(5), Double.valueOf(6));
-
-        Polynomial<Double> polyA = new Polynomial<>(a);
-        Polynomial<Double> polyB = new Polynomial<>(b);
-
-        Ring<Double> doubRing = new DoubleRing();
-
-        System.out.println((polyA.times(polyB, doubRing)));
     }
 }
 

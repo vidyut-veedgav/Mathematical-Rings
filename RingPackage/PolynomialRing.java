@@ -1,5 +1,7 @@
 package RingPackage;
 
+import java.util.List;
+
 /**
  * @author Vidyut Veedgav
  * a class to demonstrate the concept of Rings on Polynomials
@@ -13,12 +15,12 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
     }
 
     /**
-     * a static instance method to return a new polynomial
+     * a static method to return a new polynomial
      * @param <T>
      * @return a new polynomial
      */
-    public static <T> PolynomialRing<T> buildRing() {
-        return null;
+    public static <T> PolynomialRing<T> instance(Ring<T> ring) {
+        return new PolynomialRing<>(ring);
     }
 
     /**
@@ -26,22 +28,30 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
      */
     @Override
     public Polynomial<T> zero() {
-        return null;
+        return Polynomial.from(List.of());
     }
 
+    /**
+     * overriding the identity method
+     */
     @Override
     public Polynomial<T> identity() {
-        return null;
+        return Polynomial.from(List.of(ring.identity()));
     }
 
+    /**
+     * overriding the sum method
+     */
     @Override
     public Polynomial<T> sum(Polynomial<T> x, Polynomial<T> y) {
         return x.plus(y, ring);
     }
 
+    /**
+     * overriding the product method
+     */
     @Override
     public Polynomial<T> product(Polynomial<T> x, Polynomial<T> y) {
         return x.times(y, ring);
     }
-    
 }

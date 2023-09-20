@@ -86,12 +86,19 @@ public final class Polynomial<T> implements Iterable<T> {
         int maxLength = Math.max(a.size(), b.size()); //computing the length of the longer list
         List<T> sum_list = new ArrayList<>(maxLength); //a new list storing the sum values
 
+        ListIterator<T> aIter = a.listIterator();
+        ListIterator<T> bIter = b.listIterator();
+
         //iterating until the longer list's index is reached
         for (int i = 0; i < maxLength; i++) {
-            T a_coefficient = (i < a.size()) ? a.get(i) : ring.zero();
-            T b_coefficient = (i < b.size()) ? b.get(i) : ring.zero();
-            T sum = ring.sum(a_coefficient, b_coefficient);
-            sum_list.add(sum);
+
+            //  for each of the lists, checks if the end of the list is reached, 
+            //  and either assigns the addend to the coefficient at the index or zero
+            T a_addend = (i < a.size()) ? aIter.next() : ring.zero(); 
+            T b_addend = (i < b.size()) ? bIter.next() : ring.zero();
+
+            T sum = ring.sum(a_addend, b_addend); //computes the sum of the addends
+            sum_list.add(sum); //adds the sum to the sum_list, which will be used to create the returned polynomial
         }
         return new Polynomial<>(sum_list);
     }
@@ -117,37 +124,74 @@ public final class Polynomial<T> implements Iterable<T> {
         List<T> a = this.getCoefficients();
         List<T> b = other.getCoefficients(); 
 
-        int productLength = a.size() + b.size() - 1;
-        List<T> p_coefficients = new ArrayList<>(productLength);
+        int productLength = computeProductLength(a, b);
+        List<T> p_products = new ArrayList<>(productLength);
+
+        ListIterator<T> aIter = a.listIterator();
+        ListIterator<T> bIter = b.listIterator();
+
+        int a_start = 0;
         for (int i = 0; i < productLength; i++) {
 
+            System.out.println("Iteration " + (i + 1));
+            System.out.println("i = " + i);
+
             T product = ring.zero();
+
+            a_start = computeStartIndex(i, a_start, b);
+
+            aIter = a.listIterator(a_start);
+            bIter = b.listIterator(Math.min(i + 1, b.size()));
+
             for (int j = 0; j <= i; j++) {
 
-                if (j < a.size() && (i - j) < b.size()) {
-                    T a_coefficient = a.get(j);
-                    T b_coefficient = b.get(i - j);
-                    T result = ring.product(a_coefficient, b_coefficient);
+                if (aIter.hasNext() && bIter.hasPrevious()) {
+                    T a_factor = aIter.next();
+                        System.out.println(a_factor);
+                    T b_factor = bIter.previous();
+                        System.out.println(b_factor);
+                    T result = ring.product(a_factor, b_factor);
                     product = ring.sum(product, result);
                 }
             }
-            p_coefficients.add(product);
+            p_products.add(product);
         }        
+       return new Polynomial<>(p_products);
+    }
 
-       return new Polynomial<>(p_coefficients);
+    /**
+     * a helper method to compute whether an index should be incremented
+     * @param args
+     */
+    private int computeStartIndex(int currentIndex, int startIndex, List<T> list) {
+        if ((currentIndex + 1) > list.size()) {
+            startIndex = startIndex + 1;
+        }
+        return startIndex;
+    }
+
+    /**
+     * a helper method to handle the edge case where both polynomials have no coefficients
+     * @param args
+     */
+    private int computeProductLength(List<T> a, List<T> b) {
+        if (a.isEmpty() && b.isEmpty()) {
+            return 0;
+        }
+        return a.size() + b.size() - 1;
     }
 
     public static void main(String[] args) {
         
-        List<Integer> a = List.of(1, 2, 3);
-        List<Integer> b = List.of(4, 5, 6);
+        List<Double> a = List.of(Double.valueOf(1), Double.valueOf(2), Double.valueOf(3));
+        List<Double> b = List.of(Double.valueOf(4), Double.valueOf(5), Double.valueOf(6));
 
-        Polynomial<Integer> polyA = new Polynomial<>(a);
-        Polynomial<Integer> polyB = new Polynomial<>(b);
+        Polynomial<Double> polyA = new Polynomial<>(a);
+        Polynomial<Double> polyB = new Polynomial<>(b);
 
-        Ring<Integer> intRing = new IntegerRing();
+        Ring<Double> doubRing = new DoubleRing();
 
-        System.out.println((polyA.times(polyB, intRing)));
+        System.out.println((polyA.times(polyB, doubRing)));
     }
 }
 

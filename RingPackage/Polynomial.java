@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 /**
  * @author Vidyut Veedgav
@@ -19,7 +20,8 @@ public final class Polynomial<T> implements Iterable<T> {
      * @param coefficients
      */
     private Polynomial(List<T> coefficients) {
-        //add null check for list + elements
+        //null check
+        Objects.requireNonNull(coefficients);
         this.coefficients = new ArrayList<>(coefficients);
     }
 
@@ -74,6 +76,7 @@ public final class Polynomial<T> implements Iterable<T> {
      * a: (1, 2, 3)
      * b: (4, 5, 6)
      * a + b = (5, 7, 9)
+     * McCabe's Complexity: 3
      * @param other
      * @param ring
      * @return the sum
@@ -115,6 +118,7 @@ public final class Polynomial<T> implements Iterable<T> {
      *         ((1 * 0) + (2 * 0), (3 * 6) + (0 * 5) + (0 * 4))
      * 
      *       = (4, 13, 28, 27, 18)
+     * McCabe's Complexity: 3
      * @param other
      * @param ring
      * @return the product
@@ -133,26 +137,17 @@ public final class Polynomial<T> implements Iterable<T> {
         int a_start = 0;
         for (int i = 0; i < productLength; i++) {
 
-            System.out.println("Iteration " + (i + 1));
-            System.out.println("i = " + i);
-
             T product = ring.zero();
-
             a_start = computeStartIndex(i, a_start, b);
 
             aIter = a.listIterator(a_start);
             bIter = b.listIterator(Math.min(i + 1, b.size()));
 
-            for (int j = 0; j <= i; j++) {
-
-                if (aIter.hasNext() && bIter.hasPrevious()) {
-                    T a_factor = aIter.next();
-                        System.out.println(a_factor);
-                    T b_factor = bIter.previous();
-                        System.out.println(b_factor);
-                    T result = ring.product(a_factor, b_factor);
-                    product = ring.sum(product, result);
-                }
+            while (aIter.hasNext() && bIter.hasPrevious()) {
+                T a_factor = aIter.next();
+                T b_factor = bIter.previous();
+                T result = ring.product(a_factor, b_factor);
+                product = ring.sum(product, result);
             }
             p_products.add(product);
         }        
@@ -160,7 +155,7 @@ public final class Polynomial<T> implements Iterable<T> {
     }
 
     /**
-     * a helper method to compute whether an index should be incremented
+     * a helper method to compute whether an index should be incremented in the times method
      * @param args
      */
     private int computeStartIndex(int currentIndex, int startIndex, List<T> list) {
@@ -171,7 +166,7 @@ public final class Polynomial<T> implements Iterable<T> {
     }
 
     /**
-     * a helper method to handle the edge case where both polynomials have no coefficients
+     * a helper method to handle the edge case where both polynomials have no coefficients in the times method
      * @param args
      */
     private int computeProductLength(List<T> a, List<T> b) {

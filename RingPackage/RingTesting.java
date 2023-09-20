@@ -180,6 +180,7 @@ public class RingTesting {
      */
     @Test
     public void testProduct() {
+        
         //testing for the Integer type
         Ring<Integer> intRing = new IntegerRing(); //creating the IntegerRing instance
 

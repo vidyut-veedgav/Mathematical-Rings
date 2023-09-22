@@ -17,7 +17,7 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
      */
     private PolynomialRing(Ring<T> ring) {
         //null check
-        Objects.requireNonNull(ring, "ring cannot be null");
+        assert ring != null : "ring cannot be null";
 
         this.baseRing = ring;
     }

@@ -20,7 +20,7 @@ public final class Polynomial<T> implements Iterable<T> {
      * @param coefficients
      */
     private Polynomial(List<T> coefficients) {
-        //null check - (INCOMPLETE)CHANGE TO ASSERT
+        //null check
         assert coefficients != null : "coefficients cannot be null";
         this.coefficients = coefficients;
     }
@@ -60,7 +60,7 @@ public final class Polynomial<T> implements Iterable<T> {
      */
     @Override
     public Iterator<T> iterator() {
-        return coefficients.iterator();
+        return List.copyOf(coefficients).iterator();
     }
 
     /**
@@ -101,12 +101,12 @@ public final class Polynomial<T> implements Iterable<T> {
         ListIterator<T> bIter = b.listIterator();
 
         //iterating until the longer list's index is reached
-        for (int i = 0; i < maxLength; i++) { //use hasNext() to simplify
+        while (aIter.hasNext() || bIter.hasNext()) { 
 
             //  for each of the lists, checks if the end of the list is reached, 
             //  and either assigns the addend to the coefficient at the index or zero
-            T a_addend = getAddend(ring, a, aIter, i); 
-            T b_addend = getAddend(ring, b, bIter, i);
+            T a_addend = getAddend(ring, a, aIter); 
+            T b_addend = getAddend(ring, b, bIter);
 
             T sum = ring.sum(a_addend, b_addend); //computes the sum of the addends
             sum_list.add(sum); //adds the sum to the sum_list, which will be used to create the returned polynomial
@@ -122,8 +122,12 @@ public final class Polynomial<T> implements Iterable<T> {
      * @param i
      * @return the assignemnt given the condition
      */
-    private T getAddend(Ring<T> ring, List<T> list, ListIterator<T> aIter, int i) {
-        return (i < list.size()) ? aIter.next() : ring.zero();
+    private T getAddend(Ring<T> ring, List<T> list, ListIterator<T> iterator) {
+
+        assert ring != null : "ring cannot be null";
+        assert list != null : "list cannot be null";
+        assert iterator != null : "iterator cannot be null";
+        return (iterator.hasNext()) ? iterator.next() : ring.zero();
     }
 
     /**
@@ -189,7 +193,7 @@ public final class Polynomial<T> implements Iterable<T> {
      */
     private int computeStartIndex(int currentIndex, int startIndex, List<T> list) {
         //null check
-        Objects.requireNonNull(list, "list cannot be null");
+        assert list != null : "list cannot be null";
 
         if ((currentIndex + 1) > list.size()) {
             startIndex = startIndex + 1;
@@ -205,8 +209,8 @@ public final class Polynomial<T> implements Iterable<T> {
     private int computeProductLength(List<T> a, List<T> b) {
 
         //null checks
-        Objects.requireNonNull(a, "args cannot be null");
-        Objects.requireNonNull(b, "args cannot be null");
+        assert a != null : "a cannot be null";
+        assert b != null : "b cannot be null";
 
         if (a.isEmpty() && b.isEmpty()) {
             return 0;

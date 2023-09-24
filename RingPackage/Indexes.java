@@ -1,6 +1,8 @@
 package RingPackage;
 
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -77,8 +79,17 @@ public record Indexes<T>(int row, int column) implements Comparable<Indexes<T>> 
         Objects.requireNonNull(from, "from cannot be null");
         Objects.requireNonNull(from, "to cannot be null");
 
+        //calculating the range values
+        int minRow = Math.min(from.row(), to.row());
+        int maxRow = Math.max(from.row(), to.row());
+        int minColumn = Math.min(from.column(), to.column());
+        int maxColumn = Math.max(from.column(), to.column());
 
-        return null;    
+        //streaming the indexes
+        return IntStream.rangeClosed(minRow, maxRow)
+                        .boxed() //wraps the contents of the range into Integers
+                        .flatMap((row) -> IntStream.rangeClosed(minColumn, maxColumn) //use flat map to flatten the 2D stream into a single stream
+                        .mapToObj(column -> new Indexes<>(row, column))); //mapping each row column pair to a new Index
     }
 
     /**
@@ -88,7 +99,7 @@ public record Indexes<T>(int row, int column) implements Comparable<Indexes<T>> 
         //null checks
         Objects.requireNonNull(size, "size cannot be null");
         
-        return null;    
+        return stream(new Indexes<T>(0, 0), size);    
     }
 
     /**
@@ -96,6 +107,13 @@ public record Indexes<T>(int row, int column) implements Comparable<Indexes<T>> 
      */
     public static <T> Stream<Indexes<T>> stream(int rows, int columns) {
 
-        return null;    
+        return stream(new Indexes<T>(0, 0), new Indexes<T>(rows, columns)); 
+    }
+
+    public static void main(String[] args) {
+
+        Indexes<Integer> index = new Indexes<>(1, 2);
+        Indexes<Integer> index2 = new Indexes<>(3, 4);
+        System.out.println(Indexes.stream(index, index2).collect(Collectors.toList()));
     }
 }

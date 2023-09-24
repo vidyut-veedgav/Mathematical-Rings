@@ -1,5 +1,9 @@
 package RingPackage;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,9 +30,19 @@ public final class MatrixMap<T> {
      * @return
      */
     public Indexes<T> size() {
-        //returns the matrix size
-        return null;
+
+        List<Indexes<T>> keys = new ArrayList<>(matrix.keySet());
+        ListIterator<Indexes<T>> iter = keys.listIterator();
+        Indexes<T> maxIndex;
+
+        for (Indexes<T> key : keys)  {
+            if (iter.next().compareTo(iter.next()) > 0) {
+                maxIndex = 
+            }
+        }
     }
+
+    
 
     /**
      * a method to override the toString method

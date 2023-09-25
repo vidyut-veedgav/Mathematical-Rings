@@ -1,11 +1,10 @@
 package RingPackage;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 /**
  * @author Vidyut Veedgav
@@ -32,14 +31,14 @@ public final class MatrixMap<T> {
     public Indexes<T> size() {
 
         List<Indexes<T>> keys = new ArrayList<>(matrix.keySet());
-        ListIterator<Indexes<T>> iter = keys.listIterator();
-        Indexes<T> maxIndex;
+        Indexes<T> maxIndex = keys.get(0);
 
         for (Indexes<T> key : keys)  {
-            if (iter.next().compareTo(iter.next()) > 0) {
-                maxIndex = 
+            if (maxIndex.compareTo(key) > 0) {
+                maxIndex = key;
             }
         }
+        return maxIndex;
     }
 
     
@@ -72,5 +71,48 @@ public final class MatrixMap<T> {
         return matrix.get(index);
     }
 
-    //continue from here
+    /* Indexes<T> Indexes::value(MatrixMap<T> matrix) {
+        //wtf is this method
+        return null;
+    }
+    */
+    
+    static class InvalidLengthException extends Exception {
+
+          enum Cause {
+            ROW, 
+            COLUMN
+        }
+
+        private Cause cause;
+        private Integer length;
+
+        public InvalidLengthException(Cause cause, Integer length) {
+            this.cause = cause;
+            this.length = length;
+        }
+
+        /*
+        public Cause getCause() {
+            return cause;
+        }
+        */
+
+        public Integer getLength() {
+            return length;
+        }
+
+        public static int requireNonEmpty(Cause cause, int length) {
+
+            if (length > 0) {
+                throw new IllegalArgumentException(); //must make cause of this IllegalLengthException
+            }
+            return length;
+        }
+    }
+
+    public static <S> MatrixMap<S> instance (int rows, int columns, Function<Indexes<?>, S> valueMapper) {
+        return null;
+    }
 }
+

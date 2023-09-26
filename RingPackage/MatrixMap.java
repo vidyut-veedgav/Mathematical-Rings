@@ -351,7 +351,7 @@ public final class MatrixMap<T> {
     public static void main(String[] args) {
 
         //example: storing values as the sum of the index row and column
-        System.out.println(MatrixMap.instance(3, 4, (index) -> Integer.valueOf(10)));
+        System.out.println(MatrixMap.instance(3, 4, (index) -> index.row() + index.column()));
     }
 }
 

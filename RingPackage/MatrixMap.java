@@ -4,12 +4,15 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import RingPackage.MatrixMap.InvalidLengthException.Cause;
 
 /**
  * @author Vidyut Veedgav
@@ -36,32 +39,12 @@ public final class MatrixMap<T> {
     public Indexes size() {
 
         List<Indexes> keys = new ArrayList<>(matrix.keySet());
-        Indexes maxIndex = keys.get(0);
-
-        maxIndex = findMax(keys, maxIndex);
-        return maxIndex;
-    }
-
-    /**
-     * a helper method which iterates through the matrix and returns the maximum key value
-     * @param keys
-     * @param maxIndex
-     * @return
-     */
-    private Indexes findMax(List<Indexes> keys, Indexes maxIndex) {
-
-        assert keys != null : "keys cannot be null";
-        assert maxIndex != null : "maxIndex cannot be null";
-        for (Indexes key : keys)  {
-            if (maxIndex.compareTo(key) > 0) {
-                maxIndex = key;
-            }
-        }
-        return maxIndex;
+        return Collections.max(keys);
     }
 
     /**
      * a method to override the toString method
+     * INCOMPLETE
      */
     @Override
     public String toString() {
@@ -84,6 +67,7 @@ public final class MatrixMap<T> {
 
     /**
      * a method to return the element at the given indexes
+     * FOUNDATION METHOD FOR OTHER TWO VALUE METHODS
      * @return the corresponding value
      */
     public T value(Indexes indexes) {
@@ -98,21 +82,14 @@ public final class MatrixMap<T> {
      */
     public T value(int row, int column) {
 
-        Indexes index  = new Indexes(row, column);
-        return matrix.get(index);
-    }
-
-    //WHAT IS THIS
-    public Indexes value(MatrixMap<T> matrix) {
-        //wtf is this method
-        return null;
+        Indexes indexes = new Indexes(row, column);
+        return value(indexes);
     }
     
     /**
      * a nested class to aid error handling by defining protocols for controlling the matrix lengths
      */
     static class InvalidLengthException extends Exception {
-
 
         /**
          * an enum to define the possible values of the exception's cause
@@ -160,7 +137,7 @@ public final class MatrixMap<T> {
         public static int requireNonEmpty(Cause cause, int length) {
 
             if (length > 0) {
-                throw new IllegalArgumentException("InvalidLengthException"); //must make cause of this InvalidLengthException
+                throw new IllegalArgumentException(new InvalidLengthException(cause, length)); 
             }
             return length;
         }
@@ -177,7 +154,8 @@ public final class MatrixMap<T> {
     public static <S> MatrixMap<S> instance(int rows, int columns, Function<Indexes, S> valueMapper) {
 
         //error handling
-        checkPositive(rows, columns);
+        Objects.requireNonNull(valueMapper, "valueMapper cannot be null");
+        checkPositive(rows, columns); //checking if the 
         
         Map<Indexes, S> matrix = new HashMap<>();
         List<Indexes> indexes = Indexes.stream(rows, columns).collect(Collectors.toList());
@@ -195,8 +173,27 @@ public final class MatrixMap<T> {
      * @param columns
      */
     private static void checkPositive(int rows, int columns) {
-        if (rows <= 0 || columns <= 0) {
-            throw new IllegalArgumentException(); //MUST HAVE THE RIGHT CAUSE
+        checkRows(rows);
+        checkColumns(columns);
+    }
+
+    /**
+     * a subhelper method to throw an exception if the error is caused by the row length of the matrix
+     * @param rows
+     */
+    private static void checkRows(int rows) {
+        if (rows <= 0) {
+            throw new IllegalArgumentException(new InvalidLengthException(Cause.ROW, rows));
+        }
+    }
+
+    /**
+     * a subhelper method to throw an exception if the error is caused by the column length of the matrix
+     * @param columns
+     */
+    private static void checkColumns(int columns) {
+        if (columns <= 0) {
+            throw new IllegalArgumentException(new InvalidLengthException(Cause.COLUMN, columns));
         }
     }
 
@@ -251,17 +248,42 @@ public final class MatrixMap<T> {
         Map<Indexes, S> map = new HashMap<>();
 
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                Indexes key = new Indexes(i, j);
-                if (key.areDiagonal()) {
-                    map.put(key, identity);
-                }
-                else {
-                    map.put(key, zero);
-                }
-            }
+            populate(size, zero, identity, map, i); //populates the matrix with the correct value
         }
         return new MatrixMap<>(map);
+    }
+
+    /**
+     * a subroutine for the identity method that populates the matrix with the identity input or zero depending on whether or not the index is diagonal
+     * @param <S>
+     * @param size
+     * @param zero
+     * @param identity
+     * @param map
+     * @param i
+     */
+    private static <S> void populate(int size, S zero, S identity, Map<Indexes, S> map, int i) {
+        for (int j = 0; j < size; j++) {
+            Indexes key = new Indexes(i, j);
+            checkForDiagonal(zero, identity, map, key);
+        }
+    }
+
+    /**
+     * a subroutine for the identity method that checks if the given index is on the diagonal
+     * @param <S>
+     * @param zero
+     * @param identity
+     * @param map
+     * @param key
+     */
+    private static <S> void checkForDiagonal(S zero, S identity, Map<Indexes, S> map, Indexes key) {
+        if (key.areDiagonal()) {
+            map.put(key, identity);
+        }
+        else {
+            map.put(key, zero);
+        }
     }
 
     /**
@@ -283,15 +305,44 @@ public final class MatrixMap<T> {
     public static <S> MatrixMap<S> from(S[][] matrix) {
 
         Map<Indexes, S> map = new HashMap<>();
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                assignValue(matrix, map, row, col);
-            }
-        }
+        populate(matrix, map);
         return new MatrixMap<>(map);
     }
 
-    private static <S> void assignValue(S[][] matrix, Map<Indexes, S> map, int row, int col) {
+    /**
+     * a subroutine of the from method to populate the MatrixMap with elements from the matrix array
+     * @param <S>
+     * @param matrix
+     * @param map
+     */
+    private static <S> void populate(S[][] matrix, Map<Indexes, S> map) {
+        for (int row = 0; row < matrix.length; row++) {
+            assignRowValue(matrix, map, row);
+        }
+    }
+
+    /**
+     * a subroutine of the from method to assign the row values of the 2D array
+     * @param <S>
+     * @param matrix
+     * @param map
+     * @param row
+     */
+    private static <S> void assignRowValue(S[][] matrix, Map<Indexes, S> map, int row) {
+        for (int col = 0; col < matrix[row].length; col++) {
+            assignColumnValue(matrix, map, row, col);
+        }
+    }
+ 
+    /**
+     * a subroutine of the from method to assign the column values of the 2D array
+     * @param <S>
+     * @param matrix
+     * @param map
+     * @param row
+     * @param col
+     */
+    private static <S> void assignColumnValue(S[][] matrix, Map<Indexes, S> map, int row, int col) {
         Indexes key = new Indexes(row, col);
         S value = matrix[row][col];
         map.put(key, value);
@@ -300,7 +351,7 @@ public final class MatrixMap<T> {
     public static void main(String[] args) {
 
         //example: storing values as the sum of the index row and column
-        System.out.println(MatrixMap.instance(1, 2, (index) -> (index.row() + index.column())).toString());
+        System.out.println(MatrixMap.instance(3, 4, (index) -> Integer.valueOf(10)));
     }
 }
 

@@ -80,16 +80,35 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
         Objects.requireNonNull(from, "to cannot be null");
 
         //calculating the range values
-        int minRow = Math.min(from.row(), to.row());
-        int maxRow = Math.max(from.row(), to.row());
-        int minColumn = Math.min(from.column(), to.column());
-        int maxColumn = Math.max(from.column(), to.column());
+        int minRow = Indexes.getMin(from.row(), to.row()); //the minimum row
+        int maxRow = Indexes.getMax(from.row(), to.row()); //the maximum row
+
+        int minColumn = Indexes.getMin(from.column(), to.column()); //the minimum column
+        int maxColumn = Indexes.getMax(from.column(), to.column()); //the maximum column
 
         //streaming the indexes
         return IntStream.rangeClosed(minRow, maxRow)
                         .boxed() //wraps the contents of the range into Integers
                         .flatMap((row) -> IntStream.rangeClosed(minColumn, maxColumn) //use flat map to flatten the 2D stream into a single stream
                         .mapToObj(column -> new Indexes(row, column))); //mapping each row column pair to a new Index
+    }
+
+    /**
+     * a subroutine to get the smaller value out of two inputs
+     * @param size
+     * @return
+     */
+    private static int getMin(int from, int to) {
+        return Math.min(from, to);
+    }
+
+     /**
+     * a subroutine to get the larger value out of two inputs
+     * @param size
+     * @return
+     */
+    private static int getMax(int from, int to) {
+        return Math.max(from, to);
     }
 
     /**
@@ -110,10 +129,16 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
         return stream(new Indexes(0, 0), new Indexes(rows, columns)); 
     }
 
+    public <S> S value(MatrixMap<S> matrix) {
+        return matrix.value(this);
+    }
+
     public static void main(String[] args) {
 
         Indexes index = new Indexes(1, 2);
         Indexes index2 = new Indexes(3, 4);
         System.out.println(Indexes.stream(index, index2).collect(Collectors.toList()));
     }
+
+
 }

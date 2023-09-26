@@ -1,6 +1,9 @@
 package RingPackage;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -171,7 +174,7 @@ public final class MatrixMap<T> {
      * @param valueMapper
      * @return a new MatrixMap
      */
-    public static <S> MatrixMap<S> instance (int rows, int columns, Function<Indexes, S> valueMapper) {
+    public static <S> MatrixMap<S> instance(int rows, int columns, Function<Indexes, S> valueMapper) {
 
         //error handling
         checkPositive(rows, columns);
@@ -222,11 +225,76 @@ public final class MatrixMap<T> {
 
         //null check
         Objects.requireNonNull(value, "value cannot be null");
+
+        checkIfSizePositive(size); //checking if size is positive
+
+        Map<Indexes, S> matrix = new HashMap<>();
+        return null;
+    }
+
+    /**
+     * a method to return a new square matrix containing the identity along the diagonal and zero otherwise
+     * @param <S>
+     * @param size
+     * @param zero
+     * @param identity
+     * @return
+     */
+    public static <S> MatrixMap<S> identity(int size, S zero, S identity) {
+
+        //null checks
+        Objects.requireNonNull(zero, "zero cannot be null");
+        Objects.requireNonNull(identity, "identity cannot be null");
+
+        checkIfSizePositive(size); //checking if size is positive
+
+        Map<Indexes, S> map = new HashMap<>();
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Indexes key = new Indexes(i, j);
+                if (key.areDiagonal()) {
+                    map.put(key, identity);
+                }
+                else {
+                    map.put(key, zero);
+                }
+            }
+        }
+        return new MatrixMap<>(map);
+    }
+
+    /**
+     * a helper method for the constant and identity methods to check if the size of the matrix is positive
+     * @param size
+     */
+    private static void checkIfSizePositive(int size) {
         if (size <= 0) {
             throw new IllegalArgumentException();
         }
-        Map<Indexes, S> matrix = new HashMap<>();
-        return null;
+    }
+
+    /**
+     * a method to create a MatrixMap instance from the values in the two-dimentional matrix
+     * @param <S>
+     * @param matrix
+     * @return
+     */
+    public static <S> MatrixMap<S> from(S[][] matrix) {
+
+        Map<Indexes, S> map = new HashMap<>();
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                assignValue(matrix, map, row, col);
+            }
+        }
+        return new MatrixMap<>(map);
+    }
+
+    private static <S> void assignValue(S[][] matrix, Map<Indexes, S> map, int row, int col) {
+        Indexes key = new Indexes(row, col);
+        S value = matrix[row][col];
+        map.put(key, value);
     }
 
     public static void main(String[] args) {

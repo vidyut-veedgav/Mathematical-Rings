@@ -1,9 +1,6 @@
 package RingPackage;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -136,7 +133,11 @@ public final class MatrixMap<T> {
          */
         public static int requireNonEmpty(Cause cause, int length) {
 
-            if (length > 0) {
+            //null check
+            Objects.requireNonNull(cause, "cause cannot be null");
+
+            //checks if the length of the cause dimention fails the valid criteria
+            if (length <= 0) {
                 throw new IllegalArgumentException(new InvalidLengthException(cause, length)); 
             }
             return length;
@@ -155,8 +156,10 @@ public final class MatrixMap<T> {
 
         //error handling
         Objects.requireNonNull(valueMapper, "valueMapper cannot be null");
-        checkPositive(rows, columns); //checking if the 
-        
+
+        InvalidLengthException.requireNonEmpty(Cause.ROW, rows);
+        InvalidLengthException.requireNonEmpty(Cause.COLUMN, columns);
+
         Map<Indexes, S> matrix = new HashMap<>();
         List<Indexes> indexes = Indexes.stream(rows, columns).collect(Collectors.toList());
 
@@ -165,36 +168,6 @@ public final class MatrixMap<T> {
             matrix.put(index, value);
         }
         return new MatrixMap<>(matrix);
-    }
-
-    /**
-     * a helper method to determine if arguments are negative and throw the appropriate exception
-     * @param rows
-     * @param columns
-     */
-    private static void checkPositive(int rows, int columns) {
-        checkRows(rows);
-        checkColumns(columns);
-    }
-
-    /**
-     * a subhelper method to throw an exception if the error is caused by the row length of the matrix
-     * @param rows
-     */
-    private static void checkRows(int rows) {
-        if (rows <= 0) {
-            throw new IllegalArgumentException(new InvalidLengthException(Cause.ROW, rows));
-        }
-    }
-
-    /**
-     * a subhelper method to throw an exception if the error is caused by the column length of the matrix
-     * @param columns
-     */
-    private static void checkColumns(int columns) {
-        if (columns <= 0) {
-            throw new IllegalArgumentException(new InvalidLengthException(Cause.COLUMN, columns));
-        }
     }
 
     /**
@@ -209,33 +182,33 @@ public final class MatrixMap<T> {
         //null checks
         Objects.requireNonNull(size, "size cannot be null");
         Objects.requireNonNull(valueMapper, "valueMapper cannot be null");
-
-        //extracting the row and column values from the Indexes parameter
-        int row = size.row();
-        int column = size.column();
-
+    
         //calling the original instance method
-        return MatrixMap.instance(row, column, valueMapper);
+        return MatrixMap.instance(size.row(), size.column(), valueMapper);
     }
 
+    /**
+     * a method to populate a MatrixMap using constant values
+     * @param <S>
+     * @param size
+     * @param value
+     * @return a new MatrixMap
+     */
     public static <S> MatrixMap<S> constant(int size, S value) {
 
         //null check
         Objects.requireNonNull(value, "value cannot be null");
 
-        checkIfSizePositive(size); //checking if size is positive
-
-        Map<Indexes, S> matrix = new HashMap<>();
-        return null;
+        return instance(size, size, (index) -> value);
     }
 
     /**
-     * a method to return a new square matrix containing the identity along the diagonal and zero otherwise
+     * a method to return a new square matrix populated with the identity along the diagonal and zero otherwise
      * @param <S>
      * @param size
      * @param zero
      * @param identity
-     * @return
+     * @return a new MatrixMap
      */
     public static <S> MatrixMap<S> identity(int size, S zero, S identity) {
 
@@ -243,109 +216,18 @@ public final class MatrixMap<T> {
         Objects.requireNonNull(zero, "zero cannot be null");
         Objects.requireNonNull(identity, "identity cannot be null");
 
-        checkIfSizePositive(size); //checking if size is positive
-
-        Map<Indexes, S> map = new HashMap<>();
-
-        for (int i = 0; i < size; i++) {
-            populate(size, zero, identity, map, i); //populates the matrix with the correct value
-        }
-        return new MatrixMap<>(map);
+        return instance(size, size, (index) -> (index.areDiagonal()) ? identity : zero);
     }
 
     /**
-     * a subroutine for the identity method that populates the matrix with the identity input or zero depending on whether or not the index is diagonal
-     * @param <S>
-     * @param size
-     * @param zero
-     * @param identity
-     * @param map
-     * @param i
-     */
-    private static <S> void populate(int size, S zero, S identity, Map<Indexes, S> map, int i) {
-        for (int j = 0; j < size; j++) {
-            Indexes key = new Indexes(i, j);
-            checkForDiagonal(zero, identity, map, key);
-        }
-    }
-
-    /**
-     * a subroutine for the identity method that checks if the given index is on the diagonal
-     * @param <S>
-     * @param zero
-     * @param identity
-     * @param map
-     * @param key
-     */
-    private static <S> void checkForDiagonal(S zero, S identity, Map<Indexes, S> map, Indexes key) {
-        if (key.areDiagonal()) {
-            map.put(key, identity);
-        }
-        else {
-            map.put(key, zero);
-        }
-    }
-
-    /**
-     * a helper method for the constant and identity methods to check if the size of the matrix is positive
-     * @param size
-     */
-    private static void checkIfSizePositive(int size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException();
-        }
-    }
-
-    /**
-     * a method to create a MatrixMap instance from the values in the two-dimentional matrix
+     * a method to populate a MatrixMap instance from the values in the two-dimentional matrix
      * @param <S>
      * @param matrix
-     * @return
+     * @return a new MatrixMap
      */
     public static <S> MatrixMap<S> from(S[][] matrix) {
 
-        Map<Indexes, S> map = new HashMap<>();
-        populate(matrix, map);
-        return new MatrixMap<>(map);
-    }
-
-    /**
-     * a subroutine of the from method to populate the MatrixMap with elements from the matrix array
-     * @param <S>
-     * @param matrix
-     * @param map
-     */
-    private static <S> void populate(S[][] matrix, Map<Indexes, S> map) {
-        for (int row = 0; row < matrix.length; row++) {
-            assignRowValue(matrix, map, row);
-        }
-    }
-
-    /**
-     * a subroutine of the from method to assign the row values of the 2D array
-     * @param <S>
-     * @param matrix
-     * @param map
-     * @param row
-     */
-    private static <S> void assignRowValue(S[][] matrix, Map<Indexes, S> map, int row) {
-        for (int col = 0; col < matrix[row].length; col++) {
-            assignColumnValue(matrix, map, row, col);
-        }
-    }
- 
-    /**
-     * a subroutine of the from method to assign the column values of the 2D array
-     * @param <S>
-     * @param matrix
-     * @param map
-     * @param row
-     * @param col
-     */
-    private static <S> void assignColumnValue(S[][] matrix, Map<Indexes, S> map, int row, int col) {
-        Indexes key = new Indexes(row, col);
-        S value = matrix[row][col];
-        map.put(key, value);
+        return instance(matrix.length, matrix[0].length, (index) -> index.value(matrix));
     }
 
     public static void main(String[] args) {

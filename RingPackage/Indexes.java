@@ -1,7 +1,6 @@
 package RingPackage;
 
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -18,6 +17,19 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
     public int compareTo(Indexes o) {
         //null check
         Objects.requireNonNull(o, "o cannot be null");
+        return comparisonResult(o);
+    }
+
+    /**
+     * a subroutine which returns a positive or negative integer based on the result of the comparison
+     * @param o
+     * @return
+     */
+    private int comparisonResult(Indexes o) {
+
+        //null check
+        assert o != null : "o cannot be null";
+
         if (this.row > o.row) {
             return 1;
         }
@@ -29,11 +41,6 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
         }
     }
 
-    @Override
-    public String toString() {
-        return (row() + ", " + column());
-    }
-
     /**
      * a helper method to compare indexes by column
      * @param o
@@ -43,6 +50,7 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
 
         //null check
         assert o != null : "o cannot be null";
+
         if (column > o.column) {
             return 1;
         }
@@ -52,6 +60,14 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
         else {
             return 0;
         }
+    }
+
+    /**
+     * overriding the toString method
+     */
+    @Override
+    public String toString() {
+        return (row() + ", " + column());
     }
 
     /**
@@ -73,6 +89,7 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
 
     /**
      * a static method to generate all the indexes in a given range
+     * THE FOUNDATIONAL STREAM METHOD
      */
     public static <T> Stream<Indexes> stream(Indexes from, Indexes to) {
         //null checks
@@ -112,7 +129,7 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
     }
 
     /**
-     * overloading the stream mehtod to generate indexes between (0, 0) and the size endpoint
+     * overloading the stream method to generate indexes between (0, 0) and the size endpoint
      */
     public static Stream<Indexes> stream(Indexes size) {
         //null checks
@@ -122,23 +139,24 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
     }
 
     /**
-     * overloading the stream mehtod to generate indexes between (0, 0) and the (rows, columns) endpoint
+     * overloading the stream method to generate indexes between (0, 0) and the (rows, columns) endpoint
      */
     public static <T> Stream<Indexes> stream(int rows, int columns) {
 
         return stream(new Indexes(0, 0), new Indexes(rows, columns)); 
     }
 
+    /**
+     * a method to return the value of the current index in the input matrix
+     * @param <S>
+     * @param matrix
+     * @return
+     */
     public <S> S value(MatrixMap<S> matrix) {
+
+        //null check
+        Objects.requireNonNull(matrix);
+
         return matrix.value(this);
     }
-
-    public static void main(String[] args) {
-
-        Indexes index = new Indexes(1, 2);
-        Indexes index2 = new Indexes(3, 4);
-        System.out.println(Indexes.stream(index, index2).collect(Collectors.toList()));
-    }
-
-
 }

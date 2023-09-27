@@ -30,6 +30,14 @@ public final class MatrixMap<T> {
     }
 
     /**
+     * a getter method for the map
+     * @return
+     */
+    protected Map<Indexes, T> getMap() {
+        return matrix;
+    }
+
+    /**
      * a method to return the matrix size
      * @return
      */
@@ -50,10 +58,21 @@ public final class MatrixMap<T> {
         int numRows = size.row() + 1; // Add 1 to include row 0
         int numCols = size.column() + 1; // Add 1 to include column 0
     
+        return toGrid(numRows, numCols);
+    }
+
+    /**
+     * a subroutine for the toString() method which displays the matrix as a grid 
+     * @param numRows
+     * @param numCols
+     * @return
+     */
+    private String toGrid(int numRows, int numCols) {
+
         for (int row = 0; row < numRows; row++) {
             for (int col = 0; col < numCols; col++) {
                 Indexes index = new Indexes(row, col);
-                T value = matrix.get(index);
+                T value = value(index);
                 System.out.println("[" + index.toString() + "]: " + value); //print the entry
                 System.out.println("\t"); //print a tab
             }
@@ -69,6 +88,7 @@ public final class MatrixMap<T> {
      */
     public T value(Indexes indexes) {
 
+        //null check
         Objects.requireNonNull(indexes, "indexes cannot be null");
         return matrix.get(indexes);
     }
@@ -105,6 +125,11 @@ public final class MatrixMap<T> {
          * @param length
          */
         public InvalidLengthException(Cause cause, Integer length) {
+
+            //null checks
+            Objects.requireNonNull(cause);
+            Objects.requireNonNull(length);
+
             this.cause = cause;
             this.length = length;
         }
@@ -137,15 +162,25 @@ public final class MatrixMap<T> {
             Objects.requireNonNull(cause, "cause cannot be null");
 
             //checks if the length of the cause dimention fails the valid criteria
+            checkValidLength(cause, length);
+            return length;
+        }
+
+        /**
+         * a subroutine which checks the length of the input length
+         * @param cause
+         * @param length
+         */
+        private static void checkValidLength(Cause cause, int length) {
             if (length <= 0) {
                 throw new IllegalArgumentException(new InvalidLengthException(cause, length)); 
             }
-            return length;
         }
     }
 
     /**
      * a method to create an instance of a MatrixMap using a defined valueMapper function
+     * THE FOUNDATIONAL METHOD FOR CREATING MATRIX INSTANCES
      * @param <S>
      * @param rows
      * @param columns
@@ -156,18 +191,34 @@ public final class MatrixMap<T> {
 
         //error handling
         Objects.requireNonNull(valueMapper, "valueMapper cannot be null");
-
-        InvalidLengthException.requireNonEmpty(Cause.ROW, rows);
-        InvalidLengthException.requireNonEmpty(Cause.COLUMN, columns);
+        InvalidLengthException.requireNonEmpty(Cause.ROW, rows); //checks if the rows are valid
+        InvalidLengthException.requireNonEmpty(Cause.COLUMN, columns); //checks if the columns are valid
 
         Map<Indexes, S> matrix = new HashMap<>();
         List<Indexes> indexes = Indexes.stream(rows, columns).collect(Collectors.toList());
+
+        populate(valueMapper, matrix, indexes); //populating the matrix with the specified values
+        return new MatrixMap<>(matrix);
+    }
+
+    /**
+     * a subroutine of the instance method which fills the matrix with the specified elements
+     * @param <S>
+     * @param valueMapper
+     * @param matrix
+     * @param indexes
+     */
+    private static <S> void populate(Function<Indexes, S> valueMapper, Map<Indexes, S> matrix, List<Indexes> indexes) {
+
+        //null checks
+        assert valueMapper != null : "valueMapper cannot be null";
+        assert matrix != null : "matrix cannot be null";
+        assert indexes != null : "indexes cannot be null";
 
         for (Indexes index : indexes) {
             S value = valueMapper.apply(index);
             matrix.put(index, value);
         }
-        return new MatrixMap<>(matrix);
     }
 
     /**

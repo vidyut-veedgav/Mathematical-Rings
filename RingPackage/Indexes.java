@@ -18,6 +18,7 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
     public int compareTo(Indexes o) {
         //null check
         Objects.requireNonNull(o, "o cannot be null");
+
         return comparisonResult(o);
     }
 
@@ -80,8 +81,21 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
 
         //null check
         Objects.requireNonNull(matrix, "matrix cannot be null");
-        
+
         return matrix[row][column];
+    }
+
+    /**
+     * a method to return the value of the current index in the input matrix
+     * @param <S>
+     * @param matrix
+     * @return
+     */
+    public <S> S value(MatrixMap<S> matrix) {
+        //null check
+        Objects.requireNonNull(matrix);
+
+        return matrix.value(this);
     }
 
     /**
@@ -149,18 +163,5 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
     public static <T> Stream<Indexes> stream(int rows, int columns) {
 
         return stream(new Indexes(0, 0), new Indexes(rows, columns)); 
-    }
-
-    /**
-     * a method to return the value of the current index in the input matrix
-     * @param <S>
-     * @param matrix
-     * @return
-     */
-    public <S> S value(MatrixMap<S> matrix) {
-        //null check
-        Objects.requireNonNull(matrix);
-
-        return matrix.value(this);
     }
 }

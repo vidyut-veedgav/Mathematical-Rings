@@ -17,12 +17,14 @@ import RingPackage.MatrixMap.InvalidLengthException.Cause;
 public final class MatrixMap<T> {
     
     private final Map<Indexes, T>  matrix; //an instance field representing the matrix
+    private Indexes size; //an instance field represeting the size of the matrix
     
     /**
      * a constructor for the matrix
      * @param matrix
      */
     private MatrixMap(Map<Indexes, T> matrix) {
+
         //null check
         assert matrix != null : "matrix cannot be null";
         this.matrix = matrix;
@@ -46,7 +48,6 @@ public final class MatrixMap<T> {
 
     /**
      * a method to override the toString method
-     * INCOMPLETE
      */
     @Override
     public String toString() {
@@ -72,16 +73,29 @@ public final class MatrixMap<T> {
 
             //indexing through the corresponding column
             for (int col = 0; col < numCols; col++) {
-
-                Indexes index = new Indexes(row, col); //creating an index
-                T value = value(index); //finding the value at this index
-
-                sb.append("[" + index.toString() + "]: " + value); //add the entry
-                sb.append("\t"); //add a tab
+                addEntry(sb, row, col);
             }
             sb.append("\n"); //add a carriage return
         }
         return sb.toString();
+    }
+
+    /**
+     * a subroutine of the toGrid method which creates appends a String entry to the matrix
+     * @param sb
+     * @param row
+     * @param col
+     */
+    private void addEntry(StringBuilder sb, int row, int col) {
+
+        //null check
+        assert sb != null : "sb cannot be null";
+
+        Indexes index = new Indexes(row, col); //creating an index
+        T value = value(index); //finding the value at this index
+
+        sb.append("[" + index.toString() + "]: " + value); //add the entry
+        sb.append("\t"); //add a tab
     }
 
     /**
@@ -163,24 +177,10 @@ public final class MatrixMap<T> {
             Objects.requireNonNull(cause, "cause cannot be null");
 
             //checks if the length of the cause dimention fails the valid criteria
-            checkValidLength(cause, length);
-            return length;
-        }
-
-        /**
-         * a subroutine which checks the length of the input length
-         * @param cause
-         * @param length
-         */
-        private static void checkValidLength(Cause cause, int length) {
-
-            //null check
-            assert cause != null : "cause cannot be null";
-
-            //checking the length
             if (length <= 0) {
                 throw new IllegalArgumentException(new InvalidLengthException(cause, length)); 
             }
+            return length;
         }
     }
 
@@ -204,7 +204,7 @@ public final class MatrixMap<T> {
         List<Indexes> indexes = Indexes.stream(rows, columns).collect(Collectors.toList()); //creating a list of indexes
 
         populate(valueMapper, matrix, indexes); //populating the matrix with the specified values
-        return new MatrixMap<>(matrix);
+        return new MatrixMap<>(Map.copyOf(matrix));
     }
 
     /**
@@ -298,9 +298,13 @@ public final class MatrixMap<T> {
         //example: storing values as the sum of the index row and column
         System.out.println(MatrixMap.instance(4, 5, (index) -> index.row() + index.column()));
 
-
-        Integer[][] arr = null;
-        System.out.println(arr);
+        Integer[][] arr = new Integer[3][4];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                arr[i][j] = 100;
+            }
+        }
+        System.out.println(MatrixMap.from(arr));
     }
 }
 

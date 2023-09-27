@@ -156,7 +156,9 @@ public class MatrixTesting {
     @Test
     public void testMatrixToString() {
         MatrixMap<Integer> matrix = MatrixMap.constant(1, 10);
-        assertEquals("", matrix.toString());
+        assertEquals("[0, 0]: 10\t[0, 1]: 10\t\n" + //
+                "[1, 0]: 10\t[1, 1]: 10\t\n" + //
+                "", matrix.toString());
     }
 
     /**
@@ -281,9 +283,9 @@ public class MatrixTesting {
     public void testFrom() {
         Integer[][] testArr = new Integer[2][2];
         testArr[0][0] = 100;
-        //testArr[0][1] = 200;
-        //testArr[1][0] = 300;
-        //testArr[1][1] = 400;
+        testArr[0][1] = 200;
+        testArr[1][0] = 300;
+        testArr[1][1] = 400;
 
         MatrixMap<Integer> matrix = MatrixMap.from(testArr);
         assertEquals(Integer.valueOf(100), matrix.value(0, 0));

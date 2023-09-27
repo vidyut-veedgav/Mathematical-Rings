@@ -12,6 +12,7 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
 
     /**
      * overriding the compareTo method of Comparable
+     * parent routine
      */
     @Override
     public int compareTo(Indexes o) {
@@ -75,7 +76,11 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
      * @param matrix
      * @return
      */
-    public <T> T value(T[][] matrix) {
+    public <S> S value(S[][] matrix) {
+
+        //null check
+        Objects.requireNonNull(matrix, "matrix cannot be null");
+        
         return matrix[row][column];
     }
 
@@ -107,7 +112,7 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
         return IntStream.rangeClosed(minRow, maxRow)
                         .boxed() //wraps the contents of the range into Integers
                         .flatMap((row) -> IntStream.rangeClosed(minColumn, maxColumn) //use flat map to flatten the 2D stream into a single stream
-                        .mapToObj(column -> new Indexes(row, column))); //mapping each row column pair to a new Index
+                        .mapToObj((column) -> new Indexes(row, column))); //mapping each row column pair to a new Index
     }
 
     /**
@@ -153,7 +158,6 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
      * @return
      */
     public <S> S value(MatrixMap<S> matrix) {
-
         //null check
         Objects.requireNonNull(matrix);
 

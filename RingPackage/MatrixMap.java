@@ -1,6 +1,5 @@
 package RingPackage;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -31,20 +30,18 @@ public final class MatrixMap<T> {
 
     /**
      * a getter method for the map
-     * @return
+     * @return an immutable copy of the matrix, which can be used for containment testing
      */
     protected Map<Indexes, T> getMap() {
-        return matrix;
+        return Map.copyOf(matrix);
     }
 
     /**
-     * a method to return the matrix size
+     * a method to return the matrix size by finding the greatest key in the keySet
      * @return
      */
     public Indexes size() {
-
-        List<Indexes> keys = new ArrayList<>(matrix.keySet());
-        return Collections.max(keys);
+        return Collections.max(matrix.keySet());
     }
 
     /**
@@ -69,16 +66,22 @@ public final class MatrixMap<T> {
      */
     private String toGrid(int numRows, int numCols) {
 
+        StringBuilder sb = new StringBuilder();
+        //indexing through the rows
         for (int row = 0; row < numRows; row++) {
+
+            //indexing through the corresponding column
             for (int col = 0; col < numCols; col++) {
-                Indexes index = new Indexes(row, col);
-                T value = value(index);
-                System.out.println("[" + index.toString() + "]: " + value); //print the entry
-                System.out.println("\t"); //print a tab
+
+                Indexes index = new Indexes(row, col); //creating an index
+                T value = value(index); //finding the value at this index
+
+                sb.append("[" + index.toString() + "]: " + value); //add the entry
+                sb.append("\t"); //add a tab
             }
-            System.out.println("\n");
+            sb.append("\n"); //add a carriage return
         }
-        return "";
+        return sb.toString();
     }
 
     /**
@@ -98,9 +101,7 @@ public final class MatrixMap<T> {
      * @return the corresponding value
      */
     public T value(int row, int column) {
-
-        Indexes indexes = new Indexes(row, column);
-        return value(indexes);
+        return value(new Indexes(row, column));
     }
     
     /**
@@ -172,6 +173,11 @@ public final class MatrixMap<T> {
          * @param length
          */
         private static void checkValidLength(Cause cause, int length) {
+
+            //null check
+            assert cause != null : "cause cannot be null";
+
+            //checking the length
             if (length <= 0) {
                 throw new IllegalArgumentException(new InvalidLengthException(cause, length)); 
             }
@@ -194,8 +200,8 @@ public final class MatrixMap<T> {
         InvalidLengthException.requireNonEmpty(Cause.ROW, rows); //checks if the rows are valid
         InvalidLengthException.requireNonEmpty(Cause.COLUMN, columns); //checks if the columns are valid
 
-        Map<Indexes, S> matrix = new HashMap<>();
-        List<Indexes> indexes = Indexes.stream(rows, columns).collect(Collectors.toList());
+        Map<Indexes, S> matrix = new HashMap<>(); //creating the map
+        List<Indexes> indexes = Indexes.stream(rows, columns).collect(Collectors.toList()); //creating a list of indexes
 
         populate(valueMapper, matrix, indexes); //populating the matrix with the specified values
         return new MatrixMap<>(matrix);
@@ -234,7 +240,7 @@ public final class MatrixMap<T> {
         Objects.requireNonNull(size, "size cannot be null");
         Objects.requireNonNull(valueMapper, "valueMapper cannot be null");
     
-        //calling the original instance method
+        //calling the foundational instance method
         return MatrixMap.instance(size.row(), size.column(), valueMapper);
     }
 
@@ -250,6 +256,7 @@ public final class MatrixMap<T> {
         //null check
         Objects.requireNonNull(value, "value cannot be null");
 
+        //calling the foundational instance method
         return instance(size, size, (index) -> value);
     }
 
@@ -267,6 +274,7 @@ public final class MatrixMap<T> {
         Objects.requireNonNull(zero, "zero cannot be null");
         Objects.requireNonNull(identity, "identity cannot be null");
 
+        //calling the foundational instance method
         return instance(size, size, (index) -> (index.areDiagonal()) ? identity : zero);
     }
 
@@ -278,13 +286,21 @@ public final class MatrixMap<T> {
      */
     public static <S> MatrixMap<S> from(S[][] matrix) {
 
-        return instance(matrix.length, matrix[0].length, (index) -> index.value(matrix));
+        //null check
+        Objects.requireNonNull(matrix, "matrix cannot be null");
+
+        //calling the foundational instance method
+        return instance(matrix.length - 1, matrix[0].length - 1, (index) -> index.value(matrix));
     }
 
     public static void main(String[] args) {
 
         //example: storing values as the sum of the index row and column
-        System.out.println(MatrixMap.instance(3, 4, (index) -> index.row() + index.column()));
+        System.out.println(MatrixMap.instance(4, 5, (index) -> index.row() + index.column()));
+
+
+        Integer[][] arr = null;
+        System.out.println(arr);
     }
 }
 

@@ -8,6 +8,7 @@ import RingPackage.MatrixMap.InvalidLengthException.Cause;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -143,6 +144,7 @@ public class MatrixTesting {
       */
     @Test
     public void testSize() {
+
         MatrixMap<Integer> matrix = MatrixMap.constant(5, 100);
         assertEquals("5, 5", matrix.size().toString());
         MatrixMap<Integer> matrix2 = MatrixMap.constant(12, 100);

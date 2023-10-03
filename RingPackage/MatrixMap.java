@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -16,8 +17,7 @@ import RingPackage.MatrixMap.InvalidLengthException.Cause;
  */
 public final class MatrixMap<T> {
     
-    private final Map<Indexes, T>  matrix; //an instance field representing the matrix
-    private Indexes size; //an instance field represeting the size of the matrix
+    private final Map<Indexes, T>  matrix; //an field representing the matrix
     
     /**
      * a constructor for the matrix
@@ -293,10 +293,97 @@ public final class MatrixMap<T> {
         return instance(matrix.length - 1, matrix[0].length - 1, (index) -> index.value(matrix));
     }
 
+    /**
+     * a nested class to aid error handling
+     */
+    static class InconsistentSizeException extends Exception {
+
+        private Indexes thisIndex; //stores the current Index
+        private Indexes otherIndex; //stores the other Index
+
+        /**
+         * constructor
+         * @param thisIndex
+         * @param otherIndex
+         */
+        public InconsistentSizeException(Indexes thisIndex, Indexes otherIndex) {
+            this.thisIndex = thisIndex;
+            this.otherIndex = otherIndex;
+        }
+
+        /**
+         * getter for the thisIndex field
+         * @return
+         */
+        public Indexes getThisIndex() {
+            return thisIndex;
+        }
+
+        /**
+         * a getter for the otherIndex field
+         * @return
+         */
+        public Indexes getOtherIndex() {
+            return otherIndex;
+        }
+
+        /**
+         * a method which checks if two matrixes are the same size
+         * @param <T>
+         * @param thisMatrix
+         * @param otherMatrix
+         * @return
+         * @throws InconsistentSizeException
+         */
+        public static <T> Indexes requireMatchingSize(MatrixMap<T> thisMatrix, MatrixMap<T> otherMatrix) throws InconsistentSizeException {
+            
+            if (!thisMatrix.size().equals(otherMatrix.size())) {
+                throw new InconsistentSizeException(thisMatrix.size(), otherMatrix.size());
+            }
+            return thisMatrix.size();
+        }
+    }
+
+    /**
+     * a method to add two matrixes together
+     * @param other
+     * @param plus
+     * @return
+     */
+    public MatrixMap<T> plus(MatrixMap<T> other, BinaryOperator<T> plus) {
+
+        try {
+            InconsistentSizeException.requireMatchingSize(this, other);
+        } catch (InconsistentSizeException e) {
+            e.printStackTrace();
+        }
+        
+        return instance(this.size(), (index) -> plus.apply(this.value(index), other.value(index)));
+    }
+
+    /**
+     * a method to multiply two matrixes together
+     * @return
+     */
+    public MatixMap<T> times(MatrixMap<T> other, Ring<T> ring) {
+
+        try {
+            InconsistentSizeException.requireMatchingSize(this, other);
+        } catch (InconsistentSizeException e) {
+            e.printStackTrace();
+        }
+
+        return instance(this.size(), (index) -> {
+
+            
+        });
+
+    }
+
     public static void main(String[] args) {
 
         //example: storing values as the sum of the index row and column
-        System.out.println(MatrixMap.instance(4, 5, (index) -> index.row() + index.column()));
+        //System.out.println(MatrixMap.instance(4, 5, (index) -> index.row() + index.column()));
 
         Integer[][] arr = new Integer[3][4];
         for (int i = 0; i < 3; i++) {
@@ -304,7 +391,11 @@ public final class MatrixMap<T> {
                 arr[i][j] = 100;
             }
         }
-        System.out.println(MatrixMap.from(arr));
+        //System.out.println(MatrixMap.from(arr));
+        MatrixMap<Integer> m = constant(5, 100);
+        MatrixMap<Integer> n = constant(5, 100);
+
+        System.out.println(m.plus(n, (a, b) -> a + b));
     }  
 }
 

@@ -20,6 +20,7 @@ import RingPackage.MatrixMap.InvalidLengthException.Cause;
 public final class MatrixMap<T> {
     
     private final Map<Indexes, T>  matrix; //an field representing the matrix
+    private final Indexes size;
     
     /**
      * a constructor for the matrix
@@ -30,10 +31,11 @@ public final class MatrixMap<T> {
         //null check
         assert matrix != null : "matrix cannot be null";
         this.matrix = matrix;
+        this.size = Collections.max(matrix.keySet());
     }
 
     /**
-     * a getter method for the map
+     * a getter method for the map used for testing
      * @return an immutable copy of the matrix, which can be used for containment testing
      */
     protected Map<Indexes, T> getMap() {
@@ -45,7 +47,7 @@ public final class MatrixMap<T> {
      * @return
      */
     public Indexes size() {
-        return Collections.max(matrix.keySet());
+        return size;
     }
 
     /**
@@ -58,17 +60,6 @@ public final class MatrixMap<T> {
         int numRows = size.row() + 1; // Add 1 to include row 0
         int numCols = size.column() + 1; // Add 1 to include column 0
     
-        return toGrid(numRows, numCols);
-    }
-
-    /**
-     * a subroutine for the toString() method which displays the matrix as a grid 
-     * @param numRows
-     * @param numCols
-     * @return
-     */
-    private String toGrid(int numRows, int numCols) {
-
         StringBuilder sb = new StringBuilder();
         //indexing through the rows
         for (int row = 0; row < numRows; row++) {
@@ -349,7 +340,7 @@ public final class MatrixMap<T> {
             
             //checks if the sizes are not equal
             if (!thisMatrix.size().equals(otherMatrix.size())) {
-                throw new IllegalArgumentException("MATRIXES MUST BE OF EQUAL SIZE", new InconsistentSizeException(thisMatrix.size(), otherMatrix.size()));
+                throw new IllegalArgumentException(new InconsistentSizeException(thisMatrix.size(), otherMatrix.size()));
             }
             return thisMatrix.size();
         }
@@ -393,7 +384,7 @@ public final class MatrixMap<T> {
 
             //checks if the index is on the diagonal
             if (!indexes.areDiagonal()) {
-                throw new IllegalStateException("INDEXES MUST BE ON THE DIAGONAL, MAKE SURE MATRIXES ARE SQUARES", new NonSquareException(indexes));
+                throw new IllegalStateException(new NonSquareException(indexes));
             }
             return indexes;
         }
@@ -450,20 +441,6 @@ public final class MatrixMap<T> {
         Integer size = Integer.valueOf(input.nextLine());
         System.out.println("SIZE = " + size);
      
-        //System.out.println("Choose Matrix Values");
-        //System.out.println("MATRIX 1 VALUE: ");
-        //Integer matrixValOne = Integer.valueOf(input.nextLine());
-        //System.out.println("MATRIX ONE WILL BE POPULATED WITH = " + matrixValOne);
-
-        //System.out.println("MATRIX 2 VALUE: ");
-        //Integer matrixValTwo = Integer.valueOf(input.nextLine());
-        //System.out.println("MATRIX ONE WILL BE POPULATED WITH = " + matrixValTwo);
-
-        System.out.println("ADD or MULTIPLY ([A/M])");
-        String addOrMultiply = input.nextLine();
-
-       
-
         System.out.println("Matrix One Values:");
         Map<Indexes, Integer> indexMap = new HashMap<>();
         for (int i = 0; i <= size; i++) {
@@ -473,6 +450,9 @@ public final class MatrixMap<T> {
                 indexMap.put(index, Integer.valueOf(input.nextLine()));
             }
         }
+        MatrixMap<Integer> m1 = MatrixMap.instance(new Indexes(size, size), (index) -> indexMap.get(index));
+        System.out.println("MATRIX 1: ");
+        System.out.println(m1.toString());
 
         System.out.println("Matrix Two Values:");
         Map<Indexes, Integer> indexMap2 = new HashMap<>();
@@ -483,20 +463,23 @@ public final class MatrixMap<T> {
                 indexMap2.put(index, Integer.valueOf(input.nextLine()));
             }
         }
+        MatrixMap<Integer> m2 = MatrixMap.instance(new Indexes(size, size), (index) -> indexMap2.get(index));
+        System.out.println("MATRIX 1: ");
+        System.out.println(m1.toString());
+
+        System.out.println("ADD or MULTIPLY ([A/M])");
+        String addOrMultiply = input.nextLine();
 
         input.close();
 
-        MatrixMap<Integer> m1 = MatrixMap.instance(new Indexes(size, size), (index) -> indexMap.get(index));
-        MatrixMap<Integer> m2 = MatrixMap.instance(new Indexes(size, size), (index) -> indexMap2.get(index));
         Ring<Integer> intRing = new IntegerRing();
 
-        MatrixMap<Integer> sum = m1.plus(m2, (x, y) -> intRing.sum(x, y));
-        MatrixMap<Integer> product = m1.times(m2, intRing);
-
         if (addOrMultiply.equals("A")) {
+            MatrixMap<Integer> sum = m1.plus(m2, (x, y) -> intRing.sum(x, y));
             System.out.println(sum);
         }
         else if (addOrMultiply.equals("M")) {
+            MatrixMap<Integer> product = m1.times(m2, intRing);
             System.out.println(product);
         }
         else {

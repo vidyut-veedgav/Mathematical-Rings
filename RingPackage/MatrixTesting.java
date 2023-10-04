@@ -7,8 +7,9 @@ import RingPackage.MatrixMap.InvalidLengthException.Cause;
 
 import static org.junit.Assert.*;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -32,10 +33,10 @@ public class MatrixTesting {
     public void testCompareTo() {
         
         Indexes i = new Indexes(2, 2);
-        assertEquals(1, i.compareTo(index)); //testing greater than
-        assertEquals(-1, index.compareTo(i)); //testing less than
+        assertTrue(i.compareTo(index) > 0); //testing greater than
+        assertTrue(index.compareTo(i) < 0); //testing less than
         i = new Indexes(0, 0);
-        assertEquals(0, i.compareTo(index)); //testing equal to
+        assertTrue(i.compareTo(index) == 0); //testing equal to
     }
 
     /**
@@ -294,6 +295,104 @@ public class MatrixTesting {
         assertEquals(Integer.valueOf(200), matrix.value(0, 1));
         assertEquals(Integer.valueOf(300), matrix.value(1, 0));
         assertEquals(Integer.valueOf(400), matrix.value(1, 1));
+    }
+
+    /**
+     * testing the plus method
+     */
+    @Test
+    public void testPlus() {
+
+        //TESTING FOR MATRIXES OF BIGINTEGERS
+
+        //matrixes with the same values
+        MatrixMap<BigInteger> m = MatrixMap.constant(2, BigInteger.valueOf(1));
+        MatrixMap<BigInteger> n = MatrixMap.constant(2, BigInteger.valueOf(1));
+
+        Ring<BigInteger> bigRing = new BigIntegerRing();
+        MatrixMap<BigInteger> sum = m.plus(n, (x, y) -> bigRing.sum(x, y));
+        assertTrue(sum.value(0, 0).equals(BigInteger.valueOf(2)));
+        assertTrue(sum.value(0, 1).equals(BigInteger.valueOf(2)));
+        assertTrue(sum.value(1, 0).equals(BigInteger.valueOf(2)));
+        assertTrue(sum.value(1, 1).equals(BigInteger.valueOf(2)));
+        
+        //matrixes with different values
+        MatrixMap<BigInteger> x = MatrixMap.constant(2, BigInteger.valueOf(1));
+        MatrixMap<BigInteger> y = MatrixMap.constant(2, BigInteger.valueOf(2));
+
+        MatrixMap<BigInteger> sum2 = x.plus(y, (c, d) -> bigRing.sum(c, d));
+        assertTrue(sum2.value(0, 0).equals(BigInteger.valueOf(3)));
+        assertTrue(sum2.value(0, 1).equals(BigInteger.valueOf(3)));
+        assertTrue(sum2.value(1, 0).equals(BigInteger.valueOf(3)));
+        assertTrue(sum2.value(1, 1).equals(BigInteger.valueOf(3)));
+
+        //TESTING FOR MATRIXES OF POLYNOMIALS
+
+        //matrixes with the same values
+        List<BigInteger> bigList = new ArrayList<>(List.of(BigInteger.valueOf(1), BigInteger.valueOf(2), BigInteger.valueOf(3)));
+        Polynomial<BigInteger> poly1 = Polynomial.from(bigList);
+        Polynomial<BigInteger> poly2 = Polynomial.from(bigList);
+
+        MatrixMap<Polynomial<BigInteger>> pm1 = MatrixMap.constant(2, poly1);
+        MatrixMap<Polynomial<BigInteger>> pm2 = MatrixMap.constant(2, poly2);
+
+        Ring<Polynomial<BigInteger>> polyRing = PolynomialRing.instance(bigRing);
+        MatrixMap<Polynomial<BigInteger>> polySum = pm1.plus(pm2, (q, w) -> polyRing.sum(q, w));
+
+        assertEquals(List.of(BigInteger.valueOf(2), BigInteger.valueOf(4), BigInteger.valueOf(6)), polySum.value(0, 0).getCoefficients());
+        assertEquals(List.of(BigInteger.valueOf(2), BigInteger.valueOf(4), BigInteger.valueOf(6)), polySum.value(0, 1).getCoefficients());
+        assertEquals(List.of(BigInteger.valueOf(2), BigInteger.valueOf(4), BigInteger.valueOf(6)), polySum.value(1, 0).getCoefficients());
+        assertEquals(List.of(BigInteger.valueOf(2), BigInteger.valueOf(4), BigInteger.valueOf(6)), polySum.value(1, 1).getCoefficients());
+
+        //matrixes with different values
+        List<BigInteger> bigList2 = new ArrayList<>(List.of(BigInteger.valueOf(2), BigInteger.valueOf(4), BigInteger.valueOf(6)));
+        poly2 = Polynomial.from(bigList2);
+        pm2 = MatrixMap.constant(2, poly2);
+
+        MatrixMap<Polynomial<BigInteger>> polySum2 = pm1.plus(pm2, (q, w) -> polyRing.sum(q, w));
+
+        assertEquals(List.of(BigInteger.valueOf(3), BigInteger.valueOf(6), BigInteger.valueOf(9)), polySum2.value(0, 0).getCoefficients());
+        assertEquals(List.of(BigInteger.valueOf(3), BigInteger.valueOf(6), BigInteger.valueOf(9)), polySum2.value(0, 1).getCoefficients());
+        assertEquals(List.of(BigInteger.valueOf(3), BigInteger.valueOf(6), BigInteger.valueOf(9)), polySum2.value(1, 0).getCoefficients());
+        assertEquals(List.of(BigInteger.valueOf(3), BigInteger.valueOf(6), BigInteger.valueOf(9)), polySum2.value(1, 1).getCoefficients());
+    }
+
+    /**
+     * testing the times method
+     */
+    @Test
+    public void testTimes() {
+
+        //testing for Matrixes of BigIntegers
+        MatrixMap<BigInteger> m = MatrixMap.instance(new Indexes(2, 2), (index) -> BigInteger.valueOf(index.row() + index.column()));
+        MatrixMap<BigInteger> n = MatrixMap.instance(new Indexes(2, 2), (index) -> BigInteger.valueOf(index.row() + index.column() + 5));
+        Ring<BigInteger> bigRing = new BigIntegerRing();
+
+        MatrixMap<BigInteger> product = m.times(n, bigRing);
+
+        assertEquals(BigInteger.valueOf(20), product.value(0, 0));
+        assertEquals(BigInteger.valueOf(23), product.value(0, 1));
+        assertEquals(BigInteger.valueOf(38), product.value(1, 0));
+        assertEquals(BigInteger.valueOf(44), product.value(1, 1));
+
+        //testing for Matrixes of Polynomials
+        List<BigInteger> bigList = new ArrayList<>(List.of(BigInteger.valueOf(1), BigInteger.valueOf(2), BigInteger.valueOf(3)));
+        List<BigInteger> bigList2 = new ArrayList<>(List.of(BigInteger.valueOf(4), BigInteger.valueOf(5), BigInteger.valueOf(6)));
+
+        Polynomial<BigInteger> poly1 = Polynomial.from(bigList);
+        Polynomial<BigInteger> poly2 = Polynomial.from(bigList2);
+
+        Ring<Polynomial<BigInteger>> polyRing = PolynomialRing.instance(bigRing);
+
+        MatrixMap<Polynomial<BigInteger>> m1 = MatrixMap.constant(2, poly1);
+        MatrixMap<Polynomial<BigInteger>> m2 = MatrixMap.constant(2, poly2);
+
+        MatrixMap<Polynomial<BigInteger>> product2 = m1.times(m2, polyRing);
+
+        assertEquals(List.of(BigInteger.valueOf(12), BigInteger.valueOf(39), BigInteger.valueOf(84), BigInteger.valueOf(81), BigInteger.valueOf(54)), product2.value(0, 0).getCoefficients());
+        assertEquals(List.of(BigInteger.valueOf(12), BigInteger.valueOf(39), BigInteger.valueOf(84), BigInteger.valueOf(81), BigInteger.valueOf(54)), product2.value(0, 1).getCoefficients());
+        assertEquals(List.of(BigInteger.valueOf(12), BigInteger.valueOf(39), BigInteger.valueOf(84), BigInteger.valueOf(81), BigInteger.valueOf(54)), product2.value(1, 0).getCoefficients());
+        assertEquals(List.of(BigInteger.valueOf(12), BigInteger.valueOf(39), BigInteger.valueOf(84), BigInteger.valueOf(81), BigInteger.valueOf(54)), product2.value(1, 1).getCoefficients());
     }
 }
 

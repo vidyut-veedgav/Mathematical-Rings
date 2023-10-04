@@ -1,10 +1,12 @@
 package RingPackage;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -94,8 +96,7 @@ public final class MatrixMap<T> {
         Indexes index = new Indexes(row, col); //creating an index
         T value = value(index); //finding the value at this index
 
-        sb.append("[" + index.toString() + "]: " + value); //add the entry
-        sb.append("\t"); //add a tab
+        sb.append("[").append(index.toString()).append("]: ").append(value).append("\t"); //add the entry
     }
 
     /**
@@ -307,6 +308,11 @@ public final class MatrixMap<T> {
          * @param otherIndex
          */
         public InconsistentSizeException(Indexes thisIndex, Indexes otherIndex) {
+
+            //null checks
+            Objects.requireNonNull(thisIndex, "thisIndex cannot be null");
+            Objects.requireNonNull(otherIndex, "otherIndex cannot be null");
+
             this.thisIndex = thisIndex;
             this.otherIndex = otherIndex;
         }
@@ -333,69 +339,170 @@ public final class MatrixMap<T> {
          * @param thisMatrix
          * @param otherMatrix
          * @return
-         * @throws InconsistentSizeException
+         * @throws IllegalArgumentException
          */
-        public static <T> Indexes requireMatchingSize(MatrixMap<T> thisMatrix, MatrixMap<T> otherMatrix) throws InconsistentSizeException {
+        public static <T> Indexes requireMatchingSize(MatrixMap<T> thisMatrix, MatrixMap<T> otherMatrix) {
+
+            //null checks
+            Objects.requireNonNull(thisMatrix, "thisMatrix cannot be null");
+            Objects.requireNonNull(otherMatrix, "otherMatrix cannot be null");
             
+            //checks if the sizes are not equal
             if (!thisMatrix.size().equals(otherMatrix.size())) {
-                throw new InconsistentSizeException(thisMatrix.size(), otherMatrix.size());
+                throw new IllegalArgumentException("MATRIXES MUST BE OF EQUAL SIZE", new InconsistentSizeException(thisMatrix.size(), otherMatrix.size()));
             }
             return thisMatrix.size();
         }
     }
 
     /**
-     * a method to add two matrixes together
+     * a nested class used to check if a matrix is a square
+     */
+    static class NonSquareException extends Exception {
+
+        private final Indexes indexes; //instance field storing the index to be checked
+
+        /**
+         * constructor
+         * @param indexes
+         */
+        public NonSquareException(Indexes indexes) {
+
+            //null check
+            Objects.requireNonNull(indexes, "indexes cannot be null");
+            this.indexes = indexes;
+        }
+
+        /**
+         * a getter for the indexes method
+         * @return
+         */
+        public Indexes getIndexes() {
+            return indexes;
+        }
+
+        /**
+         * a method to throw an exception if the index that is passed in is not on the diagonal of the matrix
+         * @param indexes should be the size of the matrix
+         * @return
+         */
+        public static Indexes requireDiagonal(Indexes indexes) {
+
+            //null check
+            Objects.requireNonNull(indexes, "indexes cannot be null");
+
+            //checks if the index is on the diagonal
+            if (!indexes.areDiagonal()) {
+                throw new IllegalStateException("INDEXES MUST BE ON THE DIAGONAL, MAKE SURE MATRIXES ARE SQUARES", new NonSquareException(indexes));
+            }
+            return indexes;
+        }
+    }
+
+    /**
+     * a method to support matrix addition
      * @param other
      * @param plus
      * @return
      */
     public MatrixMap<T> plus(MatrixMap<T> other, BinaryOperator<T> plus) {
 
-        try {
-            InconsistentSizeException.requireMatchingSize(this, other);
-        } catch (InconsistentSizeException e) {
-            e.printStackTrace();
-        }
-        
-        return instance(this.size(), (index) -> plus.apply(this.value(index), other.value(index)));
+        //null checks
+        Objects.requireNonNull(other, "other cannot be null");
+        Objects.requireNonNull(plus, "plus cannot be null");
+
+        //checking if the matrixes are the same size
+        InconsistentSizeException.requireMatchingSize(this, other); 
+
+        return instance(this.size(), (index) -> plus.apply(this.value(index), other.value(index))); //creating a new instance of the matrix containing the sum
     }
 
     /**
-     * a method to multiply two matrixes together
+     * a method to support matrix multiplication
      * @return
      */
-    public MatixMap<T> times(MatrixMap<T> other, Ring<T> ring) {
+    public MatrixMap<T> times(MatrixMap<T> other, Ring<T> ring) {
 
-        try {
-            InconsistentSizeException.requireMatchingSize(this, other);
-        } catch (InconsistentSizeException e) {
-            e.printStackTrace();
-        }
+        //null checks
+        Objects.requireNonNull(other, "other cannot be null");
+        Objects.requireNonNull(ring, "ring cannot be null");
 
-        return instance(this.size(), (index) -> {
+        NonSquareException.requireDiagonal(this.size()); //checks if this matrix is a square
+        NonSquareException.requireDiagonal(other.size()); //checks if the other matrix is a square
+        InconsistentSizeException.requireMatchingSize(this, other); //checks if the matrixes are of equal size
 
-            
+        int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)
+        return instance(this.size(), (index) -> { //creates an instance of a matrix containing the product
+
+            List<T> products = new ArrayList<>();
+            //indexes until length is reached and adds to the product list the element at the row of this and column of other
+            for (int i = 0; i <= length; i++) {
+                products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));
+            }
+            return Rings.sum(products, ring); //sums the elements of the product list
         });
-
     }
 
     public static void main(String[] args) {
 
-        //example: storing values as the sum of the index row and column
-        //System.out.println(MatrixMap.instance(4, 5, (index) -> index.row() + index.column()));
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter Matrix Size");
+        Integer size = Integer.valueOf(input.nextLine());
+        System.out.println("SIZE = " + size);
+     
+        //System.out.println("Choose Matrix Values");
+        //System.out.println("MATRIX 1 VALUE: ");
+        //Integer matrixValOne = Integer.valueOf(input.nextLine());
+        //System.out.println("MATRIX ONE WILL BE POPULATED WITH = " + matrixValOne);
 
-        Integer[][] arr = new Integer[3][4];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                arr[i][j] = 100;
+        //System.out.println("MATRIX 2 VALUE: ");
+        //Integer matrixValTwo = Integer.valueOf(input.nextLine());
+        //System.out.println("MATRIX ONE WILL BE POPULATED WITH = " + matrixValTwo);
+
+        System.out.println("ADD or MULTIPLY ([A/M])");
+        String addOrMultiply = input.nextLine();
+
+       
+
+        System.out.println("Matrix One Values:");
+        Map<Indexes, Integer> indexMap = new HashMap<>();
+        for (int i = 0; i <= size; i++) {
+            for (int j = 0; j <= size; j++) {
+                Indexes index = new Indexes(i, j);
+                System.out.println("Value at: " + index.toString());
+                indexMap.put(index, Integer.valueOf(input.nextLine()));
             }
         }
-        //System.out.println(MatrixMap.from(arr));
-        MatrixMap<Integer> m = constant(5, 100);
-        MatrixMap<Integer> n = constant(5, 100);
 
-        System.out.println(m.plus(n, (a, b) -> a + b));
+        System.out.println("Matrix Two Values:");
+        Map<Indexes, Integer> indexMap2 = new HashMap<>();
+        for (int i = 0; i <= size; i++) {
+            for (int j = 0; j <= size; j++) {
+                Indexes index = new Indexes(i, j);
+                System.out.println("Value at: " + index.toString());
+                indexMap2.put(index, Integer.valueOf(input.nextLine()));
+            }
+        }
+
+        input.close();
+
+        MatrixMap<Integer> m1 = MatrixMap.instance(new Indexes(size, size), (index) -> indexMap.get(index));
+        MatrixMap<Integer> m2 = MatrixMap.instance(new Indexes(size, size), (index) -> indexMap2.get(index));
+        Ring<Integer> intRing = new IntegerRing();
+
+        MatrixMap<Integer> sum = m1.plus(m2, (x, y) -> intRing.sum(x, y));
+        MatrixMap<Integer> product = m1.times(m2, intRing);
+
+        if (addOrMultiply.equals("A")) {
+            System.out.println(sum);
+        }
+        else if (addOrMultiply.equals("M")) {
+            System.out.println(product);
+        }
+        else {
+            System.out.println("Invalid selection");
+        }
+       
     }  
 }
 

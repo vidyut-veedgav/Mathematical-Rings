@@ -19,51 +19,10 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
         //null check
         Objects.requireNonNull(o, "o cannot be null");
 
-        return comparisonResult(o);
+        //if this row != o row, return this row - o row, otherwise return this column - o column
+        return (this.row() != o.row() ? (this.row() - o.row()) : (this.column() - o.column()));
     }
-
-    /**
-     * a subroutine which returns a positive or negative integer based on the result of the comparison
-     * @param o
-     * @return
-     */
-    private int comparisonResult(Indexes o) {
-
-        //null check
-        assert o != null : "o cannot be null";
-
-        if (this.row > o.row) {
-            return 1;
-        }
-        else if (this.row < o.row) {
-            return -1;
-        }
-        else {
-            return compareComlumns(o);
-        }
-    }
-
-    /**
-     * a helper method to compare indexes by column
-     * @param o
-     * @return
-     */
-    private int compareComlumns(Indexes o) {
-
-        //null check
-        assert o != null : "o cannot be null";
-
-        if (column > o.column) {
-            return 1;
-        }
-        else if (column < o.column) {
-            return -1;
-        }
-        else {
-            return 0;
-        }
-    }
-
+    
     /**
      * overriding the toString method
      */

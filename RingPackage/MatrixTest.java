@@ -1,11 +1,10 @@
 package RingPackage;
 
 import org.junit.*;
+import static org.junit.Assert.*;
 
 import RingPackage.MatrixMap.InvalidLengthException;
 import RingPackage.MatrixMap.InvalidLengthException.Cause;
-
-import static org.junit.Assert.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
  * @author Vidyut Veedgav
  * a tester class for the Matrix classes
  */
-public class MatrixTesting {
+public class MatrixTest {
 
     /**
      * TESTING THE METHODS OF THE INDEXES CLASS

@@ -74,7 +74,7 @@ public final class MatrixMap<T> {
     }
 
     /**
-     * a subroutine of the toGrid method which creates appends a String entry to the matrix
+     * a subroutine of the toString method which creates appends a String entry to the matrix
      * @param sb
      * @param row
      * @param col
@@ -346,9 +346,10 @@ public final class MatrixMap<T> {
         }
     }
 
-    /**
+    /**s
      * a nested class used to check if a matrix is a square
      */
+
     static class NonSquareException extends Exception {
 
         private final Indexes indexes; //instance field storing the index to be checked
@@ -408,10 +409,12 @@ public final class MatrixMap<T> {
         return instance(this.size(), (index) -> plus.apply(this.value(index), other.value(index))); //creating a new instance of the matrix containing the sum
     }
 
+    
     /**
      * a method to support matrix multiplication
      * @return
      */
+    
     public MatrixMap<T> times(MatrixMap<T> other, Ring<T> ring) {
 
         //null checks
@@ -433,6 +436,8 @@ public final class MatrixMap<T> {
             return Rings.sum(products, ring); //sums the elements of the product list
         });
     }
+
+
 
     public static void main(String[] args) {
 
@@ -485,7 +490,7 @@ public final class MatrixMap<T> {
         else {
             System.out.println("Invalid selection");
         }
-       
+        
     }  
 }
 

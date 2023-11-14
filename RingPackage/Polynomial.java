@@ -1,16 +1,15 @@
 package RingPackage;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Objects;
 
-/**
+/**t
  * @author Vidyut Veedgav
  * a class representing a polynomial ring, meant to emulate functionality for polynomials
  */
-public final class Polynomial<T> implements Iterable<T> {
+public final class Polynomial<T> {
     
     private final List<T> coefficients; //a private instance field representing the polynomial's coefficients
 
@@ -52,15 +51,6 @@ public final class Polynomial<T> implements Iterable<T> {
     @Override
     public String toString() {
         return "Polynomial [coefficients=" + coefficients + "]";
-    }
-    
-    /**
-     * ovrrides the abstract method of Iterable to return the iterator for the list
-     * @return a new iterator
-     */
-    @Override
-    public Iterator<T> iterator() {
-        return List.copyOf(coefficients).iterator();
     }
 
     /**
@@ -216,6 +206,19 @@ public final class Polynomial<T> implements Iterable<T> {
             return 0;
         }
         return a.size() + b.size() - 1;
+    }
+
+    public static void main(String[] args) {
+        
+        Polynomial<Integer> poly1 = Polynomial.from(List.of(1, 0, -13, -12));
+        Polynomial<Integer> poly2 = Polynomial.from(List.of(1, -10));
+        
+        IntegerRing intRing = new IntegerRing();
+        Ring<Polynomial<Integer>> polyRing = PolynomialRing.instance(intRing);
+        System.out.println(poly1.times(poly2, intRing));
+
+        List<Polynomial<Integer>> list = new ArrayList<>(List.of(poly1, poly2)); 
+        System.out.println(Rings.product(list, polyRing));
     }
 }
 

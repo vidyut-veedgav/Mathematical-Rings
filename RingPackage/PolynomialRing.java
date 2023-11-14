@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author Vidyut Veedgav
  * a class to demonstrate the concept of Rings on Polynomials
  */
-public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
+public final class PolynomialRing<T> implements Ring<Polynomial<T>> {
 
     private Ring<T> baseRing; //a private field storing a ring 
 
@@ -73,4 +73,12 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>>{
 
         return x.times(y, baseRing);
     }
+
+    public static void main(String[] args) {
+
+        PolynomialRing<Integer> ring = PolynomialRing.instance(new IntegerRing());
+        System.out.println(ring.identity());
+    }
+
+    
 }

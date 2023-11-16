@@ -54,16 +54,6 @@ public final class Polynomial<T> {
     }
 
     /**
-     * returns a list iterator over the coefficients 
-     * initial call to next() return pi, initial call to previous returns pi-1
-     * @param i the start index the iterator
-     * @return
-     */
-    public ListIterator<T> listIterator(int i) {
-        return coefficients.listIterator(i);
-    }
-
-    /**
      * a method to add two polynomials together
      * Example:
      * a: (1, 2, 3)

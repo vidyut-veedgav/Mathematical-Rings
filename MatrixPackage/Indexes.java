@@ -1,4 +1,4 @@
-package RingPackage;
+package MatrixPackage;
 
 import java.util.Objects;
 import java.util.stream.IntStream;

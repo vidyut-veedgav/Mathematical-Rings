@@ -1,4 +1,4 @@
-package RingPackage;
+package MatrixPackage;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,22 +11,25 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import RingPackage.MatrixMap.InvalidLengthException.Cause;
+import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
+import RingPackage.IntegerRing;
+import RingPackage.Ring;
+import RingPackage.Rings;
 
 /**
  * @author Vidyut Veedgav
  * a class representing a matrix map class
  */
-public final class MatrixMap<T> {
+public class MatrixMap<T> {
     
-    private final Map<Indexes, T>  matrix; //an field representing the matrix
+    private final Map<Indexes, T>  matrix; //a field representing the matrix
     private final Indexes size;
     
     /**
      * a constructor for the matrix
      * @param matrix
      */
-    private MatrixMap(Map<Indexes, T> matrix) {
+    protected MatrixMap(Map<Indexes, T> matrix) {
 
         //null check
         assert matrix != null : "matrix cannot be null";
@@ -40,6 +43,14 @@ public final class MatrixMap<T> {
      */
     protected Map<Indexes, T> getMap() {
         return Map.copyOf(matrix);
+    }
+
+    /**
+     * a getter method for the map used for testing
+     * @return a mutable copy of the matrix, which can be used for containment testing
+     */
+    protected Map<Indexes, T> getModifiableMap() {
+        return (matrix);
     }
 
     /**

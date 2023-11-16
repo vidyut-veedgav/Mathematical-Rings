@@ -1,10 +1,15 @@
-package RingPackage;
+package MatrixPackage;
 
 import org.junit.*;
-import static org.junit.Assert.*;
 
-import RingPackage.MatrixMap.InvalidLengthException;
-import RingPackage.MatrixMap.InvalidLengthException.Cause;
+import MatrixPackage.MatrixMap.InvalidLengthException;
+import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
+import RingPackage.BigIntegerRing;
+import RingPackage.Polynomial;
+import RingPackage.PolynomialRing;
+import RingPackage.Ring;
+
+import static org.junit.Assert.*;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

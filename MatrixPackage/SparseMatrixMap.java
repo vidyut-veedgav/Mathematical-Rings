@@ -14,6 +14,7 @@ import MatrixPackage.MatrixMap.InconsistentSizeException;
 import MatrixPackage.MatrixMap.InvalidLengthException;
 import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
 import MatrixPackage.MatrixMap.NonSquareException;
+import RingPackage.IntegerRing;
 import RingPackage.Ring;
 import RingPackage.Rings;
 
@@ -88,10 +89,40 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         return SparseMatrixMap.instance(size.row(), size.column(), valueMapper);
     }
 
+    /**
+     * a method to return a new sparse matrix populated with a constant non-zero value
+     * @param <S>
+     * @param size
+     * @param value
+     * @return
+     */
     public static <S> SparseMatrixMap<S> constant(int size, S value) {
 
-        
-        return null;
+        //null check
+        Objects.requireNonNull(value, "value cannot be null");
+
+        //TODO implement error handling to disallow calling this method with a value of 0
+
+        //calling the foundational instance method
+        return instance(size, size, (index) -> value);
+    }
+
+    /**
+     * a method to return a new square sparse matrix populated with the identity along the diagonal
+     * @param <S>
+     * @param size
+     * @param zero
+     * @param identity
+     * @return a new MatrixMap
+     */
+    public static <S> SparseMatrixMap<S> identity(int size, S zero, S identity) {
+
+        //null checks
+        Objects.requireNonNull(zero, "zero cannot be null");
+        Objects.requireNonNull(identity, "identity cannot be null");
+
+        //calling the foundational instance method
+        return instance(size, size, (index) -> (index.areDiagonal()) ? identity : zero);
     }
 
 
@@ -131,7 +162,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         return instance(this.size(), (index) -> { //creates an instance of a matrix containing the product
 
             if (this.value(index).equals(0) || other.value(index).equals(0)) {
-                return null;
+                return ring.zero();
             }
             List<T> products = new ArrayList<>();
             //indexes until length is reached and adds to the product list the element at the row of this and column of other
@@ -179,12 +210,55 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         Indexes index = new Indexes(row, col); //creating an index
         T value = value(index); //finding the value at this index
 
-        sb.append("[").append(index.toString()).append("]: ").append(value).append("\t"); //add the entry
+        if (value != null) {
+            sb.append("[").append(index.toString()).append("]: ").append(value).append("\t"); //add the entry
+        } else {
+            sb.append("       ").append("\t");
+        }
     }
 
+    /**
+     * a method to convert this matrix to a standard matrix
+     * @param ring
+     * @return
+     */
+    public MatrixMap<T> convertToStandard(Ring<T> ring) {
+        
+        return MatrixMap.instance(size(), (index) -> {
+            List<Indexes> indexes = Indexes.stream(size()).collect(Collectors.toList());
+            return (!this.contains(index) ? ring.zero() : value(index));
+        });
+    }
+
+    /**
+     * a helper function to check if a given index is present in the matrix
+     * @param index
+     * @return
+     */
+    private boolean contains(Indexes index) {
+        return matrix.containsKey(index) ? true : false;
+    }
     public static void main(String[] args) {
         
         Matrix<Integer> sparse = SparseMatrixMap.instance(2, 2, (index) -> (index.row()));
-        System.out.println(sparse);
+        //System.out.println(sparse);
+
+        sparse = SparseMatrixMap.constant(2, 1);
+        //System.out.println(sparse);
+
+        Ring<Integer> intRing = new IntegerRing();
+        sparse = SparseMatrixMap.identity(2, intRing.zero(), intRing.identity());
+        //System.out.println(sparse);
+
+        //System.out.println(MatrixMap.instance(2, 2, (index) -> (index.column())).convertToSparse());
+        //System.out.println(SparseMatrixMap.instance(2, 2, (index) -> (index.column())));
+        //System.out.println(SparseMatrixMap.instance(2, 2, (index) -> (index.column())).convertToStandard(intRing));
+
+        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -> index.row());
+        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -> index.column());
+
+        //TODO make plus and times methods more efficient and implement
+        System.out.println(s1.plus(s2, (x, y) -> intRing.sum(x, y)));
+        System.out.println(s1.times(s2, intRing));
     }
 }

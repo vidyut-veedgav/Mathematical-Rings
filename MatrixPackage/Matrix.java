@@ -15,5 +15,4 @@ public interface Matrix<T> {
     Matrix<T> plus(Matrix<T> other, BinaryOperator<T> plus);
     Matrix<T> times(Matrix<T> other, Ring<T> ring);
     String toString();
-    
 }

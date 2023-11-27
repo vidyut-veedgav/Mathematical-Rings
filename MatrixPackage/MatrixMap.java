@@ -446,7 +446,13 @@ public final class MatrixMap<T> implements Matrix<T> {
         });
     }
 
-
+    /**
+     * a method to convert this matrix to a sparse matrix
+     * @return
+     */
+    public SparseMatrixMap<T> convertToSparse() {
+        return SparseMatrixMap.instance(this.size(), (index) -> this.value(index));
+    }
 
     public static void main(String[] args) {
 

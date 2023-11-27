@@ -20,7 +20,7 @@ import RingPackage.Rings;
  * @author Vidyut Veedgav
  * a class representing a matrix map class
  */
-public class MatrixMap<T> {
+public final class MatrixMap<T> implements Matrix<T> { 
     
     private final Map<Indexes, T>  matrix; //a field representing the matrix
     private final Indexes size;
@@ -29,7 +29,7 @@ public class MatrixMap<T> {
      * a constructor for the matrix
      * @param matrix
      */
-    protected MatrixMap(Map<Indexes, T> matrix) {
+    private MatrixMap(Map<Indexes, T> matrix) {
 
         //null check
         assert matrix != null : "matrix cannot be null";
@@ -343,7 +343,7 @@ public class MatrixMap<T> {
          * @return
          * @throws IllegalArgumentException
          */
-        public static <T> Indexes requireMatchingSize(MatrixMap<T> thisMatrix, MatrixMap<T> otherMatrix) {
+        public static <T> Indexes requireMatchingSize(Matrix<T> thisMatrix, Matrix<T> otherMatrix) {
 
             //null checks
             Objects.requireNonNull(thisMatrix, "thisMatrix cannot be null");
@@ -408,7 +408,7 @@ public class MatrixMap<T> {
      * @param plus
      * @return
      */
-    public MatrixMap<T> plus(MatrixMap<T> other, BinaryOperator<T> plus) {
+    public MatrixMap<T> plus(Matrix<T> other, BinaryOperator<T> plus) {
 
         //null checks
         Objects.requireNonNull(other, "other cannot be null");
@@ -420,13 +420,11 @@ public class MatrixMap<T> {
         return instance(this.size(), (index) -> plus.apply(this.value(index), other.value(index))); //creating a new instance of the matrix containing the sum
     }
 
-    
     /**
      * a method to support matrix multiplication
      * @return
      */
-    
-    public MatrixMap<T> times(MatrixMap<T> other, Ring<T> ring) {
+    public MatrixMap<T> times(Matrix<T> other, Ring<T> ring) {
 
         //null checks
         Objects.requireNonNull(other, "other cannot be null");

@@ -1,0 +1,282 @@
+<html xmlns:string="xalan://java.lang.String" xmlns:lxslt="http://xml.apache.org/xslt">
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Unit Test Results: MatrixPackage.MatrixTest</title>
+        <link rel="stylesheet" type="text/css" title="Style" href="../stylesheet.css">
+        <script type="text/javascript" language="JavaScript">
+        var TestCases = new Array();
+        var cur;
+        
+    cur = TestCases['MatrixPackage.MatrixTest'] = new Array();
+    
+        cur['_jacoco.agentFile'] = '/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent6701768896014586300.jar';
+    
+        cur['ant.core.lib'] = '/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant.jar';
+    
+        cur['ant.file'] = '/Users/vidyutveedgav/sparse/build.xml';
+    
+        cur['ant.file.sparse'] = '/Users/vidyutveedgav/sparse/build.xml';
+    
+        cur['ant.file.type'] = 'file';
+    
+        cur['ant.file.type.sparse'] = 'file';
+    
+        cur['ant.home'] = '/Users/vidyutveedgav/Downloads/Apache-Ant';
+    
+        cur['ant.java.version'] = '17';
+    
+        cur['ant.library.dir'] = '/Users/vidyutveedgav/Downloads/Apache-Ant/lib';
+    
+        cur['ant.project.invoked-targets'] = 'report';
+    
+        cur['ant.project.name'] = 'sparse';
+    
+        cur['ant.version'] = 'Apache Ant(TM) version 1.10.14 compiled on August 16 2023';
+    
+        cur['basedir'] = '/Users/vidyutveedgav/sparse';
+    
+        cur['build.dir'] = 'build';
+    
+        cur['doc.dir'] = 'doc';
+    
+        cur['error.file'] = 'output/error.txt';
+    
+        cur['file.encoding'] = 'UTF-8';
+    
+        cur['file.separator'] = '/';
+    
+        cur['ftp.nonProxyHosts'] = 'local|*.local|169.254/16|*.169.254/16';
+    
+        cur['http.nonProxyHosts'] = 'local|*.local|169.254/16|*.169.254/16';
+    
+        cur['jacoco.dir'] = 'report/jacoco';
+    
+        cur['jacoco.file'] = 'report/jacoco/jacoco.exec';
+    
+        cur['java.class.path'] = '/Users/vidyutveedgav/Downloads/Apache-Ant/lib/hamcrest-2.2.jar:/Users/vidyutveedgav/sparse/build:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/junit-4.13.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant-launcher.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant-junit.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant-junit4.jar';
+    
+        cur['java.class.version'] = '61.0';
+    
+        cur['java.home'] = '/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home';
+    
+        cur['java.io.tmpdir'] = '/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/';
+    
+        cur['java.library.path'] = '/Users/vidyutveedgav/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.';
+    
+        cur['java.runtime.name'] = 'Java(TM) SE Runtime Environment';
+    
+        cur['java.runtime.version'] = '17.0.8+9-LTS-211';
+    
+        cur['java.specification.name'] = 'Java Platform API Specification';
+    
+        cur['java.specification.vendor'] = 'Oracle Corporation';
+    
+        cur['java.specification.version'] = '17';
+    
+        cur['java.vendor'] = 'Oracle Corporation';
+    
+        cur['java.vendor.url'] = 'https://java.oracle.com/';
+    
+        cur['java.vendor.url.bug'] = 'https://bugreport.java.com/bugreport/';
+    
+        cur['java.version'] = '17.0.8';
+    
+        cur['java.version.date'] = '2023-07-18';
+    
+        cur['java.vm.compressedOopsMode'] = 'Zero based';
+    
+        cur['java.vm.info'] = 'mixed mode, sharing';
+    
+        cur['java.vm.name'] = 'Java HotSpot(TM) 64-Bit Server VM';
+    
+        cur['java.vm.specification.name'] = 'Java Virtual Machine Specification';
+    
+        cur['java.vm.specification.vendor'] = 'Oracle Corporation';
+    
+        cur['java.vm.specification.version'] = '17';
+    
+        cur['java.vm.vendor'] = 'Oracle Corporation';
+    
+        cur['java.vm.version'] = '17.0.8+9-LTS-211';
+    
+        cur['jdk.debug'] = 'release';
+    
+        cur['junit.dir'] = 'report/junit';
+    
+        cur['line.separator'] = '\n';
+    
+        cur['native.encoding'] = 'UTF-8';
+    
+        cur['os.arch'] = 'aarch64';
+    
+        cur['os.name'] = 'Mac OS X';
+    
+        cur['os.version'] = '14.1.1';
+    
+        cur['output.dir'] = 'output';
+    
+        cur['output.file'] = 'output/output.txt';
+    
+        cur['path.separator'] = ':';
+    
+        cur['report.dir'] = 'report';
+    
+        cur['socksNonProxyHosts'] = 'local|*.local|169.254/16|*.169.254/16';
+    
+        cur['src.dir'] = 'src';
+    
+        cur['sun.arch.data.model'] = '64';
+    
+        cur['sun.boot.library.path'] = '/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib';
+    
+        cur['sun.cpu.endian'] = 'little';
+    
+        cur['sun.io.unicode.encoding'] = 'UnicodeBig';
+    
+        cur['sun.java.command'] = 'org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner MatrixPackage.MatrixTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-MatrixPackage.MatrixTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher15340664684436775862.properties propsfile=/Users/vidyutveedgav/sparse/junit1087432527790407670.properties';
+    
+        cur['sun.java.launcher'] = 'SUN_STANDARD';
+    
+        cur['sun.jnu.encoding'] = 'UTF-8';
+    
+        cur['sun.management.compiler'] = 'HotSpot 64-Bit Tiered Compilers';
+    
+        cur['sun.stderr.encoding'] = 'UTF-8';
+    
+        cur['sun.stdout.encoding'] = 'UTF-8';
+    
+        cur['user.country'] = 'US';
+    
+        cur['user.dir'] = '/Users/vidyutveedgav/sparse';
+    
+        cur['user.home'] = '/Users/vidyutveedgav';
+    
+        cur['user.language'] = 'en';
+    
+        cur['user.name'] = 'vidyutveedgav';
+    </script><script type="text/javascript" language="JavaScript">
+        function displayProperties (name) {
+          var win = window.open('','JUnitSystemProperties','scrollbars=1,resizable=1');
+          var doc = win.document;
+          doc.open();
+          doc.write("<html><head><title>Properties of " + name + "</title>");
+          doc.write("<style type=\"text/css\">");
+          doc.write("body {font:normal 68% verdana,arial,helvetica; color:#000000; }");
+          doc.write("table tr td, table tr th { font-size: 68%; }");
+          doc.write("table.properties { border-collapse:collapse; border-left:solid 1 #cccccc; border-top:solid 1 #cccccc; padding:5px; }");
+          doc.write("table.properties th { text-align:left; border-right:solid 1 #cccccc; border-bottom:solid 1 #cccccc; background-color:#eeeeee; }");
+          doc.write("table.properties td { font:normal; text-align:left; border-right:solid 1 #cccccc; border-bottom:solid 1 #cccccc; background-color:#fffffff; }");
+          doc.write("h3 { margin-bottom: 0.5em; font: bold 115% verdana,arial,helvetica }");
+          doc.write("</style>");
+          doc.write("</head><body>");
+          doc.write("<h3>Properties of " + name + "</h3>");
+          doc.write("<div align=\"right\"><a href=\"javascript:window.close();\">Close</a></div>");
+          doc.write("<table class='properties'>");
+          doc.write("<tr><th>Name</th><th>Value</th></tr>");
+          for (prop in TestCases[name]) {
+            doc.write("<tr><th>" + prop + "</th><td>" + TestCases[name][prop] + "</td></tr>");
+          }
+          doc.write("</table>");
+          doc.write("</body></html>");
+          doc.close();
+          win.focus();
+        }
+      
+      </script>
+    </head>
+    <body>
+        <h1>Unit Test Results.</h1>
+        <table width="100%">
+            <tr>
+                <td align="left"></td><td align="right">Designed for use with <a href="https://www.junit.org/">JUnit</a> and <a href="https://ant.apache.org/">Ant</a>.</td>
+            </tr>
+        </table>
+        <hr size="1">
+        <h3>Class MatrixPackage.MatrixTest</h3>
+        <table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
+            <tr valign="top">
+                <th width="80%">Name</th><th>Tests</th><th>Errors</th><th>Failures</th><th>Skipped</th><th nowrap>Time(s)</th><th nowrap>Time Stamp</th><th>Host</th>
+            </tr>
+            <tr valign="top" class="Pass">
+                <td><a title="Display all tests" href="0_MatrixTest.html">MatrixTest</a></td><td><a title="Display all tests" href="0_MatrixTest.html">22</a></td><td>0</td><td>0</td><td>0</td><td>0.104</td><td>2023-11-27T20:23:43</td><td>Vidys-MacBook-Air-3.local</td>
+            </tr>
+        </table>
+        <h2>Tests</h2>
+        <table class="details" border="0" cellpadding="5" cellspacing="2" width="95%">
+            <tr valign="top">
+                <th>Name</th><th>Status</th><th width="80%">Type</th><th nowrap>Time(s)</th>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testAreDiagonal"></a>testAreDiagonal</td><td>Success</td><td></td><td>0.001</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testRequireNonEmpty"></a>testRequireNonEmpty</td><td>Success</td><td></td><td>0.001</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testCause"></a>testCause</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testTimes"></a>testTimes</td><td>Success</td><td></td><td>0.027</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testValue"></a>testValue</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testFrom"></a>testFrom</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testPlus"></a>testPlus</td><td>Success</td><td></td><td>0.002</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testSize"></a>testSize</td><td>Success</td><td></td><td>0.003</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testToString"></a>testToString</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testCompareTo"></a>testCompareTo</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testValueTwo"></a>testValueTwo</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testValueaTwo"></a>testValueaTwo</td><td>Success</td><td></td><td>0.001</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testConstant"></a>testConstant</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testStreamTwo"></a>testStreamTwo</td><td>Success</td><td></td><td>0.001</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testIdentity"></a>testIdentity</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testStreamThree"></a>testStreamThree</td><td>Success</td><td></td><td>0.001</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testInstance"></a>testInstance</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testValueThree"></a>testValueThree</td><td>Success</td><td></td><td>0.001</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testMatrixToString"></a>testMatrixToString</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testLength"></a>testLength</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testInstanceTwo"></a>testInstanceTwo</td><td>Success</td><td></td><td>0.001</td>
+            </tr>
+            <tr valign="top" class="TableRowColor">
+                <td><a name="testStream"></a>testStream</td><td>Success</td><td></td><td>0.000</td>
+            </tr>
+        </table>
+        <div class="Properties">
+            <a href="javascript:displayProperties('MatrixPackage.MatrixTest');">
+                    Properties &raquo;
+                </a>
+        </div>
+    </body>
+</html>

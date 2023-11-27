@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SparseMatrixMap.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sparse</a> &gt; <a href="index.source.html" class="el_package">MatrixPackage</a> &gt; <span class="el_source">SparseMatrixMap.java</span></div><h1>SparseMatrixMap.java</h1><pre class="source lang-java linenums">package MatrixPackage;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import MatrixPackage.MatrixMap.InconsistentSizeException;
+import MatrixPackage.MatrixMap.InvalidLengthException;
+import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
+import MatrixPackage.MatrixMap.NonSquareException;
+import RingPackage.IntegerRing;
+import RingPackage.Ring;
+import RingPackage.Rings;
+
+<span class="nc" id="L21">public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {</span>
+
+    private final Map&lt;Indexes, T&gt;  matrix; //a field representing the matrix
+    private final Indexes size;
+
+    /**
+     * constructor
+     */
+<span class="nc" id="L29">    private SparseMatrixMap(Map&lt;Indexes, T&gt; matrix) {</span>
+
+        //null check
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        assert matrix != null : &quot;matrix cannot be null&quot;;</span>
+<span class="nc" id="L33">        this.matrix = matrix;</span>
+<span class="nc" id="L34">        this.size = Collections.max(matrix.keySet());</span>
+<span class="nc" id="L35">    } </span>
+
+    /**
+     * a method to get the size of this SparseMatrixMap
+     */
+    @Override
+    public Indexes size() {
+<span class="nc" id="L42">        return size;</span>
+    }
+
+    /**
+     * a method to return the value of this SparseMatrixMap at a particular index
+     */
+    @Override
+    public T value(Indexes indexes) {
+        
+        //null check
+<span class="nc" id="L52">        Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
+<span class="nc" id="L53">        return matrix.get(indexes);</span>
+    }
+
+    public static &lt;S&gt; SparseMatrixMap&lt;S&gt; instance(int rows, int columns, Function&lt;Indexes, S&gt; valueMapper) {
+
+<span class="nc" id="L58">        Objects.requireNonNull(valueMapper, &quot;valueMapper cannot be null&quot;);</span>
+<span class="nc" id="L59">        InvalidLengthException.requireNonEmpty(Cause.ROW, rows); //checks if the rows are valid</span>
+<span class="nc" id="L60">        InvalidLengthException.requireNonEmpty(Cause.COLUMN, columns); //checks if the columns are valid</span>
+
+<span class="nc" id="L62">        Map&lt;Indexes, S&gt; matrix = new HashMap&lt;&gt;(); //creating the map</span>
+<span class="nc" id="L63">        List&lt;Indexes&gt; indexes = Indexes.stream(rows, columns).collect(Collectors.toList()); //creating a list of indexes</span>
+
+        //putting values into the map - TODO: adjust behavior according to specs
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (Indexes index : indexes) {</span>
+<span class="nc" id="L67">            S value = valueMapper.apply(index);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">            if (!value.equals(0)) {</span>
+<span class="nc" id="L69">                matrix.put(index, value);</span>
+            }
+<span class="nc" id="L71">        }</span>
+<span class="nc" id="L72">        return new SparseMatrixMap&lt;&gt;(Map.copyOf(matrix));</span>
+    }
+
+    /**
+     * overloading the instance method to accept an Indexes object as a parameter
+     * @param &lt;S&gt;
+     * @param size
+     * @param valueMapper
+     * @return a MatrixMap
+     */
+    public static &lt;S&gt; SparseMatrixMap&lt;S&gt; instance(Indexes size, Function&lt;Indexes, S&gt; valueMapper) {
+
+        //null checks
+<span class="nc" id="L85">        Objects.requireNonNull(size, &quot;size cannot be null&quot;);</span>
+<span class="nc" id="L86">        Objects.requireNonNull(valueMapper, &quot;valueMapper cannot be null&quot;);</span>
+    
+        //calling the foundational instance method
+<span class="nc" id="L89">        return SparseMatrixMap.instance(size.row(), size.column(), valueMapper);</span>
+    }
+
+    /**
+     * a method to return a new sparse matrix populated with a constant non-zero value
+     * @param &lt;S&gt;
+     * @param size
+     * @param value
+     * @return
+     */
+    public static &lt;S&gt; SparseMatrixMap&lt;S&gt; constant(int size, S value) {
+
+        //null check
+<span class="nc" id="L102">        Objects.requireNonNull(value, &quot;value cannot be null&quot;);</span>
+
+        //TODO implement error handling to disallow calling this method with a value of 0
+
+        //calling the foundational instance method
+<span class="nc" id="L107">        return instance(size, size, (index) -&gt; value);</span>
+    }
+
+    /**
+     * a method to return a new square sparse matrix populated with the identity along the diagonal
+     * @param &lt;S&gt;
+     * @param size
+     * @param zero
+     * @param identity
+     * @return a new MatrixMap
+     */
+    public static &lt;S&gt; SparseMatrixMap&lt;S&gt; identity(int size, S zero, S identity) {
+
+        //null checks
+<span class="nc" id="L121">        Objects.requireNonNull(zero, &quot;zero cannot be null&quot;);</span>
+<span class="nc" id="L122">        Objects.requireNonNull(identity, &quot;identity cannot be null&quot;);</span>
+
+        //calling the foundational instance method
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        return instance(size, size, (index) -&gt; (index.areDiagonal()) ? identity : zero);</span>
+    }
+
+
+    /**
+     * a method to add this matrix to another
+     */
+    @Override
+    public Matrix&lt;T&gt; plus(Matrix&lt;T&gt; other, BinaryOperator&lt;T&gt; plus) {
+        
+        //null checks
+<span class="nc" id="L136">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
+<span class="nc" id="L137">        Objects.requireNonNull(plus, &quot;plus cannot be null&quot;);</span>
+        //consistent size checks
+<span class="nc" id="L139">        InconsistentSizeException.requireMatchingSize(this, other); </span>
+
+<span class="nc" id="L141">        return instance(this.size(), (index) -&gt; </span>
+<span class="nc bnc" id="L142" title="All 4 branches missed.">            (this.value(index).equals(0) &amp;&amp; other.value(index).equals(0)) ? null : plus.apply(this.value(index), other.value(index)));   </span>
+    }
+
+    /**
+     * a method to multiply this matrix with another
+     * UNFINISHED, DON'T KNOW WHAT TO DO HERE LOLZ
+     */
+    @Override
+    public SparseMatrixMap&lt;T&gt; times(Matrix&lt;T&gt; other, Ring&lt;T&gt; ring) {
+        
+        //null checks
+<span class="nc" id="L153">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
+<span class="nc" id="L154">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
+
+        //size checking
+<span class="nc" id="L157">        NonSquareException.requireDiagonal(this.size()); //checks if this matrix is a square</span>
+<span class="nc" id="L158">        NonSquareException.requireDiagonal(other.size()); //checks if the other matrix is a square</span>
+<span class="nc" id="L159">        InconsistentSizeException.requireMatchingSize(this, other); //checks if the matrixes are of equal size</span>
+
+<span class="nc" id="L161">        int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)</span>
+<span class="nc" id="L162">        return instance(this.size(), (index) -&gt; { //creates an instance of a matrix containing the product</span>
+
+<span class="nc bnc" id="L164" title="All 4 branches missed.">            if (this.value(index).equals(0) || other.value(index).equals(0)) {</span>
+<span class="nc" id="L165">                return ring.zero();</span>
+            }
+<span class="nc" id="L167">            List&lt;T&gt; products = new ArrayList&lt;&gt;();</span>
+            //indexes until length is reached and adds to the product list the element at the row of this and column of other
+<span class="nc bnc" id="L169" title="All 2 branches missed.">            for (int i = 0; i &lt;= length; i++) {</span>
+<span class="nc" id="L170">                products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));</span>
+            }
+<span class="nc" id="L172">            return Rings.sum(products, ring); //sums the elements of the product list</span>
+        });
+    }
+
+    /**
+     * a method to override the toString method
+     */
+    @Override
+    public String toString() {
+
+<span class="nc" id="L182">        Indexes size = size();</span>
+<span class="nc" id="L183">        int numRows = size.row() + 1; // Add 1 to include row 0</span>
+<span class="nc" id="L184">        int numCols = size.column() + 1; // Add 1 to include column 0</span>
+    
+<span class="nc" id="L186">        StringBuilder sb = new StringBuilder();</span>
+        //indexing through the rows
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        for (int row = 0; row &lt; numRows; row++) {</span>
+
+            //indexing through the corresponding column
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            for (int col = 0; col &lt; numCols; col++) {</span>
+<span class="nc" id="L192">                addEntry(sb, row, col);</span>
+            }
+<span class="nc" id="L194">            sb.append(&quot;\n&quot;); //add a carriage return</span>
+        }
+<span class="nc" id="L196">        return sb.toString();</span>
+    }
+
+    /**
+     * a subroutine of the toString method which creates appends a String entry to the matrix
+     * @param sb
+     * @param row
+     * @param col
+     */
+    private void addEntry(StringBuilder sb, int row, int col) {
+
+        //null check
+<span class="nc bnc" id="L208" title="All 2 branches missed.">        assert sb != null : &quot;sb cannot be null&quot;;</span>
+
+<span class="nc" id="L210">        Indexes index = new Indexes(row, col); //creating an index</span>
+<span class="nc" id="L211">        T value = value(index); //finding the value at this index</span>
+
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (value != null) {</span>
+<span class="nc" id="L214">            sb.append(&quot;[&quot;).append(index.toString()).append(&quot;]: &quot;).append(value).append(&quot;\t&quot;); //add the entry</span>
+        } else {
+<span class="nc" id="L216">            sb.append(&quot;       &quot;).append(&quot;\t&quot;);</span>
+        }
+<span class="nc" id="L218">    }</span>
+
+    /**
+     * a method to convert this matrix to a standard matrix
+     * @param ring
+     * @return
+     */
+    public MatrixMap&lt;T&gt; convertToStandard(Ring&lt;T&gt; ring) {
+        
+<span class="nc" id="L227">        return MatrixMap.instance(size(), (index) -&gt; {</span>
+<span class="nc" id="L228">            List&lt;Indexes&gt; indexes = Indexes.stream(size()).collect(Collectors.toList());</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">            return (!this.contains(index) ? ring.zero() : value(index));</span>
+        });
+    }
+
+    /**
+     * a helper function to check if a given index is present in the matrix
+     * @param index
+     * @return
+     */
+    private boolean contains(Indexes index) {
+<span class="nc bnc" id="L239" title="All 2 branches missed.">        return matrix.containsKey(index) ? true : false;</span>
+    }
+    public static void main(String[] args) {
+        
+<span class="nc" id="L243">        Matrix&lt;Integer&gt; sparse = SparseMatrixMap.instance(2, 2, (index) -&gt; (index.row()));</span>
+        //System.out.println(sparse);
+
+<span class="nc" id="L246">        sparse = SparseMatrixMap.constant(2, 1);</span>
+        //System.out.println(sparse);
+
+<span class="nc" id="L249">        Ring&lt;Integer&gt; intRing = new IntegerRing();</span>
+<span class="nc" id="L250">        sparse = SparseMatrixMap.identity(2, intRing.zero(), intRing.identity());</span>
+        //System.out.println(sparse);
+
+        //System.out.println(MatrixMap.instance(2, 2, (index) -&gt; (index.column())).convertToSparse());
+        //System.out.println(SparseMatrixMap.instance(2, 2, (index) -&gt; (index.column())));
+        //System.out.println(SparseMatrixMap.instance(2, 2, (index) -&gt; (index.column())).convertToStandard(intRing));
+
+<span class="nc" id="L257">        Matrix&lt;Integer&gt; s1 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -&gt; index.row());</span>
+<span class="nc" id="L258">        Matrix&lt;Integer&gt; s2 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -&gt; index.column());</span>
+
+        //TODO make plus and times methods more efficient and implement
+<span class="nc" id="L261">        System.out.println(s1.plus(s2, (x, y) -&gt; intRing.sum(x, y)));</span>
+<span class="nc" id="L262">        System.out.println(s1.times(s2, intRing));</span>
+<span class="nc" id="L263">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

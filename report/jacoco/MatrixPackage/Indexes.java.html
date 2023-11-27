@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Indexes.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sparse</a> &gt; <a href="index.source.html" class="el_package">MatrixPackage</a> &gt; <span class="el_source">Indexes.java</span></div><h1>Indexes.java</h1><pre class="source lang-java linenums">package MatrixPackage;
+
+import java.util.Objects;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+/**
+ * @author Vidyut Veedgav
+ * a record representing the index of a matrix
+ */
+<span class="fc" id="L11">public record Indexes(int row, int column) implements Comparable&lt;Indexes&gt; {</span>
+
+    /**
+     * overriding the compareTo method of Comparable
+     * parent routine
+     */
+    @Override
+    public int compareTo(Indexes o) {
+        //null check
+<span class="fc" id="L20">        Objects.requireNonNull(o, &quot;o cannot be null&quot;);</span>
+
+        //if this row != o row, return this row - o row, otherwise return this column - o column
+<span class="fc bfc" id="L23" title="All 2 branches covered.">        return (this.row() != o.row() ? (this.row() - o.row()) : (this.column() - o.column()));</span>
+    }
+    
+    /**
+     * overriding the toString method
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L31">        return (row() + &quot;, &quot; + column());</span>
+    }
+
+    /**
+     * a method to return the matrix entry corresponding to this index
+     * @param matrix
+     * @return
+     */
+    public &lt;S&gt; S value(S[][] matrix) {
+
+        //null check
+<span class="fc" id="L42">        Objects.requireNonNull(matrix, &quot;matrix cannot be null&quot;);</span>
+
+<span class="fc" id="L44">        return matrix[row][column];</span>
+    }
+
+    /**
+     * a method to return the value of the current index in the input matrix
+     * @param &lt;S&gt;
+     * @param matrix
+     * @return
+     */
+    public &lt;S&gt; S value(MatrixMap&lt;S&gt; matrix) {
+        //null check
+<span class="fc" id="L55">        Objects.requireNonNull(matrix);</span>
+
+<span class="fc" id="L57">        return matrix.value(this);</span>
+    }
+
+    /**
+     * a method to determine if the index is along the matrix diagonal
+     * @return true if diagonal
+     */
+    public boolean areDiagonal() {
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        return row() == column();</span>
+    }
+
+    /**
+     * a static method to generate all the indexes in a given range
+     * THE FOUNDATIONAL STREAM METHOD
+     */
+    public static &lt;T&gt; Stream&lt;Indexes&gt; stream(Indexes from, Indexes to) {
+        //null checks
+<span class="fc" id="L74">        Objects.requireNonNull(from, &quot;from cannot be null&quot;);</span>
+<span class="fc" id="L75">        Objects.requireNonNull(from, &quot;to cannot be null&quot;);</span>
+
+        //calculating the range values
+<span class="fc" id="L78">        int minRow = Indexes.getMin(from.row(), to.row()); //the minimum row</span>
+<span class="fc" id="L79">        int maxRow = Indexes.getMax(from.row(), to.row()); //the maximum row</span>
+
+<span class="fc" id="L81">        int minColumn = Indexes.getMin(from.column(), to.column()); //the minimum column</span>
+<span class="fc" id="L82">        int maxColumn = Indexes.getMax(from.column(), to.column()); //the maximum column</span>
+
+        //streaming the indexes
+<span class="fc" id="L85">        return IntStream.rangeClosed(minRow, maxRow)</span>
+<span class="fc" id="L86">                        .boxed() //wraps the contents of the range into Integers</span>
+<span class="fc" id="L87">                        .flatMap((row) -&gt; IntStream.rangeClosed(minColumn, maxColumn) //use flat map to flatten the 2D stream into a single stream</span>
+<span class="fc" id="L88">                        .mapToObj((column) -&gt; new Indexes(row, column))); //mapping each row column pair to a new Index</span>
+    }
+
+    /**
+     * a subroutine to get the smaller value out of two inputs
+     * @param size
+     * @return
+     */
+    private static int getMin(int from, int to) {
+<span class="fc" id="L97">        return Math.min(from, to);</span>
+    }
+
+     /**
+     * a subroutine to get the larger value out of two inputs
+     * @param size
+     * @return
+     */
+    private static int getMax(int from, int to) {
+<span class="fc" id="L106">        return Math.max(from, to);</span>
+    }
+
+    /**
+     * overloading the stream method to generate indexes between (0, 0) and the size endpoint
+     */
+    public static Stream&lt;Indexes&gt; stream(Indexes size) {
+        //null checks
+<span class="fc" id="L114">        Objects.requireNonNull(size, &quot;size cannot be null&quot;);</span>
+        
+<span class="fc" id="L116">        return stream(new Indexes(0, 0), size);    </span>
+    }
+
+    /**
+     * overloading the stream method to generate indexes between (0, 0) and the (rows, columns) endpoint
+     */
+    public static &lt;T&gt; Stream&lt;Indexes&gt; stream(int rows, int columns) {
+
+<span class="fc" id="L124">        return stream(new Indexes(0, 0), new Indexes(rows, columns)); </span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

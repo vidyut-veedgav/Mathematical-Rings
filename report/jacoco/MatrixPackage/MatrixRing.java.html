@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MatrixRing.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sparse</a> &gt; <a href="index.source.html" class="el_package">MatrixPackage</a> &gt; <span class="el_source">MatrixRing.java</span></div><h1>MatrixRing.java</h1><pre class="source lang-java linenums">package MatrixPackage;
+import java.util.Objects;
+
+import RingPackage.Ring;
+
+/**
+ * a class defining a Ring for matrix operations
+ */
+<span class="nc" id="L9">public class MatrixRing&lt;T&gt; implements Ring&lt;T&gt; {</span>
+    
+    private Ring&lt;T&gt; baseRing; //a private field storing a ring 
+
+    /**
+     * a constructor for the MatrixRing class
+     * @param ring
+     */
+<span class="nc" id="L17">    private MatrixRing(Ring&lt;T&gt; ring) {</span>
+        //null check
+<span class="nc bnc" id="L19" title="All 2 branches missed.">        assert ring != null : &quot;ring cannot be null&quot;;</span>
+<span class="nc" id="L20">        this.baseRing = ring;</span>
+<span class="nc" id="L21">    }</span>
+
+    /**
+     * a static method to return a new polynomial
+     * @param &lt;T&gt; a ring
+     * @return a new polynomial
+     */
+    public static &lt;T&gt; MatrixRing&lt;T&gt; instance(Ring&lt;T&gt; ring) {
+        //null check
+<span class="nc" id="L30">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
+
+<span class="nc" id="L32">        return new MatrixRing&lt;&gt;(ring);</span>
+    }
+
+    @Override
+    public T zero() {
+<span class="nc" id="L37">        return null;</span>
+    }
+
+    @Override
+    public T identity() {
+<span class="nc" id="L42">        return null;</span>
+    }
+
+    @Override
+    public T sum(T x, T y) {
+<span class="nc" id="L47">        return null;</span>
+    }
+
+    @Override
+    public T product(T x, T y) {
+<span class="nc" id="L52">        return null;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

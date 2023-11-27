@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rings.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sparse</a> &gt; <a href="index.source.html" class="el_package">RingPackage</a> &gt; <span class="el_source">Rings.java</span></div><h1>Rings.java</h1><pre class="source lang-java linenums">package RingPackage;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.function.BinaryOperator;
+
+/**
+ * @author Vidyut Veedgav
+ * a class defining behavior for ring operations
+ */
+<span class="nc" id="L11">public final class Rings&lt;T&gt; {</span>
+    
+    /**
+     * a method to reduce elements of a list by conducting an externally defined operation
+     * @param &lt;T&gt;
+     * @param args
+     * @param zero
+     * @param accumulator
+     * @return a single value which is the result of the reduction
+     */
+    public static &lt;T&gt; T reduce(List&lt;T&gt; args, T zero, BinaryOperator&lt;T&gt; accumulator) {
+
+        //null checks
+<span class="fc" id="L24">        Objects.requireNonNull(args);</span>
+<span class="fc" id="L25">        Objects.requireNonNull(zero);</span>
+<span class="fc" id="L26">        Objects.requireNonNull(accumulator);</span>
+
+<span class="fc" id="L28">        boolean foundAny = false; //checks if the list contains elements</span>
+<span class="fc" id="L29">        T result = zero; //initializes the result as zero</span>
+
+        //loops through elements in the input list
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        for (T element : args) {</span>
+
+            //null check
+<span class="fc" id="L35">            Objects.requireNonNull(args);</span>
+
+            //checks if there are elements are present and converts the element to the result
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            if (!foundAny) {</span>
+<span class="fc" id="L39">                foundAny = true;</span>
+<span class="fc" id="L40">                result = element;</span>
+            } else {
+<span class="fc" id="L42">                result = accumulator.apply(result, element); //conducts an operation on the accumulation of previous elements and the current element</span>
+            }
+<span class="fc" id="L44">        }</span>
+<span class="fc" id="L45">        return result;</span>
+    }
+
+    /**
+     * a method to reduce a list by summing its elements
+     * @param &lt;T&gt;
+     * @param args
+     * @param ring
+     * @return a reduction based on addition
+     */
+    public static &lt;T&gt; T sum(List&lt;T&gt; args, Ring&lt;T&gt; ring) {
+
+        //null checks
+<span class="fc" id="L58">        Objects.requireNonNull(args);</span>
+<span class="fc" id="L59">        Objects.requireNonNull(ring);</span>
+
+<span class="fc" id="L61">        return reduce(args, ring.zero(), (x, y) -&gt; ring.sum(x, y));</span>
+    }
+
+    /**
+     * a method to reduce a list by multiplying its elements
+     * @param &lt;T&gt;
+     * @param args
+     * @param ring
+     * @return a reduction based on multiplication
+     */
+    public static &lt;T&gt; T product(List&lt;T&gt; args, Ring&lt;T&gt; ring) {
+
+        //null checks
+<span class="nc" id="L74">        Objects.requireNonNull(args);</span>
+<span class="nc" id="L75">        Objects.requireNonNull(ring);</span>
+
+<span class="nc" id="L77">        return reduce(args, ring.identity(), (x, y) -&gt; ring.product(x, y));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

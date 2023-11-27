@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InterpolatingPolynomial.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sparse</a> &gt; <a href="index.source.html" class="el_package">RingPackage</a> &gt; <span class="el_source">InterpolatingPolynomial.java</span></div><h1>InterpolatingPolynomial.java</h1><pre class="source lang-java linenums">package RingPackage;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * a class defining the operation of polynomial interpolation
+ */
+<span class="nc" id="L10">public class InterpolatingPolynomial {</span>
+
+/*
+Pseudocode
+
+Method name: interpolatePolynomial
+
+Input:
+- list of Integers which are roots for the resulting polynomial
+- values must all be unique and in ascending order
+
+Output: 
+- a list of the coefficients of the resulting polynomial
+*/
+
+/*interpolatePolynomial(list of roots)*/
+public static List&lt;Integer&gt; interpolatePolynomial(List&lt;Integer&gt; rootList, Ring&lt;Integer&gt; ring) {
+
+	/*if list of roots is null, throw an appropriate exception*/
+<span class="nc" id="L29">    Objects.requireNonNull(rootList, &quot;roots cannot be null&quot;);</span>
+
+	/*require elements in roots are not null*/
+<span class="nc bnc" id="L32" title="All 2 branches missed.">    if (rootList.stream().anyMatch(Objects::isNull)) {</span>
+<span class="nc" id="L33">        throw new NullPointerException(&quot;elements in roots cannot be null&quot;);</span>
+    }
+
+    /*roots ← param list of zeros*/
+<span class="nc" id="L37">    List&lt;Integer&gt; roots = rootList;</span>
+
+	/*x ← Multiplicative identity of a the numerical operator being using*/
+<span class="nc" id="L40">    Integer x = ring.identity();</span>
+
+	/*factors ← empty list of polynomial factors*/
+<span class="nc" id="L43">    List&lt;Polynomial&lt;Integer&gt;&gt; factors = new ArrayList&lt;&gt;();</span>
+
+	/*for each root in roots
+		create new Polynomial ← (x, root * -1)
+		insert polynomial → factors*/
+<span class="nc bnc" id="L48" title="All 2 branches missed.">    for (Integer root : roots) {</span>
+<span class="nc" id="L49">        factors.add(Polynomial.from(List.of(x, ring.product(root, Integer.valueOf(-1)))));</span>
+<span class="nc" id="L50">    }</span>
+
+	/*return product(factors, ring)*/
+<span class="nc" id="L53">    return Rings.product(factors, PolynomialRing.instance(new IntegerRing())).getCoefficients();</span>
+    }
+
+    public static void main(String[] args) {
+        
+<span class="nc" id="L58">        Ring&lt;Integer&gt; intRing = new IntegerRing();</span>
+<span class="nc" id="L59">        List&lt;Integer&gt; roots = List.of(1, 2, 3, 4);</span>
+<span class="nc" id="L60">        System.out.println(InterpolatingPolynomial.interpolatePolynomial(roots, intRing));</span>
+<span class="nc" id="L61">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

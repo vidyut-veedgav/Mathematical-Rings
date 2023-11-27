@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PolynomialRing.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">sparse</a> &gt; <a href="index.source.html" class="el_package">RingPackage</a> &gt; <span class="el_source">PolynomialRing.java</span></div><h1>PolynomialRing.java</h1><pre class="source lang-java linenums">package RingPackage;
+
+import java.util.List;
+import java.util.Objects;
+
+/**
+ * @author Vidyut Veedgav
+ * a class to demonstrate the concept of Rings on Polynomials
+ */
+<span class="fc" id="L10">public final class PolynomialRing&lt;T&gt; implements Ring&lt;Polynomial&lt;T&gt;&gt; {</span>
+
+    private Ring&lt;T&gt; baseRing; //a private field storing a ring 
+
+    /**
+     * a constructor for the PolynomialRing class
+     * @param ring
+     */
+<span class="fc" id="L18">    private PolynomialRing(Ring&lt;T&gt; ring) {</span>
+        //null check
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        assert ring != null : &quot;ring cannot be null&quot;;</span>
+
+<span class="fc" id="L22">        this.baseRing = ring;</span>
+<span class="fc" id="L23">    }</span>
+
+    /**
+     * a static method to return a new polynomial
+     * @param &lt;T&gt; a ring
+     * @return a new polynomial
+     */
+    public static &lt;T&gt; PolynomialRing&lt;T&gt; instance(Ring&lt;T&gt; ring) {
+        //null check
+<span class="fc" id="L32">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
+
+<span class="fc" id="L34">        return new PolynomialRing&lt;&gt;(ring);</span>
+    }
+
+    /**
+     * overriding the zero method
+     */
+    @Override
+    public Polynomial&lt;T&gt; zero() {
+<span class="fc" id="L42">        return Polynomial.from(List.of());</span>
+    }
+
+    /**
+     * overriding the identity method
+     */
+    @Override
+    public Polynomial&lt;T&gt; identity() {
+<span class="nc" id="L50">        return Polynomial.from(List.of(baseRing.identity()));</span>
+    }
+
+    /**
+     * overriding the sum method
+     */
+    @Override
+    public Polynomial&lt;T&gt; sum(Polynomial&lt;T&gt; x, Polynomial&lt;T&gt; y) {
+        //null checks
+<span class="fc" id="L59">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
+<span class="fc" id="L60">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
+
+<span class="fc" id="L62">        return x.plus(y, baseRing);</span>
+    }
+
+    /**
+     * overriding the product method
+     */
+    @Override
+    public Polynomial&lt;T&gt; product(Polynomial&lt;T&gt; x, Polynomial&lt;T&gt; y) {
+        //null checks
+<span class="fc" id="L71">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
+<span class="fc" id="L72">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
+
+<span class="fc" id="L74">        return x.times(y, baseRing);</span>
+    }
+
+    public static void main(String[] args) {
+
+<span class="nc" id="L79">        PolynomialRing&lt;Integer&gt; ring = PolynomialRing.instance(new IntegerRing());</span>
+<span class="nc" id="L80">        System.out.println(ring.identity());</span>
+<span class="nc" id="L81">    }</span>
+
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

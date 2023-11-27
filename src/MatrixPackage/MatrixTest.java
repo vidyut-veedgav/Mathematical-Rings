@@ -2,7 +2,9 @@ package MatrixPackage;
 
 import org.junit.*;
 
+import MatrixPackage.MatrixMap.InconsistentSizeException;
 import MatrixPackage.MatrixMap.InvalidLengthException;
+import MatrixPackage.MatrixMap.NonSquareException;
 import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
 import RingPackage.BigIntegerRing;
 import RingPackage.Polynomial;
@@ -221,6 +223,34 @@ public class MatrixTest {
 
         Cause cause = Cause.COLUMN;
         assertEquals(5, InvalidLengthException.requireNonEmpty(cause, 5));
+        assertThrows(IllegalArgumentException.class, () -> InvalidLengthException.requireNonEmpty(cause, -1));
+    }
+
+    /**
+     * testing the requireMatchingSize method
+     */
+    @Test
+    public void testRequireMatchingSize() {
+
+        Matrix<Integer> m1 = MatrixMap.instance(2, 2, (index) -> 1);
+        Matrix<Integer> m2 = MatrixMap.instance(2, 2, (index) -> 1);
+        Matrix<Integer> m3 = MatrixMap.instance(4, 4, (index) -> 1);
+        assertEquals(new Indexes(2, 2), InconsistentSizeException.requireMatchingSize(m1, m2));
+        assertThrows(IllegalArgumentException.class, () -> InconsistentSizeException.requireMatchingSize(m1, m3));
+        InconsistentSizeException e = new InconsistentSizeException(new Indexes(1, 1), new Indexes(2, 2));
+        assertEquals(new Indexes(1, 1), e.getThisIndex());
+        assertEquals(new Indexes(2, 2), e.getOtherIndex());
+    }
+
+    /**
+     * testing the requireDiagonal method
+     */
+    @Test
+    public void testRequireDiagonal() {
+        NonSquareException e = new NonSquareException(new Indexes(2, 2));
+        assertEquals(new Indexes(2, 2), e.getIndexes());
+        assertEquals(new Indexes(2, 2), NonSquareException.requireDiagonal(new Indexes(2, 2)));
+        assertThrows(IllegalStateException.class, () -> NonSquareException.requireDiagonal(new Indexes(0, 1)));
     }
 
     /**

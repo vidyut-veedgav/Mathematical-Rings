@@ -154,8 +154,8 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
 <span class="fc" id="L154">            Objects.requireNonNull(cause, &quot;cause cannot be null&quot;);</span>
 
             //checks if the length of the cause dimention fails the valid criteria
-<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            if (length &lt;= 0) {</span>
-<span class="nc" id="L158">                throw new IllegalArgumentException(new InvalidLengthException(cause, length)); </span>
+<span class="fc bfc" id="L157" title="All 2 branches covered.">            if (length &lt;= 0) {</span>
+<span class="fc" id="L158">                throw new IllegalArgumentException(new InvalidLengthException(cause, length)); </span>
             }
 <span class="fc" id="L160">            return length;</span>
         }
@@ -266,22 +266,22 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
          * @param thisIndex
          * @param otherIndex
          */
-<span class="nc" id="L269">        public InconsistentSizeException(Indexes thisIndex, Indexes otherIndex) {</span>
+<span class="fc" id="L269">        public InconsistentSizeException(Indexes thisIndex, Indexes otherIndex) {</span>
 
             //null checks
-<span class="nc" id="L272">            Objects.requireNonNull(thisIndex, &quot;thisIndex cannot be null&quot;);</span>
-<span class="nc" id="L273">            Objects.requireNonNull(otherIndex, &quot;otherIndex cannot be null&quot;);</span>
+<span class="fc" id="L272">            Objects.requireNonNull(thisIndex, &quot;thisIndex cannot be null&quot;);</span>
+<span class="fc" id="L273">            Objects.requireNonNull(otherIndex, &quot;otherIndex cannot be null&quot;);</span>
 
-<span class="nc" id="L275">            this.thisIndex = thisIndex;</span>
-<span class="nc" id="L276">            this.otherIndex = otherIndex;</span>
-<span class="nc" id="L277">        }</span>
+<span class="fc" id="L275">            this.thisIndex = thisIndex;</span>
+<span class="fc" id="L276">            this.otherIndex = otherIndex;</span>
+<span class="fc" id="L277">        }</span>
 
         /**
          * getter for the thisIndex field
          * @return
          */
         public Indexes getThisIndex() {
-<span class="nc" id="L284">            return thisIndex;</span>
+<span class="fc" id="L284">            return thisIndex;</span>
         }
 
         /**
@@ -289,7 +289,7 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
          * @return
          */
         public Indexes getOtherIndex() {
-<span class="nc" id="L292">            return otherIndex;</span>
+<span class="fc" id="L292">            return otherIndex;</span>
         }
 
         /**
@@ -307,8 +307,8 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
 <span class="fc" id="L307">            Objects.requireNonNull(otherMatrix, &quot;otherMatrix cannot be null&quot;);</span>
             
             //checks if the sizes are not equal
-<span class="pc bpc" id="L310" title="1 of 2 branches missed.">            if (!thisMatrix.size().equals(otherMatrix.size())) {</span>
-<span class="nc" id="L311">                throw new IllegalArgumentException(new InconsistentSizeException(thisMatrix.size(), otherMatrix.size()));</span>
+<span class="fc bfc" id="L310" title="All 2 branches covered.">            if (!thisMatrix.size().equals(otherMatrix.size())) {</span>
+<span class="fc" id="L311">                throw new IllegalArgumentException(new InconsistentSizeException(thisMatrix.size(), otherMatrix.size()));</span>
             }
 <span class="fc" id="L313">            return thisMatrix.size();</span>
         }
@@ -326,19 +326,19 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
          * constructor
          * @param indexes
          */
-<span class="nc" id="L329">        public NonSquareException(Indexes indexes) {</span>
+<span class="fc" id="L329">        public NonSquareException(Indexes indexes) {</span>
 
             //null check
-<span class="nc" id="L332">            Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
-<span class="nc" id="L333">            this.indexes = indexes;</span>
-<span class="nc" id="L334">        }</span>
+<span class="fc" id="L332">            Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
+<span class="fc" id="L333">            this.indexes = indexes;</span>
+<span class="fc" id="L334">        }</span>
 
         /**
          * a getter for the indexes method
          * @return
          */
         public Indexes getIndexes() {
-<span class="nc" id="L341">            return indexes;</span>
+<span class="fc" id="L341">            return indexes;</span>
         }
 
         /**
@@ -352,8 +352,8 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
 <span class="fc" id="L352">            Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
 
             //checks if the index is on the diagonal
-<span class="pc bpc" id="L355" title="1 of 2 branches missed.">            if (!indexes.areDiagonal()) {</span>
-<span class="nc" id="L356">                throw new IllegalStateException(new NonSquareException(indexes));</span>
+<span class="fc bfc" id="L355" title="All 2 branches covered.">            if (!indexes.areDiagonal()) {</span>
+<span class="fc" id="L356">                throw new IllegalStateException(new NonSquareException(indexes));</span>
             }
 <span class="fc" id="L358">            return indexes;</span>
         }

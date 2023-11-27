@@ -7,7 +7,7 @@ import java.util.Objects;
  * @author Vidyut Veedgav
  * a class to demonstrate the concept of Rings on Polynomials
  */
-<span class="fc" id="L10">public final class PolynomialRing&lt;T&gt; implements Ring&lt;Polynomial&lt;T&gt;&gt; {</span>
+public final class PolynomialRing&lt;T&gt; implements Ring&lt;Polynomial&lt;T&gt;&gt; {
 
     private Ring&lt;T&gt; baseRing; //a private field storing a ring 
 
@@ -16,11 +16,8 @@ import java.util.Objects;
      * @param ring
      */
 <span class="fc" id="L18">    private PolynomialRing(Ring&lt;T&gt; ring) {</span>
-        //null check
-<span class="pc bpc" id="L20" title="1 of 2 branches missed.">        assert ring != null : &quot;ring cannot be null&quot;;</span>
-
-<span class="fc" id="L22">        this.baseRing = ring;</span>
-<span class="fc" id="L23">    }</span>
+<span class="fc" id="L19">        this.baseRing = ring;</span>
+<span class="fc" id="L20">    }</span>
 
     /**
      * a static method to return a new polynomial
@@ -29,9 +26,9 @@ import java.util.Objects;
      */
     public static &lt;T&gt; PolynomialRing&lt;T&gt; instance(Ring&lt;T&gt; ring) {
         //null check
-<span class="fc" id="L32">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
+<span class="fc" id="L29">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
 
-<span class="fc" id="L34">        return new PolynomialRing&lt;&gt;(ring);</span>
+<span class="fc" id="L31">        return new PolynomialRing&lt;&gt;(ring);</span>
     }
 
     /**
@@ -39,7 +36,7 @@ import java.util.Objects;
      */
     @Override
     public Polynomial&lt;T&gt; zero() {
-<span class="fc" id="L42">        return Polynomial.from(List.of());</span>
+<span class="fc" id="L39">        return Polynomial.from(List.of());</span>
     }
 
     /**
@@ -47,7 +44,7 @@ import java.util.Objects;
      */
     @Override
     public Polynomial&lt;T&gt; identity() {
-<span class="nc" id="L50">        return Polynomial.from(List.of(baseRing.identity()));</span>
+<span class="fc" id="L47">        return Polynomial.from(List.of(baseRing.identity()));</span>
     }
 
     /**
@@ -56,10 +53,10 @@ import java.util.Objects;
     @Override
     public Polynomial&lt;T&gt; sum(Polynomial&lt;T&gt; x, Polynomial&lt;T&gt; y) {
         //null checks
-<span class="fc" id="L59">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
-<span class="fc" id="L60">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
+<span class="fc" id="L56">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
+<span class="fc" id="L57">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
 
-<span class="fc" id="L62">        return x.plus(y, baseRing);</span>
+<span class="fc" id="L59">        return x.plus(y, baseRing);</span>
     }
 
     /**
@@ -68,18 +65,10 @@ import java.util.Objects;
     @Override
     public Polynomial&lt;T&gt; product(Polynomial&lt;T&gt; x, Polynomial&lt;T&gt; y) {
         //null checks
-<span class="fc" id="L71">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
-<span class="fc" id="L72">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
+<span class="fc" id="L68">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
+<span class="fc" id="L69">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
 
-<span class="fc" id="L74">        return x.times(y, baseRing);</span>
+<span class="fc" id="L71">        return x.times(y, baseRing);</span>
     }
-
-    public static void main(String[] args) {
-
-<span class="nc" id="L79">        PolynomialRing&lt;Integer&gt; ring = PolynomialRing.instance(new IntegerRing());</span>
-<span class="nc" id="L80">        System.out.println(ring.identity());</span>
-<span class="nc" id="L81">    }</span>
-
-    
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

@@ -30,9 +30,6 @@ public final class MatrixMap<T> implements Matrix<T> {
      * @param matrix
      */
     private MatrixMap(Map<Indexes, T> matrix) {
-
-        //null check
-        assert matrix != null : "matrix cannot be null";
         this.matrix = matrix;
         this.size = Collections.max(matrix.keySet());
     }
@@ -43,14 +40,6 @@ public final class MatrixMap<T> implements Matrix<T> {
      */
     protected Map<Indexes, T> getMap() {
         return Map.copyOf(matrix);
-    }
-
-    /**
-     * a getter method for the map used for testing
-     * @return a mutable copy of the matrix, which can be used for containment testing
-     */
-    protected Map<Indexes, T> getModifiableMap() {
-        return (matrix);
     }
 
     /**
@@ -77,28 +66,13 @@ public final class MatrixMap<T> implements Matrix<T> {
 
             //indexing through the corresponding column
             for (int col = 0; col < numCols; col++) {
-                addEntry(sb, row, col);
+                Indexes index = new Indexes(row, col); //creating an index
+                T value = value(index); //finding the value at this index
+                sb.append("[").append(index.toString()).append("]: ").append(value).append("\t"); //add the entry
             }
             sb.append("\n"); //add a carriage return
         }
         return sb.toString();
-    }
-
-    /**
-     * a subroutine of the toString method which creates appends a String entry to the matrix
-     * @param sb
-     * @param row
-     * @param col
-     */
-    private void addEntry(StringBuilder sb, int row, int col) {
-
-        //null check
-        assert sb != null : "sb cannot be null";
-
-        Indexes index = new Indexes(row, col); //creating an index
-        T value = value(index); //finding the value at this index
-
-        sb.append("[").append(index.toString()).append("]: ").append(value).append("\t"); //add the entry
     }
 
     /**
@@ -206,28 +180,11 @@ public final class MatrixMap<T> implements Matrix<T> {
         Map<Indexes, S> matrix = new HashMap<>(); //creating the map
         List<Indexes> indexes = Indexes.stream(rows, columns).collect(Collectors.toList()); //creating a list of indexes
 
-        populate(valueMapper, matrix, indexes); //populating the matrix with the specified values
-        return new MatrixMap<>(Map.copyOf(matrix));
-    }
-
-    /**
-     * a subroutine of the instance method which fills the matrix with the specified elements
-     * @param <S>
-     * @param valueMapper
-     * @param matrix
-     * @param indexes
-     */
-    private static <S> void populate(Function<Indexes, S> valueMapper, Map<Indexes, S> matrix, List<Indexes> indexes) {
-
-        //null checks
-        assert valueMapper != null : "valueMapper cannot be null";
-        assert matrix != null : "matrix cannot be null";
-        assert indexes != null : "indexes cannot be null";
-
-        for (Indexes index : indexes) {
+        for (Indexes index : indexes) { //populating the matrix with the specified values
             S value = valueMapper.apply(index);
             matrix.put(index, value);
-        }
+        } 
+        return new MatrixMap<>(Map.copyOf(matrix));
     }
 
     /**

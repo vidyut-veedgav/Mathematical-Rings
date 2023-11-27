@@ -189,32 +189,18 @@ public class SparseMatrixMap<T> implements Matrix<T> {
 
             //indexing through the corresponding column
             for (int col = 0; col < numCols; col++) {
-                addEntry(sb, row, col);
+                Indexes index = new Indexes(row, col); //creating an index
+                T value = value(index); //finding the value at this index
+
+                if (value != null) {
+                    sb.append("[").append(index.toString()).append("]: ").append(value).append("\t"); //add the entry
+                } else {
+                    sb.append("       ").append("\t");
+                }
             }
             sb.append("\n"); //add a carriage return
         }
         return sb.toString();
-    }
-
-    /**
-     * a subroutine of the toString method which creates appends a String entry to the matrix
-     * @param sb
-     * @param row
-     * @param col
-     */
-    private void addEntry(StringBuilder sb, int row, int col) {
-
-        //null check
-        assert sb != null : "sb cannot be null";
-
-        Indexes index = new Indexes(row, col); //creating an index
-        T value = value(index); //finding the value at this index
-
-        if (value != null) {
-            sb.append("[").append(index.toString()).append("]: ").append(value).append("\t"); //add the entry
-        } else {
-            sb.append("       ").append("\t");
-        }
     }
 
     /**
@@ -225,7 +211,6 @@ public class SparseMatrixMap<T> implements Matrix<T> {
     public MatrixMap<T> convertToStandard(Ring<T> ring) {
         
         return MatrixMap.instance(size(), (index) -> {
-            List<Indexes> indexes = Indexes.stream(size()).collect(Collectors.toList());
             return (!this.contains(index) ? ring.zero() : value(index));
         });
     }
@@ -236,6 +221,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      * @return
      */
     private boolean contains(Indexes index) {
+        assert index != null : "index cannot be null";
         return matrix.containsKey(index) ? true : false;
     }
     public static void main(String[] args) {
@@ -252,13 +238,13 @@ public class SparseMatrixMap<T> implements Matrix<T> {
 
         //System.out.println(MatrixMap.instance(2, 2, (index) -> (index.column())).convertToSparse());
         //System.out.println(SparseMatrixMap.instance(2, 2, (index) -> (index.column())));
-        //System.out.println(SparseMatrixMap.instance(2, 2, (index) -> (index.column())).convertToStandard(intRing));
+        System.out.println(SparseMatrixMap.instance(2, 2, (index) -> (index.column())).convertToStandard(intRing));
 
         Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -> index.row());
         Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -> index.column());
 
         //TODO make plus and times methods more efficient and implement
-        System.out.println(s1.plus(s2, (x, y) -> intRing.sum(x, y)));
-        System.out.println(s1.times(s2, intRing));
+        //System.out.println(s1.plus(s2, (x, y) -> intRing.sum(x, y)));
+        //System.out.println(s1.times(s2, intRing));
     }
 }

@@ -8,7 +8,7 @@ import java.util.function.BinaryOperator;
  * @author Vidyut Veedgav
  * a class defining behavior for ring operations
  */
-<span class="nc" id="L11">public final class Rings&lt;T&gt; {</span>
+<span class="fc" id="L11">public final class Rings&lt;T&gt; {</span>
     
     /**
      * a method to reduce elements of a list by conducting an externally defined operation
@@ -71,10 +71,10 @@ import java.util.function.BinaryOperator;
     public static &lt;T&gt; T product(List&lt;T&gt; args, Ring&lt;T&gt; ring) {
 
         //null checks
-<span class="nc" id="L74">        Objects.requireNonNull(args);</span>
-<span class="nc" id="L75">        Objects.requireNonNull(ring);</span>
+<span class="fc" id="L74">        Objects.requireNonNull(args);</span>
+<span class="fc" id="L75">        Objects.requireNonNull(ring);</span>
 
-<span class="nc" id="L77">        return reduce(args, ring.identity(), (x, y) -&gt; ring.product(x, y));</span>
+<span class="fc" id="L77">        return reduce(args, ring.identity(), (x, y) -&gt; ring.product(x, y));</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

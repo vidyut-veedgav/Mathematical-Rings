@@ -1,6 +1,7 @@
 package RingPackage;
 
 import org.junit.*;
+
 import static org.junit.Assert.*;
 
 import java.math.BigInteger;
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Vidyut Veedgav
  * a tester class for the Ring classes
  */
-public class RingTesting {
+public class RingTest {
 
     //lists that store each of the number types
     List<Integer> intList; 
@@ -330,5 +331,25 @@ public class RingTesting {
         assertEquals(List.of(Double.valueOf(12), Double.valueOf(23), Double.valueOf(40), Double.valueOf(43), Double.valueOf(58), Double.valueOf(49), Double.valueOf(30)), result3.getCoefficients());
         result3 = Polynomial.from(b3.times(a3, ring3).getCoefficients());
         assertEquals(List.of(Double.valueOf(12), Double.valueOf(23), Double.valueOf(40), Double.valueOf(43), Double.valueOf(58), Double.valueOf(49), Double.valueOf(30)), result3.getCoefficients());
+    }
+
+    /**
+     * a method to test the Rings class
+     */
+    @Test
+    public void testRings() {
+        assertEquals(Integer.valueOf(6), Rings.sum(List.of(1, 2, 3), new IntegerRing()));
+        Rings<Integer> rings = new Rings<>();
+        assertEquals(RingPackage.Rings.class, rings.getClass());
+    }
+
+    /**
+     * a method to test the identity method of Polynomial
+     */
+    @Test
+    public void testPolynomialIdentity() {
+        Ring<Integer> intRing = new IntegerRing();
+        PolynomialRing<Integer> pRing = PolynomialRing.instance(intRing);
+        assertEquals(List.of(intRing.identity()), pRing.identity().getCoefficients());
     }
 }

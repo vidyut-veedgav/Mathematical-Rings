@@ -189,33 +189,19 @@ import RingPackage.Rings;
 
             //indexing through the corresponding column
 <span class="nc bnc" id="L191" title="All 2 branches missed.">            for (int col = 0; col &lt; numCols; col++) {</span>
-<span class="nc" id="L192">                addEntry(sb, row, col);</span>
+<span class="nc" id="L192">                Indexes index = new Indexes(row, col); //creating an index</span>
+<span class="nc" id="L193">                T value = value(index); //finding the value at this index</span>
+
+<span class="nc bnc" id="L195" title="All 2 branches missed.">                if (value != null) {</span>
+<span class="nc" id="L196">                    sb.append(&quot;[&quot;).append(index.toString()).append(&quot;]: &quot;).append(value).append(&quot;\t&quot;); //add the entry</span>
+                } else {
+<span class="nc" id="L198">                    sb.append(&quot;       &quot;).append(&quot;\t&quot;);</span>
+                }
             }
-<span class="nc" id="L194">            sb.append(&quot;\n&quot;); //add a carriage return</span>
+<span class="nc" id="L201">            sb.append(&quot;\n&quot;); //add a carriage return</span>
         }
-<span class="nc" id="L196">        return sb.toString();</span>
+<span class="nc" id="L203">        return sb.toString();</span>
     }
-
-    /**
-     * a subroutine of the toString method which creates appends a String entry to the matrix
-     * @param sb
-     * @param row
-     * @param col
-     */
-    private void addEntry(StringBuilder sb, int row, int col) {
-
-        //null check
-<span class="nc bnc" id="L208" title="All 2 branches missed.">        assert sb != null : &quot;sb cannot be null&quot;;</span>
-
-<span class="nc" id="L210">        Indexes index = new Indexes(row, col); //creating an index</span>
-<span class="nc" id="L211">        T value = value(index); //finding the value at this index</span>
-
-<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (value != null) {</span>
-<span class="nc" id="L214">            sb.append(&quot;[&quot;).append(index.toString()).append(&quot;]: &quot;).append(value).append(&quot;\t&quot;); //add the entry</span>
-        } else {
-<span class="nc" id="L216">            sb.append(&quot;       &quot;).append(&quot;\t&quot;);</span>
-        }
-<span class="nc" id="L218">    }</span>
 
     /**
      * a method to convert this matrix to a standard matrix
@@ -224,9 +210,8 @@ import RingPackage.Rings;
      */
     public MatrixMap&lt;T&gt; convertToStandard(Ring&lt;T&gt; ring) {
         
-<span class="nc" id="L227">        return MatrixMap.instance(size(), (index) -&gt; {</span>
-<span class="nc" id="L228">            List&lt;Indexes&gt; indexes = Indexes.stream(size()).collect(Collectors.toList());</span>
-<span class="nc bnc" id="L229" title="All 2 branches missed.">            return (!this.contains(index) ? ring.zero() : value(index));</span>
+<span class="nc" id="L213">        return MatrixMap.instance(size(), (index) -&gt; {</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">            return (!this.contains(index) ? ring.zero() : value(index));</span>
         });
     }
 
@@ -236,30 +221,31 @@ import RingPackage.Rings;
      * @return
      */
     private boolean contains(Indexes index) {
-<span class="nc bnc" id="L239" title="All 2 branches missed.">        return matrix.containsKey(index) ? true : false;</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">        assert index != null : &quot;index cannot be null&quot;;</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">        return matrix.containsKey(index) ? true : false;</span>
     }
     public static void main(String[] args) {
         
-<span class="nc" id="L243">        Matrix&lt;Integer&gt; sparse = SparseMatrixMap.instance(2, 2, (index) -&gt; (index.row()));</span>
+<span class="nc" id="L229">        Matrix&lt;Integer&gt; sparse = SparseMatrixMap.instance(2, 2, (index) -&gt; (index.row()));</span>
         //System.out.println(sparse);
 
-<span class="nc" id="L246">        sparse = SparseMatrixMap.constant(2, 1);</span>
+<span class="nc" id="L232">        sparse = SparseMatrixMap.constant(2, 1);</span>
         //System.out.println(sparse);
 
-<span class="nc" id="L249">        Ring&lt;Integer&gt; intRing = new IntegerRing();</span>
-<span class="nc" id="L250">        sparse = SparseMatrixMap.identity(2, intRing.zero(), intRing.identity());</span>
+<span class="nc" id="L235">        Ring&lt;Integer&gt; intRing = new IntegerRing();</span>
+<span class="nc" id="L236">        sparse = SparseMatrixMap.identity(2, intRing.zero(), intRing.identity());</span>
         //System.out.println(sparse);
 
         //System.out.println(MatrixMap.instance(2, 2, (index) -&gt; (index.column())).convertToSparse());
         //System.out.println(SparseMatrixMap.instance(2, 2, (index) -&gt; (index.column())));
-        //System.out.println(SparseMatrixMap.instance(2, 2, (index) -&gt; (index.column())).convertToStandard(intRing));
+<span class="nc" id="L241">        System.out.println(SparseMatrixMap.instance(2, 2, (index) -&gt; (index.column())).convertToStandard(intRing));</span>
 
-<span class="nc" id="L257">        Matrix&lt;Integer&gt; s1 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -&gt; index.row());</span>
-<span class="nc" id="L258">        Matrix&lt;Integer&gt; s2 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -&gt; index.column());</span>
+<span class="nc" id="L243">        Matrix&lt;Integer&gt; s1 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -&gt; index.row());</span>
+<span class="nc" id="L244">        Matrix&lt;Integer&gt; s2 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -&gt; index.column());</span>
 
         //TODO make plus and times methods more efficient and implement
-<span class="nc" id="L261">        System.out.println(s1.plus(s2, (x, y) -&gt; intRing.sum(x, y)));</span>
-<span class="nc" id="L262">        System.out.println(s1.times(s2, intRing));</span>
-<span class="nc" id="L263">    }</span>
+        //System.out.println(s1.plus(s2, (x, y) -&gt; intRing.sum(x, y)));
+        //System.out.println(s1.times(s2, intRing));
+<span class="nc" id="L249">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

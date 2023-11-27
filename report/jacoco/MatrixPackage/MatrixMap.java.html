@@ -20,7 +20,7 @@ import RingPackage.Rings;
  * @author Vidyut Veedgav
  * a class representing a matrix map class
  */
-<span class="fc" id="L23">public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; { </span>
+public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; { 
     
     private final Map&lt;Indexes, T&gt;  matrix; //a field representing the matrix
     private final Indexes size;
@@ -30,27 +30,16 @@ import RingPackage.Rings;
      * @param matrix
      */
 <span class="fc" id="L32">    private MatrixMap(Map&lt;Indexes, T&gt; matrix) {</span>
-
-        //null check
-<span class="pc bpc" id="L35" title="1 of 2 branches missed.">        assert matrix != null : &quot;matrix cannot be null&quot;;</span>
-<span class="fc" id="L36">        this.matrix = matrix;</span>
-<span class="fc" id="L37">        this.size = Collections.max(matrix.keySet());</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L33">        this.matrix = matrix;</span>
+<span class="fc" id="L34">        this.size = Collections.max(matrix.keySet());</span>
+<span class="fc" id="L35">    }</span>
 
     /**
      * a getter method for the map used for testing
      * @return an immutable copy of the matrix, which can be used for containment testing
      */
     protected Map&lt;Indexes, T&gt; getMap() {
-<span class="fc" id="L45">        return Map.copyOf(matrix);</span>
-    }
-
-    /**
-     * a getter method for the map used for testing
-     * @return a mutable copy of the matrix, which can be used for containment testing
-     */
-    protected Map&lt;Indexes, T&gt; getModifiableMap() {
-<span class="nc" id="L53">        return (matrix);</span>
+<span class="fc" id="L42">        return Map.copyOf(matrix);</span>
     }
 
     /**
@@ -58,7 +47,7 @@ import RingPackage.Rings;
      * @return
      */
     public Indexes size() {
-<span class="fc" id="L61">        return size;</span>
+<span class="fc" id="L50">        return size;</span>
     }
 
     /**
@@ -67,39 +56,24 @@ import RingPackage.Rings;
     @Override
     public String toString() {
 
-<span class="fc" id="L70">        Indexes size = size();</span>
-<span class="fc" id="L71">        int numRows = size.row() + 1; // Add 1 to include row 0</span>
-<span class="fc" id="L72">        int numCols = size.column() + 1; // Add 1 to include column 0</span>
+<span class="fc" id="L59">        Indexes size = size();</span>
+<span class="fc" id="L60">        int numRows = size.row() + 1; // Add 1 to include row 0</span>
+<span class="fc" id="L61">        int numCols = size.column() + 1; // Add 1 to include column 0</span>
     
-<span class="fc" id="L74">        StringBuilder sb = new StringBuilder();</span>
+<span class="fc" id="L63">        StringBuilder sb = new StringBuilder();</span>
         //indexing through the rows
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (int row = 0; row &lt; numRows; row++) {</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (int row = 0; row &lt; numRows; row++) {</span>
 
             //indexing through the corresponding column
-<span class="fc bfc" id="L79" title="All 2 branches covered.">            for (int col = 0; col &lt; numCols; col++) {</span>
-<span class="fc" id="L80">                addEntry(sb, row, col);</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">            for (int col = 0; col &lt; numCols; col++) {</span>
+<span class="fc" id="L69">                Indexes index = new Indexes(row, col); //creating an index</span>
+<span class="fc" id="L70">                T value = value(index); //finding the value at this index</span>
+<span class="fc" id="L71">                sb.append(&quot;[&quot;).append(index.toString()).append(&quot;]: &quot;).append(value).append(&quot;\t&quot;); //add the entry</span>
             }
-<span class="fc" id="L82">            sb.append(&quot;\n&quot;); //add a carriage return</span>
+<span class="fc" id="L73">            sb.append(&quot;\n&quot;); //add a carriage return</span>
         }
-<span class="fc" id="L84">        return sb.toString();</span>
+<span class="fc" id="L75">        return sb.toString();</span>
     }
-
-    /**
-     * a subroutine of the toString method which creates appends a String entry to the matrix
-     * @param sb
-     * @param row
-     * @param col
-     */
-    private void addEntry(StringBuilder sb, int row, int col) {
-
-        //null check
-<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        assert sb != null : &quot;sb cannot be null&quot;;</span>
-
-<span class="fc" id="L98">        Indexes index = new Indexes(row, col); //creating an index</span>
-<span class="fc" id="L99">        T value = value(index); //finding the value at this index</span>
-
-<span class="fc" id="L101">        sb.append(&quot;[&quot;).append(index.toString()).append(&quot;]: &quot;).append(value).append(&quot;\t&quot;); //add the entry</span>
-<span class="fc" id="L102">    }</span>
 
     /**
      * a method to return the element at the given indexes
@@ -109,8 +83,8 @@ import RingPackage.Rings;
     public T value(Indexes indexes) {
 
         //null check
-<span class="fc" id="L112">        Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
-<span class="fc" id="L113">        return matrix.get(indexes);</span>
+<span class="fc" id="L86">        Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
+<span class="fc" id="L87">        return matrix.get(indexes);</span>
     }
 
     /**
@@ -118,7 +92,7 @@ import RingPackage.Rings;
      * @return the corresponding value
      */
     public T value(int row, int column) {
-<span class="fc" id="L121">        return value(new Indexes(row, column));</span>
+<span class="fc" id="L95">        return value(new Indexes(row, column));</span>
     }
     
     /**
@@ -129,9 +103,9 @@ import RingPackage.Rings;
         /**
          * an enum to define the possible values of the exception's cause
          */
-<span class="fc" id="L132">        enum Cause {</span>
-<span class="fc" id="L133">            ROW, </span>
-<span class="fc" id="L134">            COLUMN</span>
+<span class="fc" id="L106">        enum Cause {</span>
+<span class="fc" id="L107">            ROW, </span>
+<span class="fc" id="L108">            COLUMN</span>
         }
     
         private Cause cause; //a private variable declaring the cause
@@ -142,22 +116,22 @@ import RingPackage.Rings;
          * @param cause
          * @param length
          */
-<span class="fc" id="L145">        public InvalidLengthException(Cause cause, Integer length) {</span>
+<span class="fc" id="L119">        public InvalidLengthException(Cause cause, Integer length) {</span>
 
             //null checks
-<span class="fc" id="L148">            Objects.requireNonNull(cause);</span>
-<span class="fc" id="L149">            Objects.requireNonNull(length);</span>
+<span class="fc" id="L122">            Objects.requireNonNull(cause);</span>
+<span class="fc" id="L123">            Objects.requireNonNull(length);</span>
 
-<span class="fc" id="L151">            this.cause = cause;</span>
-<span class="fc" id="L152">            this.length = length;</span>
-<span class="fc" id="L153">        }</span>
+<span class="fc" id="L125">            this.cause = cause;</span>
+<span class="fc" id="L126">            this.length = length;</span>
+<span class="fc" id="L127">        }</span>
 
         /**
          * getter for the cause
          * @return the cause
          */
         public Cause cause() {
-<span class="fc" id="L160">            return cause;</span>
+<span class="fc" id="L134">            return cause;</span>
         }
 
         /**
@@ -165,7 +139,7 @@ import RingPackage.Rings;
          * @return the length
          */
         public Integer length() {
-<span class="fc" id="L168">            return length;</span>
+<span class="fc" id="L142">            return length;</span>
         }
 
         /**
@@ -177,13 +151,13 @@ import RingPackage.Rings;
         public static int requireNonEmpty(Cause cause, int length) {
 
             //null check
-<span class="fc" id="L180">            Objects.requireNonNull(cause, &quot;cause cannot be null&quot;);</span>
+<span class="fc" id="L154">            Objects.requireNonNull(cause, &quot;cause cannot be null&quot;);</span>
 
             //checks if the length of the cause dimention fails the valid criteria
-<span class="pc bpc" id="L183" title="1 of 2 branches missed.">            if (length &lt;= 0) {</span>
-<span class="nc" id="L184">                throw new IllegalArgumentException(new InvalidLengthException(cause, length)); </span>
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">            if (length &lt;= 0) {</span>
+<span class="nc" id="L158">                throw new IllegalArgumentException(new InvalidLengthException(cause, length)); </span>
             }
-<span class="fc" id="L186">            return length;</span>
+<span class="fc" id="L160">            return length;</span>
         }
     }
 
@@ -199,36 +173,19 @@ import RingPackage.Rings;
     public static &lt;S&gt; MatrixMap&lt;S&gt; instance(int rows, int columns, Function&lt;Indexes, S&gt; valueMapper) {
 
         //error handling
-<span class="fc" id="L202">        Objects.requireNonNull(valueMapper, &quot;valueMapper cannot be null&quot;);</span>
-<span class="fc" id="L203">        InvalidLengthException.requireNonEmpty(Cause.ROW, rows); //checks if the rows are valid</span>
-<span class="fc" id="L204">        InvalidLengthException.requireNonEmpty(Cause.COLUMN, columns); //checks if the columns are valid</span>
+<span class="fc" id="L176">        Objects.requireNonNull(valueMapper, &quot;valueMapper cannot be null&quot;);</span>
+<span class="fc" id="L177">        InvalidLengthException.requireNonEmpty(Cause.ROW, rows); //checks if the rows are valid</span>
+<span class="fc" id="L178">        InvalidLengthException.requireNonEmpty(Cause.COLUMN, columns); //checks if the columns are valid</span>
 
-<span class="fc" id="L206">        Map&lt;Indexes, S&gt; matrix = new HashMap&lt;&gt;(); //creating the map</span>
-<span class="fc" id="L207">        List&lt;Indexes&gt; indexes = Indexes.stream(rows, columns).collect(Collectors.toList()); //creating a list of indexes</span>
+<span class="fc" id="L180">        Map&lt;Indexes, S&gt; matrix = new HashMap&lt;&gt;(); //creating the map</span>
+<span class="fc" id="L181">        List&lt;Indexes&gt; indexes = Indexes.stream(rows, columns).collect(Collectors.toList()); //creating a list of indexes</span>
 
-<span class="fc" id="L209">        populate(valueMapper, matrix, indexes); //populating the matrix with the specified values</span>
-<span class="fc" id="L210">        return new MatrixMap&lt;&gt;(Map.copyOf(matrix));</span>
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        for (Indexes index : indexes) { //populating the matrix with the specified values</span>
+<span class="fc" id="L184">            S value = valueMapper.apply(index);</span>
+<span class="fc" id="L185">            matrix.put(index, value);</span>
+<span class="fc" id="L186">        } </span>
+<span class="fc" id="L187">        return new MatrixMap&lt;&gt;(Map.copyOf(matrix));</span>
     }
-
-    /**
-     * a subroutine of the instance method which fills the matrix with the specified elements
-     * @param &lt;S&gt;
-     * @param valueMapper
-     * @param matrix
-     * @param indexes
-     */
-    private static &lt;S&gt; void populate(Function&lt;Indexes, S&gt; valueMapper, Map&lt;Indexes, S&gt; matrix, List&lt;Indexes&gt; indexes) {
-
-        //null checks
-<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        assert valueMapper != null : &quot;valueMapper cannot be null&quot;;</span>
-<span class="pc bpc" id="L224" title="1 of 2 branches missed.">        assert matrix != null : &quot;matrix cannot be null&quot;;</span>
-<span class="pc bpc" id="L225" title="1 of 2 branches missed.">        assert indexes != null : &quot;indexes cannot be null&quot;;</span>
-
-<span class="fc bfc" id="L227" title="All 2 branches covered.">        for (Indexes index : indexes) {</span>
-<span class="fc" id="L228">            S value = valueMapper.apply(index);</span>
-<span class="fc" id="L229">            matrix.put(index, value);</span>
-<span class="fc" id="L230">        }</span>
-<span class="fc" id="L231">    }</span>
 
     /**
      * overloading the instance method to accept an Indexes object as a parameter
@@ -240,11 +197,11 @@ import RingPackage.Rings;
     public static &lt;S&gt; MatrixMap&lt;S&gt; instance(Indexes size, Function&lt;Indexes, S&gt; valueMapper) {
 
         //null checks
-<span class="fc" id="L243">        Objects.requireNonNull(size, &quot;size cannot be null&quot;);</span>
-<span class="fc" id="L244">        Objects.requireNonNull(valueMapper, &quot;valueMapper cannot be null&quot;);</span>
+<span class="fc" id="L200">        Objects.requireNonNull(size, &quot;size cannot be null&quot;);</span>
+<span class="fc" id="L201">        Objects.requireNonNull(valueMapper, &quot;valueMapper cannot be null&quot;);</span>
     
         //calling the foundational instance method
-<span class="fc" id="L247">        return MatrixMap.instance(size.row(), size.column(), valueMapper);</span>
+<span class="fc" id="L204">        return MatrixMap.instance(size.row(), size.column(), valueMapper);</span>
     }
 
     /**
@@ -257,10 +214,10 @@ import RingPackage.Rings;
     public static &lt;S&gt; MatrixMap&lt;S&gt; constant(int size, S value) {
 
         //null check
-<span class="fc" id="L260">        Objects.requireNonNull(value, &quot;value cannot be null&quot;);</span>
+<span class="fc" id="L217">        Objects.requireNonNull(value, &quot;value cannot be null&quot;);</span>
 
         //calling the foundational instance method
-<span class="fc" id="L263">        return instance(size, size, (index) -&gt; value);</span>
+<span class="fc" id="L220">        return instance(size, size, (index) -&gt; value);</span>
     }
 
     /**
@@ -274,11 +231,11 @@ import RingPackage.Rings;
     public static &lt;S&gt; MatrixMap&lt;S&gt; identity(int size, S zero, S identity) {
 
         //null checks
-<span class="fc" id="L277">        Objects.requireNonNull(zero, &quot;zero cannot be null&quot;);</span>
-<span class="fc" id="L278">        Objects.requireNonNull(identity, &quot;identity cannot be null&quot;);</span>
+<span class="fc" id="L234">        Objects.requireNonNull(zero, &quot;zero cannot be null&quot;);</span>
+<span class="fc" id="L235">        Objects.requireNonNull(identity, &quot;identity cannot be null&quot;);</span>
 
         //calling the foundational instance method
-<span class="fc bfc" id="L281" title="All 2 branches covered.">        return instance(size, size, (index) -&gt; (index.areDiagonal()) ? identity : zero);</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        return instance(size, size, (index) -&gt; (index.areDiagonal()) ? identity : zero);</span>
     }
 
     /**
@@ -290,10 +247,10 @@ import RingPackage.Rings;
     public static &lt;S&gt; MatrixMap&lt;S&gt; from(S[][] matrix) {
 
         //null check
-<span class="fc" id="L293">        Objects.requireNonNull(matrix, &quot;matrix cannot be null&quot;);</span>
+<span class="fc" id="L250">        Objects.requireNonNull(matrix, &quot;matrix cannot be null&quot;);</span>
 
         //calling the foundational instance method
-<span class="fc" id="L296">        return instance(matrix.length - 1, matrix[0].length - 1, (index) -&gt; index.value(matrix));</span>
+<span class="fc" id="L253">        return instance(matrix.length - 1, matrix[0].length - 1, (index) -&gt; index.value(matrix));</span>
     }
 
     /**
@@ -309,22 +266,22 @@ import RingPackage.Rings;
          * @param thisIndex
          * @param otherIndex
          */
-<span class="nc" id="L312">        public InconsistentSizeException(Indexes thisIndex, Indexes otherIndex) {</span>
+<span class="nc" id="L269">        public InconsistentSizeException(Indexes thisIndex, Indexes otherIndex) {</span>
 
             //null checks
-<span class="nc" id="L315">            Objects.requireNonNull(thisIndex, &quot;thisIndex cannot be null&quot;);</span>
-<span class="nc" id="L316">            Objects.requireNonNull(otherIndex, &quot;otherIndex cannot be null&quot;);</span>
+<span class="nc" id="L272">            Objects.requireNonNull(thisIndex, &quot;thisIndex cannot be null&quot;);</span>
+<span class="nc" id="L273">            Objects.requireNonNull(otherIndex, &quot;otherIndex cannot be null&quot;);</span>
 
-<span class="nc" id="L318">            this.thisIndex = thisIndex;</span>
-<span class="nc" id="L319">            this.otherIndex = otherIndex;</span>
-<span class="nc" id="L320">        }</span>
+<span class="nc" id="L275">            this.thisIndex = thisIndex;</span>
+<span class="nc" id="L276">            this.otherIndex = otherIndex;</span>
+<span class="nc" id="L277">        }</span>
 
         /**
          * getter for the thisIndex field
          * @return
          */
         public Indexes getThisIndex() {
-<span class="nc" id="L327">            return thisIndex;</span>
+<span class="nc" id="L284">            return thisIndex;</span>
         }
 
         /**
@@ -332,7 +289,7 @@ import RingPackage.Rings;
          * @return
          */
         public Indexes getOtherIndex() {
-<span class="nc" id="L335">            return otherIndex;</span>
+<span class="nc" id="L292">            return otherIndex;</span>
         }
 
         /**
@@ -346,14 +303,14 @@ import RingPackage.Rings;
         public static &lt;T&gt; Indexes requireMatchingSize(Matrix&lt;T&gt; thisMatrix, Matrix&lt;T&gt; otherMatrix) {
 
             //null checks
-<span class="fc" id="L349">            Objects.requireNonNull(thisMatrix, &quot;thisMatrix cannot be null&quot;);</span>
-<span class="fc" id="L350">            Objects.requireNonNull(otherMatrix, &quot;otherMatrix cannot be null&quot;);</span>
+<span class="fc" id="L306">            Objects.requireNonNull(thisMatrix, &quot;thisMatrix cannot be null&quot;);</span>
+<span class="fc" id="L307">            Objects.requireNonNull(otherMatrix, &quot;otherMatrix cannot be null&quot;);</span>
             
             //checks if the sizes are not equal
-<span class="pc bpc" id="L353" title="1 of 2 branches missed.">            if (!thisMatrix.size().equals(otherMatrix.size())) {</span>
-<span class="nc" id="L354">                throw new IllegalArgumentException(new InconsistentSizeException(thisMatrix.size(), otherMatrix.size()));</span>
+<span class="pc bpc" id="L310" title="1 of 2 branches missed.">            if (!thisMatrix.size().equals(otherMatrix.size())) {</span>
+<span class="nc" id="L311">                throw new IllegalArgumentException(new InconsistentSizeException(thisMatrix.size(), otherMatrix.size()));</span>
             }
-<span class="fc" id="L356">            return thisMatrix.size();</span>
+<span class="fc" id="L313">            return thisMatrix.size();</span>
         }
     }
 
@@ -369,19 +326,19 @@ import RingPackage.Rings;
          * constructor
          * @param indexes
          */
-<span class="nc" id="L372">        public NonSquareException(Indexes indexes) {</span>
+<span class="nc" id="L329">        public NonSquareException(Indexes indexes) {</span>
 
             //null check
-<span class="nc" id="L375">            Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
-<span class="nc" id="L376">            this.indexes = indexes;</span>
-<span class="nc" id="L377">        }</span>
+<span class="nc" id="L332">            Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
+<span class="nc" id="L333">            this.indexes = indexes;</span>
+<span class="nc" id="L334">        }</span>
 
         /**
          * a getter for the indexes method
          * @return
          */
         public Indexes getIndexes() {
-<span class="nc" id="L384">            return indexes;</span>
+<span class="nc" id="L341">            return indexes;</span>
         }
 
         /**
@@ -392,13 +349,13 @@ import RingPackage.Rings;
         public static Indexes requireDiagonal(Indexes indexes) {
 
             //null check
-<span class="fc" id="L395">            Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
+<span class="fc" id="L352">            Objects.requireNonNull(indexes, &quot;indexes cannot be null&quot;);</span>
 
             //checks if the index is on the diagonal
-<span class="pc bpc" id="L398" title="1 of 2 branches missed.">            if (!indexes.areDiagonal()) {</span>
-<span class="nc" id="L399">                throw new IllegalStateException(new NonSquareException(indexes));</span>
+<span class="pc bpc" id="L355" title="1 of 2 branches missed.">            if (!indexes.areDiagonal()) {</span>
+<span class="nc" id="L356">                throw new IllegalStateException(new NonSquareException(indexes));</span>
             }
-<span class="fc" id="L401">            return indexes;</span>
+<span class="fc" id="L358">            return indexes;</span>
         }
     }
 
@@ -411,13 +368,13 @@ import RingPackage.Rings;
     public MatrixMap&lt;T&gt; plus(Matrix&lt;T&gt; other, BinaryOperator&lt;T&gt; plus) {
 
         //null checks
-<span class="fc" id="L414">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
-<span class="fc" id="L415">        Objects.requireNonNull(plus, &quot;plus cannot be null&quot;);</span>
+<span class="fc" id="L371">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
+<span class="fc" id="L372">        Objects.requireNonNull(plus, &quot;plus cannot be null&quot;);</span>
 
         //checking if the matrixes are the same size
-<span class="fc" id="L418">        InconsistentSizeException.requireMatchingSize(this, other); </span>
+<span class="fc" id="L375">        InconsistentSizeException.requireMatchingSize(this, other); </span>
 
-<span class="fc" id="L420">        return instance(this.size(), (index) -&gt; plus.apply(this.value(index), other.value(index))); //creating a new instance of the matrix containing the sum</span>
+<span class="fc" id="L377">        return instance(this.size(), (index) -&gt; plus.apply(this.value(index), other.value(index))); //creating a new instance of the matrix containing the sum</span>
     }
 
     /**
@@ -427,22 +384,22 @@ import RingPackage.Rings;
     public MatrixMap&lt;T&gt; times(Matrix&lt;T&gt; other, Ring&lt;T&gt; ring) {
 
         //null checks
-<span class="fc" id="L430">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
-<span class="fc" id="L431">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
+<span class="fc" id="L387">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
+<span class="fc" id="L388">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
 
-<span class="fc" id="L433">        NonSquareException.requireDiagonal(this.size()); //checks if this matrix is a square</span>
-<span class="fc" id="L434">        NonSquareException.requireDiagonal(other.size()); //checks if the other matrix is a square</span>
-<span class="fc" id="L435">        InconsistentSizeException.requireMatchingSize(this, other); //checks if the matrixes are of equal size</span>
+<span class="fc" id="L390">        NonSquareException.requireDiagonal(this.size()); //checks if this matrix is a square</span>
+<span class="fc" id="L391">        NonSquareException.requireDiagonal(other.size()); //checks if the other matrix is a square</span>
+<span class="fc" id="L392">        InconsistentSizeException.requireMatchingSize(this, other); //checks if the matrixes are of equal size</span>
 
-<span class="fc" id="L437">        int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)</span>
-<span class="fc" id="L438">        return instance(this.size(), (index) -&gt; { //creates an instance of a matrix containing the product</span>
+<span class="fc" id="L394">        int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)</span>
+<span class="fc" id="L395">        return instance(this.size(), (index) -&gt; { //creates an instance of a matrix containing the product</span>
 
-<span class="fc" id="L440">            List&lt;T&gt; products = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L397">            List&lt;T&gt; products = new ArrayList&lt;&gt;();</span>
             //indexes until length is reached and adds to the product list the element at the row of this and column of other
-<span class="fc bfc" id="L442" title="All 2 branches covered.">            for (int i = 0; i &lt;= length; i++) {</span>
-<span class="fc" id="L443">                products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));</span>
+<span class="fc bfc" id="L399" title="All 2 branches covered.">            for (int i = 0; i &lt;= length; i++) {</span>
+<span class="fc" id="L400">                products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));</span>
             }
-<span class="fc" id="L445">            return Rings.sum(products, ring); //sums the elements of the product list</span>
+<span class="fc" id="L402">            return Rings.sum(products, ring); //sums the elements of the product list</span>
         });
     }
 
@@ -451,62 +408,62 @@ import RingPackage.Rings;
      * @return
      */
     public SparseMatrixMap&lt;T&gt; convertToSparse() {
-<span class="nc" id="L454">        return SparseMatrixMap.instance(this.size(), (index) -&gt; this.value(index));</span>
+<span class="nc" id="L411">        return SparseMatrixMap.instance(this.size(), (index) -&gt; this.value(index));</span>
     }
 
     public static void main(String[] args) {
 
-<span class="nc" id="L459">        Scanner input = new Scanner(System.in);</span>
-<span class="nc" id="L460">        System.out.println(&quot;Enter Matrix Size&quot;);</span>
-<span class="nc" id="L461">        Integer size = Integer.valueOf(input.nextLine());</span>
-<span class="nc" id="L462">        System.out.println(&quot;SIZE = &quot; + size);</span>
+<span class="nc" id="L416">        Scanner input = new Scanner(System.in);</span>
+<span class="nc" id="L417">        System.out.println(&quot;Enter Matrix Size&quot;);</span>
+<span class="nc" id="L418">        Integer size = Integer.valueOf(input.nextLine());</span>
+<span class="nc" id="L419">        System.out.println(&quot;SIZE = &quot; + size);</span>
      
-<span class="nc" id="L464">        System.out.println(&quot;Matrix One Values:&quot;);</span>
-<span class="nc" id="L465">        Map&lt;Indexes, Integer&gt; indexMap = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L466" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
-<span class="nc bnc" id="L467" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
-<span class="nc" id="L468">                Indexes index = new Indexes(i, j);</span>
-<span class="nc" id="L469">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
-<span class="nc" id="L470">                indexMap.put(index, Integer.valueOf(input.nextLine()));</span>
+<span class="nc" id="L421">        System.out.println(&quot;Matrix One Values:&quot;);</span>
+<span class="nc" id="L422">        Map&lt;Indexes, Integer&gt; indexMap = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L423" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
+<span class="nc" id="L425">                Indexes index = new Indexes(i, j);</span>
+<span class="nc" id="L426">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
+<span class="nc" id="L427">                indexMap.put(index, Integer.valueOf(input.nextLine()));</span>
             }
         }
-<span class="nc" id="L473">        MatrixMap&lt;Integer&gt; m1 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap.get(index));</span>
-<span class="nc" id="L474">        System.out.println(&quot;MATRIX 1: &quot;);</span>
-<span class="nc" id="L475">        System.out.println(m1.toString());</span>
+<span class="nc" id="L430">        MatrixMap&lt;Integer&gt; m1 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap.get(index));</span>
+<span class="nc" id="L431">        System.out.println(&quot;MATRIX 1: &quot;);</span>
+<span class="nc" id="L432">        System.out.println(m1.toString());</span>
 
-<span class="nc" id="L477">        System.out.println(&quot;Matrix Two Values:&quot;);</span>
-<span class="nc" id="L478">        Map&lt;Indexes, Integer&gt; indexMap2 = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L479" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
-<span class="nc bnc" id="L480" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
-<span class="nc" id="L481">                Indexes index = new Indexes(i, j);</span>
-<span class="nc" id="L482">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
-<span class="nc" id="L483">                indexMap2.put(index, Integer.valueOf(input.nextLine()));</span>
+<span class="nc" id="L434">        System.out.println(&quot;Matrix Two Values:&quot;);</span>
+<span class="nc" id="L435">        Map&lt;Indexes, Integer&gt; indexMap2 = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
+<span class="nc bnc" id="L437" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
+<span class="nc" id="L438">                Indexes index = new Indexes(i, j);</span>
+<span class="nc" id="L439">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
+<span class="nc" id="L440">                indexMap2.put(index, Integer.valueOf(input.nextLine()));</span>
             }
         }
-<span class="nc" id="L486">        MatrixMap&lt;Integer&gt; m2 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap2.get(index));</span>
-<span class="nc" id="L487">        System.out.println(&quot;MATRIX 1: &quot;);</span>
-<span class="nc" id="L488">        System.out.println(m1.toString());</span>
+<span class="nc" id="L443">        MatrixMap&lt;Integer&gt; m2 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap2.get(index));</span>
+<span class="nc" id="L444">        System.out.println(&quot;MATRIX 1: &quot;);</span>
+<span class="nc" id="L445">        System.out.println(m1.toString());</span>
 
-<span class="nc" id="L490">        System.out.println(&quot;ADD or MULTIPLY ([A/M])&quot;);</span>
-<span class="nc" id="L491">        String addOrMultiply = input.nextLine();</span>
+<span class="nc" id="L447">        System.out.println(&quot;ADD or MULTIPLY ([A/M])&quot;);</span>
+<span class="nc" id="L448">        String addOrMultiply = input.nextLine();</span>
 
-<span class="nc" id="L493">        input.close();</span>
+<span class="nc" id="L450">        input.close();</span>
 
-<span class="nc" id="L495">        Ring&lt;Integer&gt; intRing = new IntegerRing();</span>
+<span class="nc" id="L452">        Ring&lt;Integer&gt; intRing = new IntegerRing();</span>
 
-<span class="nc bnc" id="L497" title="All 2 branches missed.">        if (addOrMultiply.equals(&quot;A&quot;)) {</span>
-<span class="nc" id="L498">            MatrixMap&lt;Integer&gt; sum = m1.plus(m2, (x, y) -&gt; intRing.sum(x, y));</span>
-<span class="nc" id="L499">            System.out.println(sum);</span>
-<span class="nc" id="L500">        }</span>
-<span class="nc bnc" id="L501" title="All 2 branches missed.">        else if (addOrMultiply.equals(&quot;M&quot;)) {</span>
-<span class="nc" id="L502">            MatrixMap&lt;Integer&gt; product = m1.times(m2, intRing);</span>
-<span class="nc" id="L503">            System.out.println(product);</span>
-<span class="nc" id="L504">        }</span>
+<span class="nc bnc" id="L454" title="All 2 branches missed.">        if (addOrMultiply.equals(&quot;A&quot;)) {</span>
+<span class="nc" id="L455">            MatrixMap&lt;Integer&gt; sum = m1.plus(m2, (x, y) -&gt; intRing.sum(x, y));</span>
+<span class="nc" id="L456">            System.out.println(sum);</span>
+<span class="nc" id="L457">        }</span>
+<span class="nc bnc" id="L458" title="All 2 branches missed.">        else if (addOrMultiply.equals(&quot;M&quot;)) {</span>
+<span class="nc" id="L459">            MatrixMap&lt;Integer&gt; product = m1.times(m2, intRing);</span>
+<span class="nc" id="L460">            System.out.println(product);</span>
+<span class="nc" id="L461">        }</span>
         else {
-<span class="nc" id="L506">            System.out.println(&quot;Invalid selection&quot;);</span>
+<span class="nc" id="L463">            System.out.println(&quot;Invalid selection&quot;);</span>
         }
         
-<span class="nc" id="L509">    }  </span>
+<span class="nc" id="L466">    }  </span>
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

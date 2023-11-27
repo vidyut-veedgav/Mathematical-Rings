@@ -16,9 +16,6 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>> {
      * @param ring
      */
     private PolynomialRing(Ring<T> ring) {
-        //null check
-        assert ring != null : "ring cannot be null";
-
         this.baseRing = ring;
     }
 
@@ -73,12 +70,4 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>> {
 
         return x.times(y, baseRing);
     }
-
-    public static void main(String[] args) {
-
-        PolynomialRing<Integer> ring = PolynomialRing.instance(new IntegerRing());
-        System.out.println(ring.identity());
-    }
-
-    
 }

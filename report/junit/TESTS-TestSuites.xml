@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" hostname="Vidys-MacBook-Air-3.local" id="0" name="MatrixTest" package="MatrixPackage" skipped="0" tests="22" time="0.104" timestamp="2023-11-27T20:23:43">
+  <testsuite errors="0" failures="0" hostname="Vidys-MacBook-Air-3.local" id="0" name="MatrixTest" package="MatrixPackage" skipped="0" tests="22" time="0.09" timestamp="2023-11-27T21:19:56">
       <properties>
           <property name="ant.library.dir" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib" />
 
@@ -32,7 +32,7 @@
 
           <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib" />
 
-          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner MatrixPackage.MatrixTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-MatrixPackage.MatrixTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher15340664684436775862.properties propsfile=/Users/vidyutveedgav/sparse/junit1087432527790407670.properties" />
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner MatrixPackage.MatrixTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-MatrixPackage.MatrixTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher10916552822861772790.properties propsfile=/Users/vidyutveedgav/sparse/junit16893395652195735733.properties" />
 
           <property name="output.dir" value="output" />
 
@@ -50,7 +50,7 @@
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
-          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent6701768896014586300.jar" />
+          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent14390520658946995980.jar" />
 
           <property name="java.version.date" value="2023-07-18" />
 
@@ -156,11 +156,11 @@
 
       <testcase classname="MatrixPackage.MatrixTest" name="testCause" time="0.0" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testTimes" time="0.027" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testTimes" time="0.022" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testValue" time="0.0" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testFrom" time="0.0" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testFrom" time="0.001" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testPlus" time="0.002" />
 
@@ -168,7 +168,7 @@
 
       <testcase classname="MatrixPackage.MatrixTest" name="testToString" time="0.0" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testCompareTo" time="0.0" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testCompareTo" time="0.001" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testValueTwo" time="0.0" />
 
@@ -176,7 +176,7 @@
 
       <testcase classname="MatrixPackage.MatrixTest" name="testConstant" time="0.0" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testStreamTwo" time="0.001" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testStreamTwo" time="0.0" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testIdentity" time="0.0" />
 
@@ -193,6 +193,326 @@
       <testcase classname="MatrixPackage.MatrixTest" name="testInstanceTwo" time="0.001" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testStream" time="0.0" />
+
+      <system-out><![CDATA[]]></system-out>
+
+      <system-err><![CDATA[]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="Vidys-MacBook-Air-3.local" id="1" name="PolynomialTest" package="RingPackage" skipped="0" tests="1" time="0.055" timestamp="2023-11-27T21:19:56">
+      <properties>
+          <property name="ant.library.dir" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="java.specification.version" value="17" />
+
+          <property name="ant.project.name" value="sparse" />
+
+          <property name="sun.jnu.encoding" value="UTF-8" />
+
+          <property name="java.class.path" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib/hamcrest-2.2.jar:/Users/vidyutveedgav/sparse/build:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/junit-4.13.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant-launcher.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant-junit.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant-junit4.jar" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+          <property name="ant.file.type.sparse" value="file" />
+
+          <property name="java.vendor.url" value="https://java.oracle.com/" />
+
+          <property name="os.name" value="Mac OS X" />
+
+          <property name="java.vm.specification.version" value="17" />
+
+          <property name="user.country" value="US" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner RingPackage.PolynomialTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-RingPackage.PolynomialTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher9552172915365183002.properties propsfile=/Users/vidyutveedgav/sparse/junit9198737579526132297.properties" />
+
+          <property name="output.dir" value="output" />
+
+          <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
+
+          <property name="jdk.debug" value="release" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="user.home" value="/Users/vidyutveedgav" />
+
+          <property name="user.language" value="en" />
+
+          <property name="sun.stderr.encoding" value="UTF-8" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent14390520658946995980.jar" />
+
+          <property name="java.version.date" value="2023-07-18" />
+
+          <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" />
+
+          <property name="file.separator" value="/" />
+
+          <property name="basedir" value="/Users/vidyutveedgav/sparse" />
+
+          <property name="java.vm.compressedOopsMode" value="Zero based" />
+
+          <property name="jacoco.file" value="report/jacoco/jacoco.exec" />
+
+          <property name="sun.stdout.encoding" value="UTF-8" />
+
+          <property name="line.separator" value="&#xa;" />
+
+          <property name="ant.java.version" value="17" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="doc.dir" value="doc" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
+
+          <property name="java.runtime.version" value="17.0.8+9-LTS-211" />
+
+          <property name="user.name" value="vidyutveedgav" />
+
+          <property name="ant.file" value="/Users/vidyutveedgav/sparse/build.xml" />
+
+          <property name="path.separator" value=":" />
+
+          <property name="jacoco.dir" value="report/jacoco" />
+
+          <property name="os.version" value="14.1.1" />
+
+          <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="ant.project.invoked-targets" value="report" />
+
+          <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+
+          <property name="report.dir" value="report" />
+
+          <property name="junit.dir" value="report/junit" />
+
+          <property name="build.dir" value="build" />
+
+          <property name="ant.core.lib" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant.jar" />
+
+          <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/" />
+
+          <property name="java.io.tmpdir" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/" />
+
+          <property name="java.version" value="17.0.8" />
+
+          <property name="user.dir" value="/Users/vidyutveedgav/sparse" />
+
+          <property name="os.arch" value="aarch64" />
+
+          <property name="ant.file.sparse" value="/Users/vidyutveedgav/sparse/build.xml" />
+
+          <property name="output.file" value="output/output.txt" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="ant.home" value="/Users/vidyutveedgav/Downloads/Apache-Ant" />
+
+          <property name="error.file" value="output/error.txt" />
+
+          <property name="native.encoding" value="UTF-8" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.10.14 compiled on August 16 2023" />
+
+          <property name="java.library.path" value="/Users/vidyutveedgav/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:." />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.info" value="mixed mode, sharing" />
+
+          <property name="java.vm.version" value="17.0.8+9-LTS-211" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeBig" />
+
+          <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
+
+          <property name="java.class.version" value="61.0" />
+
+          <property name="src.dir" value="src" />
+
+      </properties>
+
+      <testcase classname="RingPackage.PolynomialTest" name="testToString" time="0.004" />
+
+      <system-out><![CDATA[]]></system-out>
+
+      <system-err><![CDATA[]]></system-err>
+
+  </testsuite>
+  <testsuite errors="0" failures="0" hostname="Vidys-MacBook-Air-3.local" id="2" name="RingTest" package="RingPackage" skipped="0" tests="4" time="0.057" timestamp="2023-11-27T21:19:56">
+      <properties>
+          <property name="ant.library.dir" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib" />
+
+          <property name="ant.file.type" value="file" />
+
+          <property name="java.specification.version" value="17" />
+
+          <property name="ant.project.name" value="sparse" />
+
+          <property name="sun.jnu.encoding" value="UTF-8" />
+
+          <property name="java.class.path" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib/hamcrest-2.2.jar:/Users/vidyutveedgav/sparse/build:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/junit-4.13.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant-launcher.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant-junit.jar:/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant-junit4.jar" />
+
+          <property name="java.vm.vendor" value="Oracle Corporation" />
+
+          <property name="sun.arch.data.model" value="64" />
+
+          <property name="ant.file.type.sparse" value="file" />
+
+          <property name="java.vendor.url" value="https://java.oracle.com/" />
+
+          <property name="os.name" value="Mac OS X" />
+
+          <property name="java.vm.specification.version" value="17" />
+
+          <property name="user.country" value="US" />
+
+          <property name="sun.java.launcher" value="SUN_STANDARD" />
+
+          <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib" />
+
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner RingPackage.RingTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-RingPackage.RingTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher10259376605953722132.properties propsfile=/Users/vidyutveedgav/sparse/junit12746195950229321340.properties" />
+
+          <property name="output.dir" value="output" />
+
+          <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
+
+          <property name="jdk.debug" value="release" />
+
+          <property name="sun.cpu.endian" value="little" />
+
+          <property name="user.home" value="/Users/vidyutveedgav" />
+
+          <property name="user.language" value="en" />
+
+          <property name="sun.stderr.encoding" value="UTF-8" />
+
+          <property name="java.specification.vendor" value="Oracle Corporation" />
+
+          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent14390520658946995980.jar" />
+
+          <property name="java.version.date" value="2023-07-18" />
+
+          <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" />
+
+          <property name="file.separator" value="/" />
+
+          <property name="basedir" value="/Users/vidyutveedgav/sparse" />
+
+          <property name="java.vm.compressedOopsMode" value="Zero based" />
+
+          <property name="jacoco.file" value="report/jacoco/jacoco.exec" />
+
+          <property name="sun.stdout.encoding" value="UTF-8" />
+
+          <property name="line.separator" value="&#xa;" />
+
+          <property name="ant.java.version" value="17" />
+
+          <property name="java.vm.specification.vendor" value="Oracle Corporation" />
+
+          <property name="java.specification.name" value="Java Platform API Specification" />
+
+          <property name="doc.dir" value="doc" />
+
+          <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers" />
+
+          <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
+
+          <property name="java.runtime.version" value="17.0.8+9-LTS-211" />
+
+          <property name="user.name" value="vidyutveedgav" />
+
+          <property name="ant.file" value="/Users/vidyutveedgav/sparse/build.xml" />
+
+          <property name="path.separator" value=":" />
+
+          <property name="jacoco.dir" value="report/jacoco" />
+
+          <property name="os.version" value="14.1.1" />
+
+          <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
+
+          <property name="file.encoding" value="UTF-8" />
+
+          <property name="ant.project.invoked-targets" value="report" />
+
+          <property name="java.vm.name" value="Java HotSpot(TM) 64-Bit Server VM" />
+
+          <property name="report.dir" value="report" />
+
+          <property name="junit.dir" value="report/junit" />
+
+          <property name="build.dir" value="build" />
+
+          <property name="ant.core.lib" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib/ant.jar" />
+
+          <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/" />
+
+          <property name="java.io.tmpdir" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/" />
+
+          <property name="java.version" value="17.0.8" />
+
+          <property name="user.dir" value="/Users/vidyutveedgav/sparse" />
+
+          <property name="os.arch" value="aarch64" />
+
+          <property name="ant.file.sparse" value="/Users/vidyutveedgav/sparse/build.xml" />
+
+          <property name="output.file" value="output/output.txt" />
+
+          <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+
+          <property name="ant.home" value="/Users/vidyutveedgav/Downloads/Apache-Ant" />
+
+          <property name="error.file" value="output/error.txt" />
+
+          <property name="native.encoding" value="UTF-8" />
+
+          <property name="ant.version" value="Apache Ant(TM) version 1.10.14 compiled on August 16 2023" />
+
+          <property name="java.library.path" value="/Users/vidyutveedgav/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:." />
+
+          <property name="java.vendor" value="Oracle Corporation" />
+
+          <property name="java.vm.info" value="mixed mode, sharing" />
+
+          <property name="java.vm.version" value="17.0.8+9-LTS-211" />
+
+          <property name="sun.io.unicode.encoding" value="UnicodeBig" />
+
+          <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
+
+          <property name="java.class.version" value="61.0" />
+
+          <property name="src.dir" value="src" />
+
+      </properties>
+
+      <testcase classname="RingPackage.RingTest" name="testSum" time="0.006" />
+
+      <testcase classname="RingPackage.RingTest" name="testRings" time="0.0" />
+
+      <testcase classname="RingPackage.RingTest" name="testProduct" time="0.001" />
+
+      <testcase classname="RingPackage.RingTest" name="testPolynomialIdentity" time="0.001" />
 
       <system-out><![CDATA[]]></system-out>
 

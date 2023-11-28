@@ -50,7 +50,7 @@ public record Indexes(int row, int column) implements Comparable<Indexes> {
      * @param matrix
      * @return
      */
-    public <S> S value(MatrixMap<S> matrix) {
+    public <S> S value(Matrix<S> matrix) {
         //null check
         Objects.requireNonNull(matrix);
 

@@ -408,7 +408,7 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
      * @return
      */
     public SparseMatrixMap&lt;T&gt; convertToSparse() {
-<span class="nc" id="L411">        return SparseMatrixMap.instance(this.size(), (index) -&gt; this.value(index));</span>
+<span class="fc" id="L411">        return SparseMatrixMap.instance(this.size(), (index) -&gt; this.value(index));</span>
     }
 
     public static void main(String[] args) {

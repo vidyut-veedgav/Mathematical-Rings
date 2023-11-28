@@ -7,6 +7,7 @@ import MatrixPackage.MatrixMap.InvalidLengthException;
 import MatrixPackage.MatrixMap.NonSquareException;
 import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
 import RingPackage.BigIntegerRing;
+import RingPackage.IntegerRing;
 import RingPackage.Polynomial;
 import RingPackage.PolynomialRing;
 import RingPackage.Ring;
@@ -254,6 +255,18 @@ public class MatrixTest {
     }
 
     /**
+     * testing the convertToSparse method
+     */
+    @Test
+    public void testConvertToSparse() {
+        SparseMatrixMap<Integer> sparse = MatrixMap.instance(new Indexes(2, 2), (index) -> index.row()).convertToSparse(ring);
+        assertEquals(null, sparse.value(new Indexes(0, 0)));
+        assertEquals(null, sparse.value(new Indexes(0, 1)));
+        assertEquals(null, sparse.value(new Indexes(0, 2)));
+        assertEquals(Integer.valueOf(1), sparse.value(new Indexes(1, 0)));
+    }
+
+    /**
      * *********************************************************************
      */
 
@@ -428,6 +441,40 @@ public class MatrixTest {
         assertEquals(List.of(BigInteger.valueOf(12), BigInteger.valueOf(39), BigInteger.valueOf(84), BigInteger.valueOf(81), BigInteger.valueOf(54)), product2.value(1, 0).getCoefficients());
         assertEquals(List.of(BigInteger.valueOf(12), BigInteger.valueOf(39), BigInteger.valueOf(84), BigInteger.valueOf(81), BigInteger.valueOf(54)), product2.value(1, 1).getCoefficients());
     }
+
+    /**
+     * TESTING THE METHODS OF THE SPARSEMATRIXMAP CLASS
+     */
+
+    Ring<Integer> ring = new IntegerRing(); 
+    /**
+     * testing the size method
+     */
+    @Test
+    public void testSparseSize() {
+        assertEquals(new Indexes(2, 2), SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> Integer.valueOf(1)).size());
+    }
+
+    /**
+     * testing the constant method
+     */
+    @Test
+    public void testSparseConstant() {
+        SparseMatrixMap<Integer> sparse = SparseMatrixMap.constant(1, ring, Integer.valueOf(5));
+        assertEquals(Integer.valueOf(5), sparse.value(new Indexes(0, 0)));
+        assertEquals(Integer.valueOf(5), sparse.value(new Indexes(0, 1)));
+        assertEquals(Integer.valueOf(5), sparse.value(new Indexes(1, 0)));
+        assertEquals(Integer.valueOf(5), sparse.value(new Indexes(1, 1)));
+    }
+
+    @Test
+    public void testSparseIdentity() {
+        SparseMatrixMap<Integer> sparse = SparseMatrixMap.identity(1, ring);
+        assertEquals(Integer.valueOf(1), sparse.value(new Indexes(0, 0)));
+        assertEquals(Integer.valueOf(1), sparse.value(new Indexes(1, 1)));
+    }
+
+    
 }
 
 

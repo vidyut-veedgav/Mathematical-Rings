@@ -1,11 +1,14 @@
 package MatrixPackage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -21,18 +24,49 @@ import RingPackage.Rings;
 public class SparseMatrixMap<T> implements Matrix<T> {
 
     private final Map<Indexes, T>  matrix; //a field representing the matrix
-    private final Indexes size;
+    private final Indexes size; //a field representing the size of the matrix
+    private final Ring<T> ring; //a field representing a ring used for intermediate operations
+    private final List<Indexes> nonZeroIndexes; //a field representing the indexes which are mapped to nonzero values
 
     /**
      * constructor
      */
-    private SparseMatrixMap(Map<Indexes, T> matrix) {
-
-        //null check
-        assert matrix != null : "matrix cannot be null";
+    private SparseMatrixMap(Map<Indexes, T> matrix, Ring<T> ring) {
         this.matrix = matrix;
         this.size = Collections.max(matrix.keySet());
-    } 
+        this.ring = ring;
+        
+        //creates a list of the non zero indexes in the matrix
+        nonZeroIndexes = matrix.keySet().stream()
+                                .filter(key -> !value(key).equals(ring.zero()))
+                                .collect(Collectors.toList());
+    }
+
+    /**
+     * finds the intersection of nonzero indexes between this matrix and another
+     * @param other
+     * @return
+     */
+    private List<Indexes> intersectionNonZeroIndexes(SparseMatrixMap<T> other) {
+        List<Indexes> result = new ArrayList<>();
+        for (Indexes index : nonZeroIndexes) {
+            if (other.nonZeroIndexes.contains(index)) {
+                result.add(index);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * finds the union of nonzero indexes between this matrix and another
+     * @param other
+     * @return
+     */
+    private Set<Indexes> unionNonZeroIndexes(SparseMatrixMap<T> other) {
+        List<Indexes> resultList = new ArrayList<>(this.nonZeroIndexes);
+        resultList.addAll(new ArrayList<>(other.nonZeroIndexes));
+        return new HashSet<>(resultList);
+    }
 
     /**
      * a method to get the size of this SparseMatrixMap
@@ -44,16 +78,27 @@ public class SparseMatrixMap<T> implements Matrix<T> {
 
     /**
      * a method to return the value of this SparseMatrixMap at a particular index
+     * OPTION 1: add ring param to the interface method
+     * OPTION 2: overload value method
      */
     @Override
-    public T value(Indexes indexes) {
+    public T value(Indexes index) {
         
         //null check
-        Objects.requireNonNull(indexes, "indexes cannot be null");
-        return matrix.get(indexes);
+        Objects.requireNonNull(index, "indexes cannot be null");
+        T value = matrix.get(index);
+        return (value == null) ? ring.zero() : value;
     }
 
-    public static <S> SparseMatrixMap<S> instance(int rows, int columns, Function<Indexes, S> valueMapper) {
+    /**
+     * a foundational instance method for the SparseMatrixMap
+     * @param <S>
+     * @param rows
+     * @param columns
+     * @param valueMapper
+     * @return
+     */
+    public static <S> SparseMatrixMap<S> instance(int rows, int columns,  Ring<S> ring, Function<Indexes, S> valueMapper) {
 
         Objects.requireNonNull(valueMapper, "valueMapper cannot be null");
         InvalidLengthException.requireNonEmpty(Cause.ROW, rows); //checks if the rows are valid
@@ -62,14 +107,13 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         Map<Indexes, S> matrix = new HashMap<>(); //creating the map
         List<Indexes> indexes = Indexes.stream(rows, columns).collect(Collectors.toList()); //creating a list of indexes
 
-        //putting values into the map - TODO: adjust behavior according to specs
         for (Indexes index : indexes) {
             S value = valueMapper.apply(index);
-            if (!value.equals(0)) {
+            if (!value.equals(ring.zero())) {
                 matrix.put(index, value);
             }
         }
-        return new SparseMatrixMap<>(Map.copyOf(matrix));
+        return new SparseMatrixMap<>(Map.copyOf(matrix), ring);
     }
 
     /**
@@ -79,14 +123,14 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      * @param valueMapper
      * @return a MatrixMap
      */
-    public static <S> SparseMatrixMap<S> instance(Indexes size, Function<Indexes, S> valueMapper) {
+    public static <S> SparseMatrixMap<S> instance(Indexes size, Ring<S> ring, Function<Indexes, S> valueMapper) {
 
         //null checks
         Objects.requireNonNull(size, "size cannot be null");
         Objects.requireNonNull(valueMapper, "valueMapper cannot be null");
     
         //calling the foundational instance method
-        return SparseMatrixMap.instance(size.row(), size.column(), valueMapper);
+        return SparseMatrixMap.instance(size.row(), size.column(), ring, valueMapper);
     }
 
     /**
@@ -96,7 +140,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      * @param value
      * @return
      */
-    public static <S> SparseMatrixMap<S> constant(int size, S value) {
+    public static <S> SparseMatrixMap<S> constant(int size, Ring<S> ring, S value) {
 
         //null check
         Objects.requireNonNull(value, "value cannot be null");
@@ -104,7 +148,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         //TODO implement error handling to disallow calling this method with a value of 0
 
         //calling the foundational instance method
-        return instance(size, size, (index) -> value);
+        return instance(size, size, ring, (index) -> value);
     }
 
     /**
@@ -115,14 +159,14 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      * @param identity
      * @return a new MatrixMap
      */
-    public static <S> SparseMatrixMap<S> identity(int size, S zero, S identity) {
+    public static <S> SparseMatrixMap<S> identity(int size, Ring<S> ring) {
 
         //null checks
-        Objects.requireNonNull(zero, "zero cannot be null");
-        Objects.requireNonNull(identity, "identity cannot be null");
+        Objects.requireNonNull(ring.zero(), "zero cannot be null");
+        Objects.requireNonNull(ring.identity(), "identity cannot be null");
 
         //calling the foundational instance method
-        return instance(size, size, (index) -> (index.areDiagonal()) ? identity : zero);
+        return instance(size, size, ring, (index) -> (index.areDiagonal()) ? ring.identity() : ring.zero());
     }
 
 
@@ -138,14 +182,15 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         //consistent size checks
         InconsistentSizeException.requireMatchingSize(this, other); 
 
-        return instance(this.size(), (index) -> 
-            (this.value(index).equals(0) && other.value(index).equals(0)) ? null : plus.apply(this.value(index), other.value(index)));   
+        return instance(this.size(), this.ring, (index) -> plus.apply(this.value(index), other.value(index)));
     }
 
     /**
      * a method to multiply this matrix with another
      * UNFINISHED, DON'T KNOW WHAT TO DO HERE LOLZ
      */
+
+    //find intersection, for each value at intersection indexes, compute the product
     @Override
     public SparseMatrixMap<T> times(Matrix<T> other, Ring<T> ring) {
         
@@ -159,7 +204,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         InconsistentSizeException.requireMatchingSize(this, other); //checks if the matrixes are of equal size
 
         int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)
-        return instance(this.size(), (index) -> { //creates an instance of a matrix containing the product
+        return instance(this.size(), this.ring, (index) -> { //creates an instance of a matrix containing the product
 
             if (this.value(index).equals(0) || other.value(index).equals(0)) {
                 return ring.zero();
@@ -192,10 +237,10 @@ public class SparseMatrixMap<T> implements Matrix<T> {
                 Indexes index = new Indexes(row, col); //creating an index
                 T value = value(index); //finding the value at this index
 
-                if (value != null) {
+                if (value != this.ring.zero()) {
                     sb.append("[").append(index.toString()).append("]: ").append(value).append("\t"); //add the entry
                 } else {
-                    sb.append("       ").append("\t");
+                    sb.append("          ").append("\t");
                 }
             }
             sb.append("\n"); //add a carriage return
@@ -211,40 +256,33 @@ public class SparseMatrixMap<T> implements Matrix<T> {
     public MatrixMap<T> convertToStandard(Ring<T> ring) {
         
         return MatrixMap.instance(size(), (index) -> {
-            return (!this.contains(index) ? ring.zero() : value(index));
+            return (!matrix.containsKey(index) ? ring.zero() : value(index));
         });
     }
 
-    /**
-     * a helper function to check if a given index is present in the matrix
-     * @param index
-     * @return
-     */
-    private boolean contains(Indexes index) {
-        assert index != null : "index cannot be null";
-        return matrix.containsKey(index) ? true : false;
-    }
     public static void main(String[] args) {
         
-        Matrix<Integer> sparse = SparseMatrixMap.instance(2, 2, (index) -> (index.row()));
+        Ring<Integer> ring = new IntegerRing();
+        Matrix<Integer> sparse = SparseMatrixMap.instance(2, 2, ring, (index) -> (index.row()));
+        System.out.println(sparse);
+        Matrix<Integer> sparse2 = SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column()));
+        System.out.println(sparse2);
+
+        sparse = SparseMatrixMap.constant(2, ring, 1);
         //System.out.println(sparse);
 
-        sparse = SparseMatrixMap.constant(2, 1);
-        //System.out.println(sparse);
+        sparse = SparseMatrixMap.identity(2, ring);
 
-        Ring<Integer> intRing = new IntegerRing();
-        sparse = SparseMatrixMap.identity(2, intRing.zero(), intRing.identity());
-        //System.out.println(sparse);
+        //System.out.println(SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column())));
+        //System.out.println(SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column())).convertToStandard(ring));
+        //System.out.println(MatrixMap.instance(2, 2, (index) -> (index.column())).convertToSparse(ring));
 
-        //System.out.println(MatrixMap.instance(2, 2, (index) -> (index.column())).convertToSparse());
-        //System.out.println(SparseMatrixMap.instance(2, 2, (index) -> (index.column())));
-        System.out.println(SparseMatrixMap.instance(2, 2, (index) -> (index.column())).convertToStandard(intRing));
-
-        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -> index.row());
-        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), (index) -> index.column());
+        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.column());
+        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.row());
 
         //TODO make plus and times methods more efficient and implement
-        //System.out.println(s1.plus(s2, (x, y) -> intRing.sum(x, y)));
+        //System.out.println(s1.plus(s2, (x, y) -> ring.sum(x, y)));
         //System.out.println(s1.times(s2, intRing));
+        //System.out.println(s1.value(new Indexes(0, 0)));
     }
 }

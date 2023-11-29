@@ -48,13 +48,9 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      * @return
      */
     private List<Indexes> intersectionNonZeroIndexes(SparseMatrixMap<T> other) {
-        List<Indexes> result = new ArrayList<>();
-        for (Indexes index : nonZeroIndexes) {
-            if (other.nonZeroIndexes.contains(index)) {
-                result.add(index);
-            }
-        }
-        return result;
+        List<Indexes> intersection = new ArrayList<>(this.nonZeroIndexes);
+        intersection.retainAll(other.nonZeroIndexes);
+        return intersection;
     }
 
     /**

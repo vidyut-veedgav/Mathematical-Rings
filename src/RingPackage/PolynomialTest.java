@@ -1,7 +1,10 @@
 package RingPackage;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
@@ -20,5 +23,31 @@ public class PolynomialTest {
     public void testToString() {
         Polynomial<Integer> poly = Polynomial.from(List.of(1, 2, 3, 4));
         assertEquals("Polynomial [coefficients=[1, 2, 3, 4]]", poly.toString());
+    }
+
+    @Test
+    public void testTimes() {
+        Polynomial<Integer> poly1 = Polynomial.from(new ArrayList<>());
+        Polynomial<Integer> poly2 = Polynomial.from(new ArrayList<>());
+        assertEquals(List.of(), poly1.times(poly2, new IntegerRing()).getCoefficients());
+        poly1 = Polynomial.from(List.of(1));
+        assertEquals(List.of(), poly1.times(poly2, new IntegerRing()).getCoefficients());
+        poly1 = Polynomial.from(new ArrayList<>());
+        poly2 = Polynomial.from(List.of(1));
+        assertEquals(List.of(), poly1.times(poly2, new IntegerRing()).getCoefficients());
+    }
+
+    /**
+     * testing the interpolatePolynomial method of InterpolatingPolynomial
+     */
+    @Test
+    public void testInterpolatingPolynonial() {
+        Ring<Integer> intRing = new IntegerRing();
+        List<Integer> roots = List.of(1, 2, 3, 4);
+        assertEquals(List.of(1, -10, 35, -50, 24), InterpolatingPolynomial.interpolatePolynomial(roots, intRing));
+
+        InterpolatingPolynomial poly = new InterpolatingPolynomial();
+        assertEquals(RingPackage.InterpolatingPolynomial.class, poly.getClass());
+        assertThrows(NullPointerException.class, () -> InterpolatingPolynomial.interpolatePolynomial(Arrays.asList(1, 2, null, 4), intRing));
     }
 }

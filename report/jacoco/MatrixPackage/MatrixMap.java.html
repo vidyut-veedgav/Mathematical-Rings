@@ -394,76 +394,88 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
 <span class="fc" id="L394">        int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)</span>
 <span class="fc" id="L395">        return instance(this.size(), (index) -&gt; { //creates an instance of a matrix containing the product</span>
 
-<span class="fc" id="L397">            List&lt;T&gt; products = new ArrayList&lt;&gt;();</span>
-            //indexes until length is reached and adds to the product list the element at the row of this and column of other
-<span class="fc bfc" id="L399" title="All 2 branches covered.">            for (int i = 0; i &lt;= length; i++) {</span>
-<span class="fc" id="L400">                products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));</span>
-            }
-<span class="fc" id="L402">            return Rings.sum(products, ring); //sums the elements of the product list</span>
+<span class="fc" id="L397">            return getProductAtIndex(other, ring, length, index);</span>
         });
+    }
+
+    /**
+     * a subroutine which conducts multiplication and computes the resulting value at each index of the matrix
+     * @param other
+     * @param ring
+     * @param length
+     * @param index
+     * @return
+     */
+    private T getProductAtIndex(Matrix&lt;T&gt; other, Ring&lt;T&gt; ring, int length, Indexes index) {
+<span class="fc" id="L410">        List&lt;T&gt; products = new ArrayList&lt;&gt;();</span>
+        //indexes until length is reached and adds to the product list the element at the row of this and column of other
+<span class="fc bfc" id="L412" title="All 2 branches covered.">        for (int i = 0; i &lt;= length; i++) {</span>
+<span class="fc" id="L413">            products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));</span>
+        }
+<span class="fc" id="L415">        return Rings.sum(products, ring); //sums the elements of the product list</span>
     }
 
     /**
      * a method to convert this matrix to a sparse matrix
      * @return
      */
-    public SparseMatrixMap&lt;T&gt; convertToSparse() {
-<span class="fc" id="L411">        return SparseMatrixMap.instance(this.size(), (index) -&gt; this.value(index));</span>
+    public SparseMatrixMap&lt;T&gt; convertToSparse(Ring&lt;T&gt; ring) {
+<span class="fc" id="L423">        return SparseMatrixMap.instance(this.size(), ring, (index) -&gt; this.value(index));</span>
     }
 
     public static void main(String[] args) {
 
-<span class="nc" id="L416">        Scanner input = new Scanner(System.in);</span>
-<span class="nc" id="L417">        System.out.println(&quot;Enter Matrix Size&quot;);</span>
-<span class="nc" id="L418">        Integer size = Integer.valueOf(input.nextLine());</span>
-<span class="nc" id="L419">        System.out.println(&quot;SIZE = &quot; + size);</span>
+<span class="nc" id="L428">        Scanner input = new Scanner(System.in);</span>
+<span class="nc" id="L429">        System.out.println(&quot;Enter Matrix Size&quot;);</span>
+<span class="nc" id="L430">        Integer size = Integer.valueOf(input.nextLine());</span>
+<span class="nc" id="L431">        System.out.println(&quot;SIZE = &quot; + size);</span>
      
-<span class="nc" id="L421">        System.out.println(&quot;Matrix One Values:&quot;);</span>
-<span class="nc" id="L422">        Map&lt;Indexes, Integer&gt; indexMap = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L423" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
-<span class="nc bnc" id="L424" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
-<span class="nc" id="L425">                Indexes index = new Indexes(i, j);</span>
-<span class="nc" id="L426">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
-<span class="nc" id="L427">                indexMap.put(index, Integer.valueOf(input.nextLine()));</span>
+<span class="nc" id="L433">        System.out.println(&quot;Matrix One Values:&quot;);</span>
+<span class="nc" id="L434">        Map&lt;Indexes, Integer&gt; indexMap = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L435" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
+<span class="nc bnc" id="L436" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
+<span class="nc" id="L437">                Indexes index = new Indexes(i, j);</span>
+<span class="nc" id="L438">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
+<span class="nc" id="L439">                indexMap.put(index, Integer.valueOf(input.nextLine()));</span>
             }
         }
-<span class="nc" id="L430">        MatrixMap&lt;Integer&gt; m1 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap.get(index));</span>
-<span class="nc" id="L431">        System.out.println(&quot;MATRIX 1: &quot;);</span>
-<span class="nc" id="L432">        System.out.println(m1.toString());</span>
+<span class="nc" id="L442">        MatrixMap&lt;Integer&gt; m1 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap.get(index));</span>
+<span class="nc" id="L443">        System.out.println(&quot;MATRIX 1: &quot;);</span>
+<span class="nc" id="L444">        System.out.println(m1.toString());</span>
 
-<span class="nc" id="L434">        System.out.println(&quot;Matrix Two Values:&quot;);</span>
-<span class="nc" id="L435">        Map&lt;Indexes, Integer&gt; indexMap2 = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L436" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
-<span class="nc bnc" id="L437" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
-<span class="nc" id="L438">                Indexes index = new Indexes(i, j);</span>
-<span class="nc" id="L439">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
-<span class="nc" id="L440">                indexMap2.put(index, Integer.valueOf(input.nextLine()));</span>
+<span class="nc" id="L446">        System.out.println(&quot;Matrix Two Values:&quot;);</span>
+<span class="nc" id="L447">        Map&lt;Indexes, Integer&gt; indexMap2 = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L448" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
+<span class="nc bnc" id="L449" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
+<span class="nc" id="L450">                Indexes index = new Indexes(i, j);</span>
+<span class="nc" id="L451">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
+<span class="nc" id="L452">                indexMap2.put(index, Integer.valueOf(input.nextLine()));</span>
             }
         }
-<span class="nc" id="L443">        MatrixMap&lt;Integer&gt; m2 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap2.get(index));</span>
-<span class="nc" id="L444">        System.out.println(&quot;MATRIX 1: &quot;);</span>
-<span class="nc" id="L445">        System.out.println(m1.toString());</span>
+<span class="nc" id="L455">        MatrixMap&lt;Integer&gt; m2 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap2.get(index));</span>
+<span class="nc" id="L456">        System.out.println(&quot;MATRIX 1: &quot;);</span>
+<span class="nc" id="L457">        System.out.println(m1.toString());</span>
 
-<span class="nc" id="L447">        System.out.println(&quot;ADD or MULTIPLY ([A/M])&quot;);</span>
-<span class="nc" id="L448">        String addOrMultiply = input.nextLine();</span>
+<span class="nc" id="L459">        System.out.println(&quot;ADD or MULTIPLY ([A/M])&quot;);</span>
+<span class="nc" id="L460">        String addOrMultiply = input.nextLine();</span>
 
-<span class="nc" id="L450">        input.close();</span>
+<span class="nc" id="L462">        input.close();</span>
 
-<span class="nc" id="L452">        Ring&lt;Integer&gt; intRing = new IntegerRing();</span>
+<span class="nc" id="L464">        Ring&lt;Integer&gt; intRing = new IntegerRing();</span>
 
-<span class="nc bnc" id="L454" title="All 2 branches missed.">        if (addOrMultiply.equals(&quot;A&quot;)) {</span>
-<span class="nc" id="L455">            MatrixMap&lt;Integer&gt; sum = m1.plus(m2, (x, y) -&gt; intRing.sum(x, y));</span>
-<span class="nc" id="L456">            System.out.println(sum);</span>
-<span class="nc" id="L457">        }</span>
-<span class="nc bnc" id="L458" title="All 2 branches missed.">        else if (addOrMultiply.equals(&quot;M&quot;)) {</span>
-<span class="nc" id="L459">            MatrixMap&lt;Integer&gt; product = m1.times(m2, intRing);</span>
-<span class="nc" id="L460">            System.out.println(product);</span>
-<span class="nc" id="L461">        }</span>
+<span class="nc bnc" id="L466" title="All 2 branches missed.">        if (addOrMultiply.equals(&quot;A&quot;)) {</span>
+<span class="nc" id="L467">            MatrixMap&lt;Integer&gt; sum = m1.plus(m2, (x, y) -&gt; intRing.sum(x, y));</span>
+<span class="nc" id="L468">            System.out.println(sum);</span>
+<span class="nc" id="L469">        }</span>
+<span class="nc bnc" id="L470" title="All 2 branches missed.">        else if (addOrMultiply.equals(&quot;M&quot;)) {</span>
+<span class="nc" id="L471">            MatrixMap&lt;Integer&gt; product = m1.times(m2, intRing);</span>
+<span class="nc" id="L472">            System.out.println(product);</span>
+<span class="nc" id="L473">        }</span>
         else {
-<span class="nc" id="L463">            System.out.println(&quot;Invalid selection&quot;);</span>
+<span class="nc" id="L475">            System.out.println(&quot;Invalid selection&quot;);</span>
         }
         
-<span class="nc" id="L466">    }  </span>
+<span class="nc" id="L478">    }  </span>
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

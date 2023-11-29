@@ -9,7 +9,7 @@ import java.util.Objects;
  * @author Vidyut Veedgav
  * a class representing a polynomial ring, meant to emulate functionality for polynomials
  */
-<span class="fc" id="L12">public final class Polynomial&lt;T&gt; {</span>
+public final class Polynomial&lt;T&gt; {
     
     private final List&lt;T&gt; coefficients; //a private instance field representing the polynomial's coefficients
 
@@ -102,11 +102,7 @@ import java.util.Objects;
      * @return the assignemnt given the condition
      */
     private T getAddend(Ring&lt;T&gt; ring, List&lt;T&gt; list, ListIterator&lt;T&gt; iterator) {
-
-<span class="pc bpc" id="L106" title="1 of 2 branches missed.">        assert ring != null : &quot;ring cannot be null&quot;;</span>
-<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        assert list != null : &quot;list cannot be null&quot;;</span>
-<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        assert iterator != null : &quot;iterator cannot be null&quot;;</span>
-<span class="fc bfc" id="L109" title="All 2 branches covered.">        return (iterator.hasNext()) ? iterator.next() : ring.zero();</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        return (iterator.hasNext()) ? iterator.next() : ring.zero();</span>
     }
 
     /**
@@ -129,41 +125,46 @@ import java.util.Objects;
     public Polynomial&lt;T&gt; times(Polynomial&lt;T&gt; other, Ring&lt;T&gt; ring) {
 
         //null checks
-<span class="fc" id="L132">        Objects.requireNonNull(other, &quot;the 'other' parameter cannot be null&quot;);</span>
-<span class="fc" id="L133">        Objects.requireNonNull(ring, &quot;the 'ring' parameter cannot be null&quot;); </span>
+<span class="fc" id="L128">        Objects.requireNonNull(other, &quot;the 'other' parameter cannot be null&quot;);</span>
+<span class="fc" id="L129">        Objects.requireNonNull(ring, &quot;the 'ring' parameter cannot be null&quot;); </span>
         
-<span class="fc" id="L135">        List&lt;T&gt; a = this.getCoefficients(); //coefficients of the first polynomial </span>
-<span class="fc" id="L136">        List&lt;T&gt; b = other.getCoefficients(); //coefficients of the second polynomial</span>
+<span class="fc" id="L131">        List&lt;T&gt; a = this.getCoefficients(); //coefficients of the first polynomial </span>
+<span class="fc" id="L132">        List&lt;T&gt; b = other.getCoefficients(); //coefficients of the second polynomial</span>
 
-<span class="fc" id="L138">        int productLength = computeProductLength(a, b);      //  edge case: if both lists are empty, product length will be 0                                                  //        if not, the </span>
+        int productLength;
+<span class="fc bfc" id="L135" title="All 4 branches covered.">        if (a.isEmpty() &amp;&amp; b.isEmpty()) {  //  edge case: if both lists are empty, product length will be 0             </span>
+<span class="fc" id="L136">            productLength = 0;</span>
+         } else {
+<span class="fc" id="L138">            productLength = a.size() + b.size() - 1;</span>
+         }                                           //        if not, the 
                                                              //  otherwise, it will be (size of a + size of b - 1)
-<span class="fc" id="L140">        List&lt;T&gt; product_list = new ArrayList&lt;&gt;(productLength); //creates the list of products that will be used to create the final polynomial</span>
+<span class="fc" id="L141">        List&lt;T&gt; product_list = new ArrayList&lt;&gt;(productLength); //creates the list of products that will be used to create the final polynomial</span>
 
-<span class="fc" id="L142">        ListIterator&lt;T&gt; aIter = a.listIterator(); //iterator for list a </span>
-<span class="fc" id="L143">        ListIterator&lt;T&gt; bIter = b.listIterator(); //iterator for list b</span>
+<span class="fc" id="L143">        ListIterator&lt;T&gt; aIter = a.listIterator(); //iterator for list a </span>
+<span class="fc" id="L144">        ListIterator&lt;T&gt; bIter = b.listIterator(); //iterator for list b</span>
 
-<span class="fc" id="L145">        int a_start = 0; //start index of list a</span>
+<span class="fc" id="L146">        int a_start = 0; //start index of list a</span>
 
         //iterates until productLength is reached
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        for (int i = 0; i &lt; productLength; i++) {</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        for (int i = 0; i &lt; productLength; i++) {</span>
 
-<span class="fc" id="L150">            T product = ring.zero(); //initializing the product to zero</span>
-<span class="fc" id="L151">            a_start = computeStartIndex(i, a_start, b); //adjusting the start index of a depending on whether b has more elements</span>
+<span class="fc" id="L151">            T product = ring.zero(); //initializing the product to zero</span>
+<span class="fc" id="L152">            a_start = computeStartIndex(i, a_start, b); //adjusting the start index of a depending on whether b has more elements</span>
 
             //initializing the iterators to their respective start indices
-<span class="fc" id="L154">            aIter = a.listIterator(a_start);</span>
-<span class="fc" id="L155">            bIter = b.listIterator(Math.min(i + 1, b.size()));</span>
+<span class="fc" id="L155">            aIter = a.listIterator(a_start);</span>
+<span class="fc" id="L156">            bIter = b.listIterator(Math.min(i + 1, b.size()));</span>
 
             //iterates while aIter has a next element and bIter has a previous element
-<span class="fc bfc" id="L158" title="All 4 branches covered.">            while (aIter.hasNext() &amp;&amp; bIter.hasPrevious()) {</span>
-<span class="fc" id="L159">                T a_factor = aIter.next(); //defining a's next value as the first factor</span>
-<span class="fc" id="L160">                T b_factor = bIter.previous(); //defining b's previous value as second factor</span>
-<span class="fc" id="L161">                T result = ring.product(a_factor, b_factor); //multiplies the factors</span>
-<span class="fc" id="L162">                product = ring.sum(product, result); //sums the result of the multiplication with the previous result</span>
-<span class="fc" id="L163">            }</span>
-<span class="fc" id="L164">            product_list.add(product); //adds the product to the list of products</span>
+<span class="fc bfc" id="L159" title="All 4 branches covered.">            while (aIter.hasNext() &amp;&amp; bIter.hasPrevious()) {</span>
+<span class="fc" id="L160">                T a_factor = aIter.next(); //defining a's next value as the first factor</span>
+<span class="fc" id="L161">                T b_factor = bIter.previous(); //defining b's previous value as second factor</span>
+<span class="fc" id="L162">                T result = ring.product(a_factor, b_factor); //multiplies the factors</span>
+<span class="fc" id="L163">                product = ring.sum(product, result); //sums the result of the multiplication with the previous result</span>
+<span class="fc" id="L164">            }</span>
+<span class="fc" id="L165">            product_list.add(product); //adds the product to the list of products</span>
         }        
-<span class="fc" id="L166">       return new Polynomial&lt;&gt;(product_list); </span>
+<span class="fc" id="L167">       return new Polynomial&lt;&gt;(product_list); </span>
     }
 
     /**
@@ -171,31 +172,18 @@ import java.util.Objects;
      * @param args
      */
     private int computeStartIndex(int currentIndex, int startIndex, List&lt;T&gt; list) {
-        //null check
-<span class="pc bpc" id="L175" title="1 of 2 branches missed.">        assert list != null : &quot;list cannot be null&quot;;</span>
-
-<span class="fc bfc" id="L177" title="All 2 branches covered.">        if ((currentIndex + 1) &gt; list.size()) {</span>
-<span class="fc" id="L178">            startIndex = startIndex + 1;</span>
+<span class="fc bfc" id="L175" title="All 2 branches covered.">        if ((currentIndex + 1) &gt; list.size()) {</span>
+<span class="fc" id="L176">            startIndex = startIndex + 1;</span>
         }
-<span class="fc" id="L180">        return startIndex;</span>
+<span class="fc" id="L178">        return startIndex;</span>
     }
 
-    /**
-     * a helper method to handle the edge case where both polynomials have no coefficients in the times method
-     * avoids an OutOfBoundsException
-     * @param args
-     */
-    private int computeProductLength(List&lt;T&gt; a, List&lt;T&gt; b) {
-
-        //null checks
-<span class="pc bpc" id="L191" title="1 of 2 branches missed.">        assert a != null : &quot;a cannot be null&quot;;</span>
-<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        assert b != null : &quot;b cannot be null&quot;;</span>
-
-<span class="pc bpc" id="L194" title="1 of 4 branches missed.">        if (a.isEmpty() &amp;&amp; b.isEmpty()) {</span>
-<span class="fc" id="L195">            return 0;</span>
-        }
-<span class="fc" id="L197">        return a.size() + b.size() - 1;</span>
-    }
+    public static void main(String[] args) {
+        
+<span class="nc" id="L183">        Polynomial&lt;Integer&gt; poly1 = Polynomial.from(List.of());</span>
+<span class="nc" id="L184">        Polynomial&lt;Integer&gt; poly2 = Polynomial.from(List.of());</span>
+<span class="nc" id="L185">        System.out.println(poly1.times(poly2, new IntegerRing()));</span>
+<span class="nc" id="L186">    }</span>
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

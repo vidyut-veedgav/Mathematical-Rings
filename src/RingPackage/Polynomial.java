@@ -102,10 +102,6 @@ public final class Polynomial<T> {
      * @return the assignemnt given the condition
      */
     private T getAddend(Ring<T> ring, List<T> list, ListIterator<T> iterator) {
-
-        assert ring != null : "ring cannot be null";
-        assert list != null : "list cannot be null";
-        assert iterator != null : "iterator cannot be null";
         return (iterator.hasNext()) ? iterator.next() : ring.zero();
     }
 
@@ -135,7 +131,12 @@ public final class Polynomial<T> {
         List<T> a = this.getCoefficients(); //coefficients of the first polynomial 
         List<T> b = other.getCoefficients(); //coefficients of the second polynomial
 
-        int productLength = computeProductLength(a, b);      //  edge case: if both lists are empty, product length will be 0                                                  //        if not, the 
+        int productLength;
+        if (a.isEmpty() && b.isEmpty()) {  //  edge case: if both lists are empty, product length will be 0             
+            productLength = 0;
+         } else {
+            productLength = a.size() + b.size() - 1;
+         }                                           //        if not, the 
                                                              //  otherwise, it will be (size of a + size of b - 1)
         List<T> product_list = new ArrayList<>(productLength); //creates the list of products that will be used to create the final polynomial
 
@@ -171,30 +172,10 @@ public final class Polynomial<T> {
      * @param args
      */
     private int computeStartIndex(int currentIndex, int startIndex, List<T> list) {
-        //null check
-        assert list != null : "list cannot be null";
-
         if ((currentIndex + 1) > list.size()) {
             startIndex = startIndex + 1;
         }
         return startIndex;
-    }
-
-    /**
-     * a helper method to handle the edge case where both polynomials have no coefficients in the times method
-     * avoids an OutOfBoundsException
-     * @param args
-     */
-    private int computeProductLength(List<T> a, List<T> b) {
-
-        //null checks
-        assert a != null : "a cannot be null";
-        assert b != null : "b cannot be null";
-
-        if (a.isEmpty() && b.isEmpty()) {
-            return 0;
-        }
-        return a.size() + b.size() - 1;
     }
 }
 

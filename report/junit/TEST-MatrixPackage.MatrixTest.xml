@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="Vidys-MacBook-Air-3.local" name="MatrixPackage.MatrixTest" skipped="0" tests="28" time="0.09" timestamp="2023-11-28T18:31:22">
+<testsuite errors="0" failures="1" hostname="Vidys-MacBook-Air-3.local" name="MatrixPackage.MatrixTest" skipped="0" tests="28" time="0.104" timestamp="2023-11-29T06:55:04">
   <properties>
     <property name="ant.library.dir" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib" />
     <property name="ant.file.type" value="file" />
@@ -16,7 +16,7 @@
     <property name="user.country" value="US" />
     <property name="sun.java.launcher" value="SUN_STANDARD" />
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner MatrixPackage.MatrixTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-MatrixPackage.MatrixTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher10821960727811877691.properties propsfile=/Users/vidyutveedgav/sparse/junit13390052667526485585.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner MatrixPackage.MatrixTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-MatrixPackage.MatrixTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher7876271743904614026.properties propsfile=/Users/vidyutveedgav/sparse/junit15138736001124588642.properties" />
     <property name="output.dir" value="output" />
     <property name="http.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16" />
     <property name="jdk.debug" value="release" />
@@ -25,7 +25,7 @@
     <property name="user.language" value="en" />
     <property name="sun.stderr.encoding" value="UTF-8" />
     <property name="java.specification.vendor" value="Oracle Corporation" />
-    <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent16616316248745223965.jar" />
+    <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent2120447208086500780.jar" />
     <property name="java.version.date" value="2023-07-18" />
     <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" />
     <property name="file.separator" value="/" />
@@ -75,34 +75,66 @@
     <property name="java.class.version" value="61.0" />
     <property name="src.dir" value="src" />
   </properties>
-  <testcase classname="MatrixPackage.MatrixTest" name="testAreDiagonal" time="0.003" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testAreDiagonal" time="0.002" />
   <testcase classname="MatrixPackage.MatrixTest" name="testRequireNonEmpty" time="0.001" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testCause" time="0.001" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testTimes" time="0.02" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testCause" time="0.0" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testTimes" time="0.023" />
   <testcase classname="MatrixPackage.MatrixTest" name="testValue" time="0.0" />
   <testcase classname="MatrixPackage.MatrixTest" name="testFrom" time="0.001" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testPlus" time="0.001" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testPlus" time="0.002" />
   <testcase classname="MatrixPackage.MatrixTest" name="testSize" time="0.003" />
   <testcase classname="MatrixPackage.MatrixTest" name="testToString" time="0.0" />
   <testcase classname="MatrixPackage.MatrixTest" name="testCompareTo" time="0.0" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testValueTwo" time="0.001" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testSparseConstant" time="0.001" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testSparseIdentity" time="0.001" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testValueTwo" time="0.0" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testSparseConstant" time="0.003" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testSparseIdentity" time="0.0" />
   <testcase classname="MatrixPackage.MatrixTest" name="testValueaTwo" time="0.001" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testConvertToSparse" time="0.0" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testConvertToSparse" time="0.004">
+    <failure message="expected:&lt;null&gt; but was:&lt;0&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: expected:&lt;null&gt; but was:&lt;0&gt;
+	at org.junit.Assert.fail(Assert.java:89)
+	at org.junit.Assert.failNotEquals(Assert.java:835)
+	at org.junit.Assert.assertEquals(Assert.java:120)
+	at org.junit.Assert.assertEquals(Assert.java:146)
+	at MatrixPackage.MatrixTest.testConvertToSparse(MatrixTest.java:263)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at junit.framework.JUnit4TestAdapter.run(JUnit4TestAdapter.java:50)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.run(JUnitTestRunner.java:535)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.launch(JUnitTestRunner.java:1197)
+	at org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner.main(JUnitTestRunner.java:1042)
+</failure>
+  </testcase>
   <testcase classname="MatrixPackage.MatrixTest" name="testConstant" time="0.0" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testStreamTwo" time="0.001" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testStreamTwo" time="0.0" />
   <testcase classname="MatrixPackage.MatrixTest" name="testIdentity" time="0.0" />
   <testcase classname="MatrixPackage.MatrixTest" name="testSparseSize" time="0.0" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testRequireDiagonal" time="0.0" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testRequireDiagonal" time="0.001" />
   <testcase classname="MatrixPackage.MatrixTest" name="testStreamThree" time="0.0" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testInstance" time="0.001" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testInstance" time="0.0" />
   <testcase classname="MatrixPackage.MatrixTest" name="testValueThree" time="0.0" />
   <testcase classname="MatrixPackage.MatrixTest" name="testMatrixToString" time="0.0" />
   <testcase classname="MatrixPackage.MatrixTest" name="testLength" time="0.0" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testInstanceTwo" time="0.001" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testRequireMatchingSize" time="0.0" />
-  <testcase classname="MatrixPackage.MatrixTest" name="testStream" time="0.001" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testInstanceTwo" time="0.0" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testRequireMatchingSize" time="0.001" />
+  <testcase classname="MatrixPackage.MatrixTest" name="testStream" time="0.0" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

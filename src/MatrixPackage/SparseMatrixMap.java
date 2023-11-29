@@ -58,10 +58,10 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      * @param other
      * @return
      */
-    private Set<Indexes> unionNonZeroIndexes(SparseMatrixMap<T> other) {
-        List<Indexes> resultList = new ArrayList<>(this.nonZeroIndexes);
-        resultList.addAll(new ArrayList<>(other.nonZeroIndexes));
-        return new HashSet<>(resultList);
+    private List<Indexes> unionNonZeroIndexes(SparseMatrixMap<T> other) {
+        Set<Indexes> resultSet = new HashSet<>(nonZeroIndexes);
+        resultSet.addAll(other.nonZeroIndexes);
+        return new ArrayList<>(resultSet);
     }
 
     /**
@@ -204,6 +204,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
 
             return getProductAtIndex(other, ring, length, index);
         });
+        
     }
 
     /**
@@ -270,9 +271,9 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         
         Ring<Integer> ring = new IntegerRing();
         Matrix<Integer> sparse = SparseMatrixMap.instance(2, 2, ring, (index) -> (index.row()));
-        System.out.println(sparse);
+        System.out.println("s1: \n" + sparse);
         Matrix<Integer> sparse2 = SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column()));
-        System.out.println(sparse2);
+        System.out.println("s2: \n" + sparse2);
 
         sparse = SparseMatrixMap.constant(2, ring, 1);
         //System.out.println(sparse);
@@ -283,15 +284,15 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         //System.out.println(SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column())).convertToStandard(ring));
         //System.out.println(MatrixMap.instance(2, 2, (index) -> (index.column())).convertToSparse(ring));
 
-        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.column());
-        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.row());
+        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.row());
+        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.column());
 
-        Matrix<Integer> m1 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.column());
-        Matrix<Integer> m2 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.row());
+        Matrix<Integer> m1 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.row());
+        Matrix<Integer> m2 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.column());
 
         //TODO make plus and times methods more efficient and implement
-        //System.out.println(s1.plus(s2, (x, y) -> ring.sum(x, y)));
-        System.out.println(m1.times(m2, ring));
+        System.out.println(s1.plus(s2, (x, y) -> ring.sum(x, y)));
+        //System.out.println(m1.times(m2, ring));
         System.out.println(s1.times(s2, ring));
         //System.out.println(s1.value(new Indexes(0, 0)));
     }

@@ -202,16 +202,26 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)
         return instance(this.size(), this.ring, (index) -> { //creates an instance of a matrix containing the product
 
-            if (this.value(index).equals(0) || other.value(index).equals(0)) {
-                return ring.zero();
-            }
-            List<T> products = new ArrayList<>();
-            //indexes until length is reached and adds to the product list the element at the row of this and column of other
-            for (int i = 0; i <= length; i++) {
-                products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));
-            }
-            return Rings.sum(products, ring); //sums the elements of the product list
+            return getProductAtIndex(other, ring, length, index);
         });
+    }
+
+    /**
+     * a subroutine which conducts multiplication and computes the resulting value at each index of the matrix
+     * @param other
+     * @param ring
+     * @param length
+     * @param index
+     * @return
+     */
+    private T getProductAtIndex(Matrix<T> other, Ring<T> ring, int length, Indexes index) {
+    
+        List<T> products = new ArrayList<>();
+        //indexes until length is reached and adds to the product list the element at the row of this and column of other
+        for (int i = 0; i <= length; i++) {
+            products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));
+        }
+        return Rings.sum(products, ring); //sums the elements of the product list
     }
 
     /**
@@ -276,9 +286,13 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.column());
         Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.row());
 
+        Matrix<Integer> m1 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.column());
+        Matrix<Integer> m2 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.row());
+
         //TODO make plus and times methods more efficient and implement
         //System.out.println(s1.plus(s2, (x, y) -> ring.sum(x, y)));
-        //System.out.println(s1.times(s2, intRing));
+        System.out.println(m1.times(m2, ring));
+        System.out.println(s1.times(s2, ring));
         //System.out.println(s1.value(new Indexes(0, 0)));
     }
 }

@@ -394,13 +394,25 @@ public final class MatrixMap<T> implements Matrix<T> {
         int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)
         return instance(this.size(), (index) -> { //creates an instance of a matrix containing the product
 
-            List<T> products = new ArrayList<>();
-            //indexes until length is reached and adds to the product list the element at the row of this and column of other
-            for (int i = 0; i <= length; i++) {
-                products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));
-            }
-            return Rings.sum(products, ring); //sums the elements of the product list
+            return getProductAtIndex(other, ring, length, index);
         });
+    }
+
+    /**
+     * a subroutine which conducts multiplication and computes the resulting value at each index of the matrix
+     * @param other
+     * @param ring
+     * @param length
+     * @param index
+     * @return
+     */
+    private T getProductAtIndex(Matrix<T> other, Ring<T> ring, int length, Indexes index) {
+        List<T> products = new ArrayList<>();
+        //indexes until length is reached and adds to the product list the element at the row of this and column of other
+        for (int i = 0; i <= length; i++) {
+            products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));
+        }
+        return Rings.sum(products, ring); //sums the elements of the product list
     }
 
     /**

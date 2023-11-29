@@ -524,6 +524,29 @@ public class MatrixTest {
         MatrixMap.instance(new Indexes(Integer.MAX_VALUE, Integer.MAX_VALUE), (index) -> 1);
     }
     */
+
+    /* TESTING THE METHODS OF THE MATRIXRING CLASS */
+
+    /**
+     * testing sum
+     */
+    @Test
+    public void testMatrixSum() {
+        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.row());
+        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.column());
+        assertEquals(ring.zero(), MatrixRing.instance(new  IntegerRing()).sum(s1, s2).value(new Indexes(0, 0)));
+    }
+
+    /**
+     * testing product
+     */
+    @Test
+    public void testMatrixTimes() {
+        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.row());
+        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.column());
+        assertEquals(ring.zero(), MatrixRing.instance(new  IntegerRing()).product(s1, s2).value(new Indexes(0, 0)));
+    }
+
 }
 
 

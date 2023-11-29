@@ -6,7 +6,7 @@ import RingPackage.Ring;
 /**
  * a class defining a Ring for matrix operations
  */
-public class MatrixRing<T> implements Ring<T> {
+public class MatrixRing<T> {
     
     private Ring<T> baseRing; //a private field storing a ring 
 
@@ -15,8 +15,6 @@ public class MatrixRing<T> implements Ring<T> {
      * @param ring
      */
     private MatrixRing(Ring<T> ring) {
-        //null check
-        assert ring != null : "ring cannot be null";
         this.baseRing = ring;
     }
 
@@ -32,23 +30,29 @@ public class MatrixRing<T> implements Ring<T> {
         return new MatrixRing<>(ring);
     }
 
-    @Override
-    public T zero() {
-        return null;
+    /**
+     * a ring method to handle matrix addition
+     * @param x
+     * @param y
+     * @return
+     */
+    public Matrix<T> sum(Matrix<T> x, Matrix<T> y) {
+        //null check
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+        return x.plus(y, (a, b) -> baseRing.sum(a, b));
     }
 
-    @Override
-    public T identity() {
-        return null;
-    }
-
-    @Override
-    public T sum(T x, T y) {
-        return null;
-    }
-
-    @Override
-    public T product(T x, T y) {
-        return null;
+    /**
+     * a ring method to handle matrix multiplication
+     * @param x
+     * @param y
+     * @return
+     */
+    public Matrix<T> product(Matrix<T> x, Matrix<T> y) {
+        //null check
+        Objects.requireNonNull(x, "x cannot be null");
+        Objects.requireNonNull(y, "y cannot be null");
+        return x.times(y, baseRing);
     }
 }

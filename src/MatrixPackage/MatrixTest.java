@@ -517,7 +517,7 @@ public class MatrixTest {
     /**
      * a stress test for the matrix class, as defined by the design document
      * AVERAGE RESULT OF LAST 3 TESTS: 53 seconds
-     * program can handle 53 seconds of matrix creation before throwing OutOfMemoryException
+     * program can handle avg 53 seconds of matrix creation before throwing OutOfMemoryException
      *
     @Test
     public void stressTest() {

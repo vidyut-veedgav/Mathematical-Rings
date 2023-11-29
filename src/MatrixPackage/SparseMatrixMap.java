@@ -84,6 +84,8 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
     public T value(Indexes index) {
         //null check
         Objects.requireNonNull(index, "indexes cannot be null");
+
+        //error handling for index greater than size
         T value = matrix.get(index);
         return (value == null) ? ring.zero() : value;
     }
@@ -214,8 +216,7 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
         return instance(this.size(), this.ring, (index) -> { //creates an instance of a matrix containing the product
 
             return getProductAtIndex(other, ring, length, index);
-        });
-        
+        });    
     }
 
     /**
@@ -236,9 +237,11 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
         return Rings.sum(products, ring); //sums the elements of the product list
     }
 
+    
+
     /**
      * a method to override the toString method
-     */
+     *
     @Override
     public String toString() {
 
@@ -265,6 +268,16 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
         }
         return sb.toString();
     }
+    */
+
+    /**
+     * toString method for SparseMatrixMap
+     *
+    @Override
+    public String toString() {
+        return "SparseMatrixMap [matrix=" + matrix + ", size=" + size + ", ring=" + ring + "]";
+    }
+    */
 
     /**
      * a method to convert this matrix to a standard matrix
@@ -284,7 +297,7 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
     /**
      * main method
      * @param args
-     */
+     *
     public static void main(String[] args) {
         
         Ring<Integer> ring = new IntegerRing();
@@ -334,4 +347,5 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
         System.out.println(MatrixRing.instance(ring).product(s1, s2));
         System.out.println("***************************************************");
     }
+    */
 }

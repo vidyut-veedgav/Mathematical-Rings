@@ -423,6 +423,10 @@ public final class MatrixMap<T> implements Matrix<T> {
         return SparseMatrixMap.instance(this.size(), ring, (index) -> this.value(index));
     }
 
+    /**
+     * main method
+     * @param args
+     *
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
@@ -474,7 +478,7 @@ public final class MatrixMap<T> implements Matrix<T> {
         else {
             System.out.println("Invalid selection");
         }
-        
     }  
+    */
 }
 

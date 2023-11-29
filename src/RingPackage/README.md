@@ -18,3 +18,6 @@ List<Integer> intList = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 Rings.sum(intList, intRing);
 
 In this example, I am summing Integers in the dataset {1, 2, 3, 4, 5}.
+
+
+FOR TESTING THE SPARSE MATRIX METHODS, UNCOMMENT THE PREWRITTEN TOSTRING METHOD

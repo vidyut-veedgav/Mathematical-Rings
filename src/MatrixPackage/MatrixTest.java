@@ -465,8 +465,12 @@ public class MatrixTest {
         assertEquals(Integer.valueOf(5), sparse.value(new Indexes(0, 1)));
         assertEquals(Integer.valueOf(5), sparse.value(new Indexes(1, 0)));
         assertEquals(Integer.valueOf(5), sparse.value(new Indexes(1, 1)));
+        assertThrows(IllegalArgumentException.class, () -> SparseMatrixMap.constant(1, ring, Integer.valueOf(0)));
     }
 
+    /**
+     * testing the identity method of SparseMatrixMap
+     */
     @Test
     public void testSparseIdentity() {
         SparseMatrixMap<Integer> sparse = SparseMatrixMap.identity(1, ring);
@@ -474,7 +478,52 @@ public class MatrixTest {
         assertEquals(Integer.valueOf(1), sparse.value(new Indexes(1, 1)));
     }
 
-    
+    /**
+     * testing the sparse plus method
+     */
+    @Test
+    public void testSparsePlus() {
+        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(1, 1), new IntegerRing(), (index) -> index.row());
+        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(1, 1), new IntegerRing(), (index) -> index.column());
+        assertEquals(new Indexes(1, 1), s1.plus(s2, (x, y) -> ring.sum(x, y)).size());
+    }
+
+    /**
+     * testing the sparse times method
+     */
+    @Test
+    public void testSparseTimes() {
+        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(1, 1), new IntegerRing(), (index) -> index.row());
+        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(1, 1), new IntegerRing(), (index) -> index.column());
+        assertEquals(new Indexes(1, 1), s1.times(s2, new IntegerRing()).size());
+    }
+
+    /**
+     * testing the convertToStandard method of SparseMatrixMap
+     */
+    @Test
+    public void testConvertToStandard() {
+        assertEquals(new Indexes(1, 2), SparseMatrixMap.instance(2, 2, ring, (index) -> {
+            if (index.row() == 2) {
+                return ring.zero();
+            } else {
+                return 10;
+            }
+        }).convertToStandard(ring).size());
+
+        assertEquals(new Indexes(2, 2), SparseMatrixMap.instance(2, 2, ring, (index) -> index.row()).convertToStandard(ring).size());
+    }
+
+    /**
+     * a stress test for the matrix class, as defined by the design document
+     * AVERAGE RESULT OF LAST 3 TESTS: 53 seconds
+     * program can handle 53 seconds of matrix creation before throwing OutOfMemoryException
+     *
+    @Test
+    public void stressTest() {
+        MatrixMap.instance(new Indexes(Integer.MAX_VALUE, Integer.MAX_VALUE), (index) -> 1);
+    }
+    */
 }
 
 

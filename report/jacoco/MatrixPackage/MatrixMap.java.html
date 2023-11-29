@@ -423,59 +423,63 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
 <span class="fc" id="L423">        return SparseMatrixMap.instance(this.size(), ring, (index) -&gt; this.value(index));</span>
     }
 
+    /**
+     * main method
+     * @param args
+     *
     public static void main(String[] args) {
 
-<span class="nc" id="L428">        Scanner input = new Scanner(System.in);</span>
-<span class="nc" id="L429">        System.out.println(&quot;Enter Matrix Size&quot;);</span>
-<span class="nc" id="L430">        Integer size = Integer.valueOf(input.nextLine());</span>
-<span class="nc" id="L431">        System.out.println(&quot;SIZE = &quot; + size);</span>
+        Scanner input = new Scanner(System.in);
+        System.out.println(&quot;Enter Matrix Size&quot;);
+        Integer size = Integer.valueOf(input.nextLine());
+        System.out.println(&quot;SIZE = &quot; + size);
      
-<span class="nc" id="L433">        System.out.println(&quot;Matrix One Values:&quot;);</span>
-<span class="nc" id="L434">        Map&lt;Indexes, Integer&gt; indexMap = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L435" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
-<span class="nc bnc" id="L436" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
-<span class="nc" id="L437">                Indexes index = new Indexes(i, j);</span>
-<span class="nc" id="L438">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
-<span class="nc" id="L439">                indexMap.put(index, Integer.valueOf(input.nextLine()));</span>
+        System.out.println(&quot;Matrix One Values:&quot;);
+        Map&lt;Indexes, Integer&gt; indexMap = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt;= size; i++) {
+            for (int j = 0; j &lt;= size; j++) {
+                Indexes index = new Indexes(i, j);
+                System.out.println(&quot;Value at: &quot; + index.toString());
+                indexMap.put(index, Integer.valueOf(input.nextLine()));
             }
         }
-<span class="nc" id="L442">        MatrixMap&lt;Integer&gt; m1 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap.get(index));</span>
-<span class="nc" id="L443">        System.out.println(&quot;MATRIX 1: &quot;);</span>
-<span class="nc" id="L444">        System.out.println(m1.toString());</span>
+        MatrixMap&lt;Integer&gt; m1 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap.get(index));
+        System.out.println(&quot;MATRIX 1: &quot;);
+        System.out.println(m1.toString());
 
-<span class="nc" id="L446">        System.out.println(&quot;Matrix Two Values:&quot;);</span>
-<span class="nc" id="L447">        Map&lt;Indexes, Integer&gt; indexMap2 = new HashMap&lt;&gt;();</span>
-<span class="nc bnc" id="L448" title="All 2 branches missed.">        for (int i = 0; i &lt;= size; i++) {</span>
-<span class="nc bnc" id="L449" title="All 2 branches missed.">            for (int j = 0; j &lt;= size; j++) {</span>
-<span class="nc" id="L450">                Indexes index = new Indexes(i, j);</span>
-<span class="nc" id="L451">                System.out.println(&quot;Value at: &quot; + index.toString());</span>
-<span class="nc" id="L452">                indexMap2.put(index, Integer.valueOf(input.nextLine()));</span>
+        System.out.println(&quot;Matrix Two Values:&quot;);
+        Map&lt;Indexes, Integer&gt; indexMap2 = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt;= size; i++) {
+            for (int j = 0; j &lt;= size; j++) {
+                Indexes index = new Indexes(i, j);
+                System.out.println(&quot;Value at: &quot; + index.toString());
+                indexMap2.put(index, Integer.valueOf(input.nextLine()));
             }
         }
-<span class="nc" id="L455">        MatrixMap&lt;Integer&gt; m2 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap2.get(index));</span>
-<span class="nc" id="L456">        System.out.println(&quot;MATRIX 1: &quot;);</span>
-<span class="nc" id="L457">        System.out.println(m1.toString());</span>
+        MatrixMap&lt;Integer&gt; m2 = MatrixMap.instance(new Indexes(size, size), (index) -&gt; indexMap2.get(index));
+        System.out.println(&quot;MATRIX 1: &quot;);
+        System.out.println(m1.toString());
 
-<span class="nc" id="L459">        System.out.println(&quot;ADD or MULTIPLY ([A/M])&quot;);</span>
-<span class="nc" id="L460">        String addOrMultiply = input.nextLine();</span>
+        System.out.println(&quot;ADD or MULTIPLY ([A/M])&quot;);
+        String addOrMultiply = input.nextLine();
 
-<span class="nc" id="L462">        input.close();</span>
+        input.close();
 
-<span class="nc" id="L464">        Ring&lt;Integer&gt; intRing = new IntegerRing();</span>
+        Ring&lt;Integer&gt; intRing = new IntegerRing();
 
-<span class="nc bnc" id="L466" title="All 2 branches missed.">        if (addOrMultiply.equals(&quot;A&quot;)) {</span>
-<span class="nc" id="L467">            MatrixMap&lt;Integer&gt; sum = m1.plus(m2, (x, y) -&gt; intRing.sum(x, y));</span>
-<span class="nc" id="L468">            System.out.println(sum);</span>
-<span class="nc" id="L469">        }</span>
-<span class="nc bnc" id="L470" title="All 2 branches missed.">        else if (addOrMultiply.equals(&quot;M&quot;)) {</span>
-<span class="nc" id="L471">            MatrixMap&lt;Integer&gt; product = m1.times(m2, intRing);</span>
-<span class="nc" id="L472">            System.out.println(product);</span>
-<span class="nc" id="L473">        }</span>
+        if (addOrMultiply.equals(&quot;A&quot;)) {
+            MatrixMap&lt;Integer&gt; sum = m1.plus(m2, (x, y) -&gt; intRing.sum(x, y));
+            System.out.println(sum);
+        }
+        else if (addOrMultiply.equals(&quot;M&quot;)) {
+            MatrixMap&lt;Integer&gt; product = m1.times(m2, intRing);
+            System.out.println(product);
+        }
         else {
-<span class="nc" id="L475">            System.out.println(&quot;Invalid selection&quot;);</span>
+            System.out.println(&quot;Invalid selection&quot;);
         }
-        
-<span class="nc" id="L478">    }  </span>
+    }  
+    */
 }
 
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

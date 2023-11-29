@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="1" hostname="Vidys-MacBook-Air-3.local" id="0" name="MatrixTest" package="MatrixPackage" skipped="0" tests="28" time="0.104" timestamp="2023-11-29T06:55:04">
+  <testsuite errors="0" failures="1" hostname="Vidys-MacBook-Air-3.local" id="0" name="MatrixTest" package="MatrixPackage" skipped="0" tests="31" time="0.112" timestamp="2023-11-29T07:35:07">
       <properties>
           <property name="ant.library.dir" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib" />
 
@@ -32,7 +32,7 @@
 
           <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib" />
 
-          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner MatrixPackage.MatrixTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-MatrixPackage.MatrixTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher7876271743904614026.properties propsfile=/Users/vidyutveedgav/sparse/junit15138736001124588642.properties" />
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner MatrixPackage.MatrixTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-MatrixPackage.MatrixTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher6313446546916021513.properties propsfile=/Users/vidyutveedgav/sparse/junit15858459374638037766.properties" />
 
           <property name="output.dir" value="output" />
 
@@ -50,7 +50,7 @@
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
-          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent2120447208086500780.jar" />
+          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent11548253229353344578.jar" />
 
           <property name="java.version.date" value="2023-07-18" />
 
@@ -150,13 +150,15 @@
 
       </properties>
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testAreDiagonal" time="0.002" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testSparseTimes" time="0.023" />
+
+      <testcase classname="MatrixPackage.MatrixTest" name="testAreDiagonal" time="0.0" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testRequireNonEmpty" time="0.001" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testCause" time="0.0" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testTimes" time="0.023" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testTimes" time="0.006" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testValue" time="0.0" />
 
@@ -164,7 +166,7 @@
 
       <testcase classname="MatrixPackage.MatrixTest" name="testPlus" time="0.002" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testSize" time="0.003" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testSize" time="0.006" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testToString" time="0.0" />
 
@@ -172,7 +174,9 @@
 
       <testcase classname="MatrixPackage.MatrixTest" name="testValueTwo" time="0.0" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testSparseConstant" time="0.003" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testSparseConstant" time="0.001" />
+
+      <testcase classname="MatrixPackage.MatrixTest" name="testConvertToStandard" time="0.001" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testSparseIdentity" time="0.0" />
 
@@ -217,7 +221,9 @@
 
       <testcase classname="MatrixPackage.MatrixTest" name="testStreamTwo" time="0.0" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testIdentity" time="0.0" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testIdentity" time="0.001" />
+
+      <testcase classname="MatrixPackage.MatrixTest" name="testSparsePlus" time="0.001" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testSparseSize" time="0.0" />
 
@@ -227,24 +233,24 @@
 
       <testcase classname="MatrixPackage.MatrixTest" name="testInstance" time="0.0" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testValueThree" time="0.0" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testValueThree" time="0.001" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testMatrixToString" time="0.0" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testLength" time="0.0" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testInstanceTwo" time="0.0" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testInstanceTwo" time="0.008" />
 
       <testcase classname="MatrixPackage.MatrixTest" name="testRequireMatchingSize" time="0.001" />
 
-      <testcase classname="MatrixPackage.MatrixTest" name="testStream" time="0.0" />
+      <testcase classname="MatrixPackage.MatrixTest" name="testStream" time="0.001" />
 
       <system-out><![CDATA[]]></system-out>
 
       <system-err><![CDATA[]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="Vidys-MacBook-Air-3.local" id="1" name="PolynomialTest" package="RingPackage" skipped="0" tests="3" time="0.06" timestamp="2023-11-29T06:55:05">
+  <testsuite errors="0" failures="0" hostname="Vidys-MacBook-Air-3.local" id="1" name="PolynomialTest" package="RingPackage" skipped="0" tests="3" time="0.058" timestamp="2023-11-29T07:35:08">
       <properties>
           <property name="ant.library.dir" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib" />
 
@@ -276,7 +282,7 @@
 
           <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib" />
 
-          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner RingPackage.PolynomialTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-RingPackage.PolynomialTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher1911698326710558364.properties propsfile=/Users/vidyutveedgav/sparse/junit6921922639548408780.properties" />
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner RingPackage.PolynomialTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-RingPackage.PolynomialTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher8730725913222511500.properties propsfile=/Users/vidyutveedgav/sparse/junit3618096965442801794.properties" />
 
           <property name="output.dir" value="output" />
 
@@ -294,7 +300,7 @@
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
-          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent2120447208086500780.jar" />
+          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent11548253229353344578.jar" />
 
           <property name="java.version.date" value="2023-07-18" />
 
@@ -394,7 +400,7 @@
 
       </properties>
 
-      <testcase classname="RingPackage.PolynomialTest" name="testInterpolatingPolynonial" time="0.007" />
+      <testcase classname="RingPackage.PolynomialTest" name="testInterpolatingPolynonial" time="0.006" />
 
       <testcase classname="RingPackage.PolynomialTest" name="testTimes" time="0.0" />
 
@@ -405,7 +411,7 @@
       <system-err><![CDATA[]]></system-err>
 
   </testsuite>
-  <testsuite errors="0" failures="0" hostname="Vidys-MacBook-Air-3.local" id="2" name="RingTest" package="RingPackage" skipped="0" tests="4" time="0.058" timestamp="2023-11-29T06:55:05">
+  <testsuite errors="0" failures="0" hostname="Vidys-MacBook-Air-3.local" id="2" name="RingTest" package="RingPackage" skipped="0" tests="4" time="0.057" timestamp="2023-11-29T07:35:08">
       <properties>
           <property name="ant.library.dir" value="/Users/vidyutveedgav/Downloads/Apache-Ant/lib" />
 
@@ -437,7 +443,7 @@
 
           <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/lib" />
 
-          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner RingPackage.RingTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-RingPackage.RingTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher6170148261073492007.properties propsfile=/Users/vidyutveedgav/sparse/junit17450742028192538778.properties" />
+          <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner RingPackage.RingTest skipNonTests=false filtertrace=false haltOnError=false haltOnFailure=false formatter=org.apache.tools.ant.taskdefs.optional.junit.OutErrSummaryJUnitResultFormatter showoutput=false outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=false formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/vidyutveedgav/sparse/report/junit/TEST-RingPackage.RingTest.xml crashfile=/Users/vidyutveedgav/sparse/junitvmwatcher6883870632189172454.properties propsfile=/Users/vidyutveedgav/sparse/junit12727984144754660798.properties" />
 
           <property name="output.dir" value="output" />
 
@@ -455,7 +461,7 @@
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
-          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent2120447208086500780.jar" />
+          <property name="_jacoco.agentFile" value="/var/folders/xg/4syc1kr941jdwsz388p3bc100000gn/T/jacocoagent11548253229353344578.jar" />
 
           <property name="java.version.date" value="2023-07-18" />
 
@@ -557,7 +563,7 @@
 
       <testcase classname="RingPackage.RingTest" name="testSum" time="0.006" />
 
-      <testcase classname="RingPackage.RingTest" name="testRings" time="0.001" />
+      <testcase classname="RingPackage.RingTest" name="testRings" time="0.0" />
 
       <testcase classname="RingPackage.RingTest" name="testProduct" time="0.001" />
 

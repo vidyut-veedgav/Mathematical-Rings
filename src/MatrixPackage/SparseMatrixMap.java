@@ -14,6 +14,7 @@ import MatrixPackage.MatrixMap.InconsistentSizeException;
 import MatrixPackage.MatrixMap.InvalidLengthException;
 import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
 import MatrixPackage.MatrixMap.NonSquareException;
+import RingPackage.IntegerRing;
 import RingPackage.Ring;
 import RingPackage.Rings;
 
@@ -237,7 +238,7 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
 
     /**
      * a method to override the toString method
-     *
+     */
     @Override
     public String toString() {
 
@@ -264,7 +265,6 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
         }
         return sb.toString();
     }
-    */
 
     /**
      * a method to convert this matrix to a standard matrix
@@ -284,34 +284,54 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
     /**
      * main method
      * @param args
-     *
+     */
     public static void main(String[] args) {
         
         Ring<Integer> ring = new IntegerRing();
-        Matrix<Integer> sparse = SparseMatrixMap.instance(2, 2, ring, (index) -> (index.row()));
-        //System.out.println("s1: \n" + sparse);
-        Matrix<Integer> sparse2 = SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column()));
-        //System.out.println("s2: \n" + sparse2);
 
-        sparse = SparseMatrixMap.constant(2, ring, 1);
+        //sparse = SparseMatrixMap.constant(2, ring, 1);
         //System.out.println(sparse);
 
-        sparse = SparseMatrixMap.identity(2, ring);
+        //sparse = SparseMatrixMap.identity(2, ring);
 
         //System.out.println(SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column())));
         //System.out.println(SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column())).convertToStandard(ring));
         //System.out.println(MatrixMap.instance(2, 2, (index) -> (index.column())).convertToSparse(ring));
 
-        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.row());
-        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.column());
 
+        //OPERATION TESTING
+
+        System.out.println("***************************************************");
+        System.out.println("STANDARD MATRIX MAP:");
         Matrix<Integer> m1 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.row());
         Matrix<Integer> m2 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.column());
+        System.out.println("Matrix 1: ");
+        System.out.println(m1);
+        System.out.println("Matrix 2: ");
+        System.out.println(m2);
+        System.out.println("***************************************************");
+        System.out.println("*ADDITION*");
+        System.out.println("Sum: ");
+        System.out.println(MatrixRing.instance(ring).sum(m1, m2));
+        System.out.println("*MULTIPLICATION*");
+        System.out.println("Product: ");
+        System.out.println(MatrixRing.instance(ring).product(m1, m2));
 
-        //System.out.println(s1.plus(s2, (x, y) -> ring.sum(x, y)));
-        //System.out.println(m1.times(m2, ring));
-        //System.out.println(s1.times(s2, ring));
-        //System.out.println(s1.value(new Indexes(0, 0)));
+        System.out.println("***************************************************");
+        System.out.println("SPARSE MATRIX MAP:");
+        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.row());
+        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.column());
+        System.out.println("Matrix 1: ");
+        System.out.println(s1);
+        System.out.println("Matrix 2: ");
+        System.out.println(s2);
+        System.out.println("***************************************************");
+        System.out.println("*ADDITION*");
+        System.out.println("Sum: ");
+        System.out.println(MatrixRing.instance(ring).sum(s1, s2));
+        System.out.println("*MULTIPLICATION*");
+        System.out.println("Product: ");
+        System.out.println(MatrixRing.instance(ring).product(s1, s2));
+        System.out.println("***************************************************");
     }
-    */
 }

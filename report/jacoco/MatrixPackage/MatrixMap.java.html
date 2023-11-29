@@ -420,7 +420,10 @@ public final class MatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
      * @return
      */
     public SparseMatrixMap&lt;T&gt; convertToSparse(Ring&lt;T&gt; ring) {
-<span class="fc" id="L423">        return SparseMatrixMap.instance(this.size(), ring, (index) -&gt; this.value(index));</span>
+
+        //null check
+<span class="fc" id="L425">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
+<span class="fc" id="L426">        return SparseMatrixMap.instance(this.size(), ring, (index) -&gt; this.value(index));</span>
     }
 
     /**

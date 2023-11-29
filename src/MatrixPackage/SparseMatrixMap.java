@@ -14,11 +14,10 @@ import MatrixPackage.MatrixMap.InconsistentSizeException;
 import MatrixPackage.MatrixMap.InvalidLengthException;
 import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
 import MatrixPackage.MatrixMap.NonSquareException;
-import RingPackage.IntegerRing;
 import RingPackage.Ring;
 import RingPackage.Rings;
 
-public class SparseMatrixMap<T> implements Matrix<T> {
+public final class SparseMatrixMap<T> implements Matrix<T> {
 
     private final Map<Indexes, T>  matrix; //a field representing the matrix
     private final Indexes size; //a field representing the size of the matrix
@@ -29,6 +28,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      * constructor
      */
     private SparseMatrixMap(Map<Indexes, T> matrix, Ring<T> ring) {
+        //setting class fields
         this.matrix = matrix;
         this.size = Collections.max(matrix.keySet());
         this.ring = ring;
@@ -81,7 +81,6 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      */
     @Override
     public T value(Indexes index) {
-        
         //null check
         Objects.requireNonNull(index, "indexes cannot be null");
         T value = matrix.get(index);
@@ -98,6 +97,8 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      */
     public static <S> SparseMatrixMap<S> instance(int rows, int columns,  Ring<S> ring, Function<Indexes, S> valueMapper) {
 
+        //null check
+        Objects.requireNonNull(ring, "ring cannot be null");
         Objects.requireNonNull(valueMapper, "valueMapper cannot be null");
         InvalidLengthException.requireNonEmpty(Cause.ROW, rows); //checks if the rows are valid
         InvalidLengthException.requireNonEmpty(Cause.COLUMN, columns); //checks if the columns are valid
@@ -105,6 +106,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         Map<Indexes, S> matrix = new HashMap<>(); //creating the map
         List<Indexes> indexes = Indexes.stream(rows, columns).collect(Collectors.toList()); //creating a list of indexes
 
+        //populating the map with the applied mappings at each index, excluding mappings to zero
         for (Indexes index : indexes) {
             S value = valueMapper.apply(index);
             if (!value.equals(ring.zero())) {
@@ -125,6 +127,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
 
         //null checks
         Objects.requireNonNull(size, "size cannot be null");
+        Objects.requireNonNull(ring, "ring cannot be null");
         Objects.requireNonNull(valueMapper, "valueMapper cannot be null");
     
         //calling the foundational instance method
@@ -144,7 +147,9 @@ public class SparseMatrixMap<T> implements Matrix<T> {
 
         //null check
         Objects.requireNonNull(value, "value cannot be null");
+        Objects.requireNonNull(ring, "ring cannot be null");
 
+        //edge case: user attempts to populate a constant sparse matrix with zero
         if (value.equals(ring.zero())) {
             throw new IllegalArgumentException("cannot populate a sparse matrix with 0");
         }
@@ -163,9 +168,8 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      */
     public static <S> SparseMatrixMap<S> identity(int size, Ring<S> ring) {
 
-        //null checks
-        Objects.requireNonNull(ring.zero(), "zero cannot be null");
-        Objects.requireNonNull(ring.identity(), "identity cannot be null");
+        //null check
+        Objects.requireNonNull(ring, "ring cannot be null");
 
         //calling the foundational instance method
         return instance(size, size, ring, (index) -> (index.areDiagonal()) ? ring.identity() : ring.zero());
@@ -200,7 +204,7 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         Objects.requireNonNull(other, "other cannot be null");
         Objects.requireNonNull(ring, "ring cannot be null");
 
-        //size checking
+        //size and square checks
         NonSquareException.requireDiagonal(this.size()); //checks if this matrix is a square
         NonSquareException.requireDiagonal(other.size()); //checks if the other matrix is a square
         InconsistentSizeException.requireMatchingSize(this, other); //checks if the matrixes are of equal size
@@ -268,6 +272,9 @@ public class SparseMatrixMap<T> implements Matrix<T> {
      * @return
      */
     public MatrixMap<T> convertToStandard(Ring<T> ring) {
+
+        //null check
+        Objects.requireNonNull(ring, "ring cannot be null");
         
         return MatrixMap.instance(size(), (index) -> {
             return (!matrix.containsKey(index) ? ring.zero() : value(index));
@@ -301,7 +308,6 @@ public class SparseMatrixMap<T> implements Matrix<T> {
         Matrix<Integer> m1 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.row());
         Matrix<Integer> m2 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.column());
 
-        //TODO make plus and times methods more efficient and implement
         //System.out.println(s1.plus(s2, (x, y) -> ring.sum(x, y)));
         //System.out.println(m1.times(m2, ring));
         //System.out.println(s1.times(s2, ring));

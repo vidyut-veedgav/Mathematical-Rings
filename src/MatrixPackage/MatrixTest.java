@@ -260,9 +260,9 @@ public class MatrixTest {
     @Test
     public void testConvertToSparse() {
         SparseMatrixMap<Integer> sparse = MatrixMap.instance(new Indexes(2, 2), (index) -> index.row()).convertToSparse(ring);
-        assertEquals(null, sparse.value(new Indexes(0, 0)));
-        assertEquals(null, sparse.value(new Indexes(0, 1)));
-        assertEquals(null, sparse.value(new Indexes(0, 2)));
+        assertEquals(ring.zero(), sparse.value(new Indexes(0, 0)));
+        assertEquals(ring.zero(), sparse.value(new Indexes(0, 1)));
+        assertEquals(ring.zero(), sparse.value(new Indexes(0, 2)));
         assertEquals(Integer.valueOf(1), sparse.value(new Indexes(1, 0)));
     }
 

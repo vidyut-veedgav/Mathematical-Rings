@@ -14,7 +14,6 @@ import MatrixPackage.MatrixMap.InconsistentSizeException;
 import MatrixPackage.MatrixMap.InvalidLengthException;
 import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
 import MatrixPackage.MatrixMap.NonSquareException;
-import RingPackage.IntegerRing;
 import RingPackage.Ring;
 import RingPackage.Rings;
 
@@ -28,10 +27,10 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
     /**
      * constructor
      */
-<span class="fc" id="L31">    private SparseMatrixMap(Map&lt;Indexes, T&gt; matrix, Ring&lt;T&gt; ring) {</span>
-<span class="fc" id="L32">        this.matrix = matrix;</span>
-<span class="fc" id="L33">        this.size = Collections.max(matrix.keySet());</span>
-<span class="fc" id="L34">        this.ring = ring;</span>
+<span class="fc" id="L30">    private SparseMatrixMap(Map&lt;Indexes, T&gt; matrix, Ring&lt;T&gt; ring) {</span>
+<span class="fc" id="L31">        this.matrix = matrix;</span>
+<span class="fc" id="L32">        this.size = Collections.max(matrix.keySet());</span>
+<span class="fc" id="L33">        this.ring = ring;</span>
         
         /*
         //creates a list of the non zero indexes in the matrix
@@ -39,7 +38,7 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
                                 .filter(key -&gt; !value(key).equals(ring.zero()))
                                 .collect(Collectors.toList());
         */
-<span class="fc" id="L42">    }</span>
+<span class="fc" id="L41">    }</span>
 
     /* Methods to use in case of a change in implementation */
 /*
@@ -71,7 +70,7 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
      */
     @Override
     public Indexes size() {
-<span class="fc" id="L74">        return size;</span>
+<span class="fc" id="L73">        return size;</span>
     }
 
     /**
@@ -81,11 +80,10 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
      */
     @Override
     public T value(Indexes index) {
-        
         //null check
-<span class="fc" id="L86">        Objects.requireNonNull(index, &quot;indexes cannot be null&quot;);</span>
-<span class="fc" id="L87">        T value = matrix.get(index);</span>
-<span class="fc bfc" id="L88" title="All 2 branches covered.">        return (value == null) ? ring.zero() : value;</span>
+<span class="fc" id="L84">        Objects.requireNonNull(index, &quot;indexes cannot be null&quot;);</span>
+<span class="fc" id="L85">        T value = matrix.get(index);</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        return (value == null) ? ring.zero() : value;</span>
     }
 
     /**
@@ -98,6 +96,8 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
      */
     public static &lt;S&gt; SparseMatrixMap&lt;S&gt; instance(int rows, int columns,  Ring&lt;S&gt; ring, Function&lt;Indexes, S&gt; valueMapper) {
 
+        //null check
+<span class="fc" id="L100">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
 <span class="fc" id="L101">        Objects.requireNonNull(valueMapper, &quot;valueMapper cannot be null&quot;);</span>
 <span class="fc" id="L102">        InvalidLengthException.requireNonEmpty(Cause.ROW, rows); //checks if the rows are valid</span>
 <span class="fc" id="L103">        InvalidLengthException.requireNonEmpty(Cause.COLUMN, columns); //checks if the columns are valid</span>
@@ -105,13 +105,14 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
 <span class="fc" id="L105">        Map&lt;Indexes, S&gt; matrix = new HashMap&lt;&gt;(); //creating the map</span>
 <span class="fc" id="L106">        List&lt;Indexes&gt; indexes = Indexes.stream(rows, columns).collect(Collectors.toList()); //creating a list of indexes</span>
 
-<span class="fc bfc" id="L108" title="All 2 branches covered.">        for (Indexes index : indexes) {</span>
-<span class="fc" id="L109">            S value = valueMapper.apply(index);</span>
-<span class="fc bfc" id="L110" title="All 2 branches covered.">            if (!value.equals(ring.zero())) {</span>
-<span class="fc" id="L111">                matrix.put(index, value);</span>
+        //populating the map with the applied mappings at each index, excluding mappings to zero
+<span class="fc bfc" id="L109" title="All 2 branches covered.">        for (Indexes index : indexes) {</span>
+<span class="fc" id="L110">            S value = valueMapper.apply(index);</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">            if (!value.equals(ring.zero())) {</span>
+<span class="fc" id="L112">                matrix.put(index, value);</span>
             }
-<span class="fc" id="L113">        }</span>
-<span class="fc" id="L114">        return new SparseMatrixMap&lt;&gt;(Map.copyOf(matrix), ring);</span>
+<span class="fc" id="L114">        }</span>
+<span class="fc" id="L115">        return new SparseMatrixMap&lt;&gt;(Map.copyOf(matrix), ring);</span>
     }
 
     /**
@@ -124,11 +125,12 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
     public static &lt;S&gt; SparseMatrixMap&lt;S&gt; instance(Indexes size, Ring&lt;S&gt; ring, Function&lt;Indexes, S&gt; valueMapper) {
 
         //null checks
-<span class="fc" id="L127">        Objects.requireNonNull(size, &quot;size cannot be null&quot;);</span>
-<span class="fc" id="L128">        Objects.requireNonNull(valueMapper, &quot;valueMapper cannot be null&quot;);</span>
+<span class="fc" id="L128">        Objects.requireNonNull(size, &quot;size cannot be null&quot;);</span>
+<span class="fc" id="L129">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
+<span class="fc" id="L130">        Objects.requireNonNull(valueMapper, &quot;valueMapper cannot be null&quot;);</span>
     
         //calling the foundational instance method
-<span class="fc" id="L131">        return SparseMatrixMap.instance(size.row(), size.column(), ring, valueMapper);</span>
+<span class="fc" id="L133">        return SparseMatrixMap.instance(size.row(), size.column(), ring, valueMapper);</span>
     }
 
     /**
@@ -143,14 +145,16 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
     public static &lt;S&gt; SparseMatrixMap&lt;S&gt; constant(int size, Ring&lt;S&gt; ring, S value) {
 
         //null check
-<span class="fc" id="L146">        Objects.requireNonNull(value, &quot;value cannot be null&quot;);</span>
+<span class="fc" id="L148">        Objects.requireNonNull(value, &quot;value cannot be null&quot;);</span>
+<span class="fc" id="L149">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
 
-<span class="fc bfc" id="L148" title="All 2 branches covered.">        if (value.equals(ring.zero())) {</span>
-<span class="fc" id="L149">            throw new IllegalArgumentException(&quot;cannot populate a sparse matrix with 0&quot;);</span>
+        //edge case: user attempts to populate a constant sparse matrix with zero
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (value.equals(ring.zero())) {</span>
+<span class="fc" id="L153">            throw new IllegalArgumentException(&quot;cannot populate a sparse matrix with 0&quot;);</span>
         }
 
         //calling the foundational instance method
-<span class="fc" id="L153">        return instance(size, size, ring, (index) -&gt; value);</span>
+<span class="fc" id="L157">        return instance(size, size, ring, (index) -&gt; value);</span>
     }
 
     /**
@@ -163,12 +167,11 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
      */
     public static &lt;S&gt; SparseMatrixMap&lt;S&gt; identity(int size, Ring&lt;S&gt; ring) {
 
-        //null checks
-<span class="fc" id="L167">        Objects.requireNonNull(ring.zero(), &quot;zero cannot be null&quot;);</span>
-<span class="fc" id="L168">        Objects.requireNonNull(ring.identity(), &quot;identity cannot be null&quot;);</span>
+        //null check
+<span class="fc" id="L171">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
 
         //calling the foundational instance method
-<span class="fc bfc" id="L171" title="All 2 branches covered.">        return instance(size, size, ring, (index) -&gt; (index.areDiagonal()) ? ring.identity() : ring.zero());</span>
+<span class="fc bfc" id="L174" title="All 2 branches covered.">        return instance(size, size, ring, (index) -&gt; (index.areDiagonal()) ? ring.identity() : ring.zero());</span>
     }
 
 
@@ -179,12 +182,12 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
     public Matrix&lt;T&gt; plus(Matrix&lt;T&gt; other, BinaryOperator&lt;T&gt; plus) {
         
         //null checks
-<span class="fc" id="L182">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
-<span class="fc" id="L183">        Objects.requireNonNull(plus, &quot;plus cannot be null&quot;);</span>
+<span class="fc" id="L185">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
+<span class="fc" id="L186">        Objects.requireNonNull(plus, &quot;plus cannot be null&quot;);</span>
         //consistent size checks
-<span class="fc" id="L185">        InconsistentSizeException.requireMatchingSize(this, other); </span>
+<span class="fc" id="L188">        InconsistentSizeException.requireMatchingSize(this, other); </span>
 
-<span class="fc" id="L187">        return instance(this.size(), this.ring, (index) -&gt; plus.apply(this.value(index), other.value(index)));</span>
+<span class="fc" id="L190">        return instance(this.size(), this.ring, (index) -&gt; plus.apply(this.value(index), other.value(index)));</span>
     }
 
     /**
@@ -197,18 +200,18 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
     public SparseMatrixMap&lt;T&gt; times(Matrix&lt;T&gt; other, Ring&lt;T&gt; ring) {
         
         //null checks
-<span class="fc" id="L200">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
-<span class="fc" id="L201">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
+<span class="fc" id="L203">        Objects.requireNonNull(other, &quot;other cannot be null&quot;);</span>
+<span class="fc" id="L204">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
 
-        //size checking
-<span class="fc" id="L204">        NonSquareException.requireDiagonal(this.size()); //checks if this matrix is a square</span>
-<span class="fc" id="L205">        NonSquareException.requireDiagonal(other.size()); //checks if the other matrix is a square</span>
-<span class="fc" id="L206">        InconsistentSizeException.requireMatchingSize(this, other); //checks if the matrixes are of equal size</span>
+        //size and square checks
+<span class="fc" id="L207">        NonSquareException.requireDiagonal(this.size()); //checks if this matrix is a square</span>
+<span class="fc" id="L208">        NonSquareException.requireDiagonal(other.size()); //checks if the other matrix is a square</span>
+<span class="fc" id="L209">        InconsistentSizeException.requireMatchingSize(this, other); //checks if the matrixes are of equal size</span>
 
-<span class="fc" id="L208">        int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)</span>
-<span class="fc" id="L209">        return instance(this.size(), this.ring, (index) -&gt; { //creates an instance of a matrix containing the product</span>
+<span class="fc" id="L211">        int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)</span>
+<span class="fc" id="L212">        return instance(this.size(), this.ring, (index) -&gt; { //creates an instance of a matrix containing the product</span>
 
-<span class="fc" id="L211">            return getProductAtIndex(other, ring, length, index);</span>
+<span class="fc" id="L214">            return getProductAtIndex(other, ring, length, index);</span>
         });
         
     }
@@ -223,12 +226,12 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
      */
     private T getProductAtIndex(Matrix&lt;T&gt; other, Ring&lt;T&gt; ring, int length, Indexes index) {
     
-<span class="fc" id="L226">        List&lt;T&gt; products = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L229">        List&lt;T&gt; products = new ArrayList&lt;&gt;();</span>
         //indexes until length is reached and adds to the product list the element at the row of this and column of other
-<span class="fc bfc" id="L228" title="All 2 branches covered.">        for (int i = 0; i &lt;= length; i++) {</span>
-<span class="fc" id="L229">            products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));</span>
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        for (int i = 0; i &lt;= length; i++) {</span>
+<span class="fc" id="L232">            products.add(ring.product(this.value(new Indexes(index.row(), i)), other.value(new Indexes(i, index.column()))));</span>
         }
-<span class="fc" id="L231">        return Rings.sum(products, ring); //sums the elements of the product list</span>
+<span class="fc" id="L234">        return Rings.sum(products, ring); //sums the elements of the product list</span>
     }
 
     /**
@@ -268,9 +271,12 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
      * @return
      */
     public MatrixMap&lt;T&gt; convertToStandard(Ring&lt;T&gt; ring) {
+
+        //null check
+<span class="fc" id="L276">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
         
-<span class="fc" id="L272">        return MatrixMap.instance(size(), (index) -&gt; {</span>
-<span class="fc bfc" id="L273" title="All 2 branches covered.">            return (!matrix.containsKey(index) ? ring.zero() : value(index));</span>
+<span class="fc" id="L278">        return MatrixMap.instance(size(), (index) -&gt; {</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">            return (!matrix.containsKey(index) ? ring.zero() : value(index));</span>
         });
     }
 
@@ -301,7 +307,6 @@ public class SparseMatrixMap&lt;T&gt; implements Matrix&lt;T&gt; {
         Matrix&lt;Integer&gt; m1 = MatrixMap.instance(new Indexes(2, 2), (index) -&gt; index.row());
         Matrix&lt;Integer&gt; m2 = MatrixMap.instance(new Indexes(2, 2), (index) -&gt; index.column());
 
-        //TODO make plus and times methods more efficient and implement
         //System.out.println(s1.plus(s2, (x, y) -&gt; ring.sum(x, y)));
         //System.out.println(m1.times(m2, ring));
         //System.out.println(s1.times(s2, ring));

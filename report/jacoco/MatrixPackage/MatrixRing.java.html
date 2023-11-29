@@ -26,8 +26,7 @@ public class MatrixRing&lt;T&gt; {
     public static &lt;T&gt; MatrixRing&lt;T&gt; instance(Ring&lt;T&gt; ring) {
         //null check
 <span class="fc" id="L28">        Objects.requireNonNull(ring, &quot;ring cannot be null&quot;);</span>
-
-<span class="fc" id="L30">        return new MatrixRing&lt;&gt;(ring);</span>
+<span class="fc" id="L29">        return new MatrixRing&lt;&gt;(ring);</span>
     }
 
     /**
@@ -38,9 +37,9 @@ public class MatrixRing&lt;T&gt; {
      */
     public Matrix&lt;T&gt; sum(Matrix&lt;T&gt; x, Matrix&lt;T&gt; y) {
         //null check
-<span class="fc" id="L41">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
-<span class="fc" id="L42">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
-<span class="fc" id="L43">        return x.plus(y, (a, b) -&gt; baseRing.sum(a, b));</span>
+<span class="fc" id="L40">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
+<span class="fc" id="L41">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
+<span class="fc" id="L42">        return x.plus(y, (a, b) -&gt; baseRing.sum(a, b));</span>
     }
 
     /**
@@ -51,9 +50,9 @@ public class MatrixRing&lt;T&gt; {
      */
     public Matrix&lt;T&gt; product(Matrix&lt;T&gt; x, Matrix&lt;T&gt; y) {
         //null check
-<span class="fc" id="L54">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
-<span class="fc" id="L55">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
-<span class="fc" id="L56">        return x.times(y, baseRing);</span>
+<span class="fc" id="L53">        Objects.requireNonNull(x, &quot;x cannot be null&quot;);</span>
+<span class="fc" id="L54">        Objects.requireNonNull(y, &quot;y cannot be null&quot;);</span>
+<span class="fc" id="L55">        return x.times(y, baseRing);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

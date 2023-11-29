@@ -420,6 +420,9 @@ public final class MatrixMap<T> implements Matrix<T> {
      * @return
      */
     public SparseMatrixMap<T> convertToSparse(Ring<T> ring) {
+
+        //null check
+        Objects.requireNonNull(ring, "ring cannot be null");
         return SparseMatrixMap.instance(this.size(), ring, (index) -> this.value(index));
     }
 

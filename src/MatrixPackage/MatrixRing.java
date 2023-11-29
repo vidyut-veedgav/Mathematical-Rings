@@ -6,9 +6,9 @@ import RingPackage.Ring;
 /**
  * a class defining a Ring for matrix operations
  */
-public class MatrixRing<T> {
+public final class MatrixRing<T> {
     
-    private Ring<T> baseRing; //a private field storing a ring 
+    private final Ring<T> baseRing; //a private field storing a ring 
 
     /**
      * a constructor for the MatrixRing class
@@ -26,7 +26,6 @@ public class MatrixRing<T> {
     public static <T> MatrixRing<T> instance(Ring<T> ring) {
         //null check
         Objects.requireNonNull(ring, "ring cannot be null");
-
         return new MatrixRing<>(ring);
     }
 

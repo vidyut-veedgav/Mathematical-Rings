@@ -4,25 +4,26 @@ import java.util.List;
 import java.util.Objects;
 
 /**
+ * This is a class to demonstrate the concept of Rings on Polynomials
  * @author Vidyut Veedgav
- * a class to demonstrate the concept of Rings on Polynomials
  */
 public final class PolynomialRing<T> implements Ring<Polynomial<T>> {
 
     private Ring<T> baseRing; //a private field storing a ring 
 
     /**
-     * a constructor for the PolynomialRing class
-     * @param ring
+     * Constructor for the PolynomialRing class, called by the static factory method (instance)
+     * @param ring a Ring object 
      */
     private PolynomialRing(Ring<T> ring) {
         this.baseRing = ring;
     }
 
     /**
-     * a static method to return a new polynomial
-     * @param <T> a ring
-     * @return a new polynomial
+     * Returns a new PolynomialRing instance
+     * @param <T> the static type T
+     * @param ring a Ring object used for mapping and intermediate operations. 
+     * @return a new MatrixRing object which can be used to compute Polynomial addition and multiplication
      */
     public static <T> PolynomialRing<T> instance(Ring<T> ring) {
         //null check
@@ -32,7 +33,8 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>> {
     }
 
     /**
-     * overriding the zero method
+     * Returns the zero property of data type Polynomial
+     * @return zero of type Polynomial
      */
     @Override
     public Polynomial<T> zero() {
@@ -40,7 +42,8 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>> {
     }
 
     /**
-     * overriding the identity method
+     * Returns the multiplicative identity property of data type Polynomial
+     * @return the identity of type Polynomial
      */
     @Override
     public Polynomial<T> identity() {
@@ -48,7 +51,10 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>> {
     }
 
     /**
-     * overriding the sum method
+     * Handles Polynomial addition.
+     * @param x the first Polynomial addend.
+     * @param y the second Polynomial addend.
+     * @return a new Polynomial object which is the sum of its parameters.
      */
     @Override
     public Polynomial<T> sum(Polynomial<T> x, Polynomial<T> y) {
@@ -60,7 +66,10 @@ public final class PolynomialRing<T> implements Ring<Polynomial<T>> {
     }
 
     /**
-     * overriding the product method
+     * Handles Polynomial multiplication.
+     * @param x the first Polynomial factor.
+     * @param y the second Polynomial factor.
+     * @return a new Polynomial object which is the sum of its parameters.
      */
     @Override
     public Polynomial<T> product(Polynomial<T> x, Polynomial<T> y) {

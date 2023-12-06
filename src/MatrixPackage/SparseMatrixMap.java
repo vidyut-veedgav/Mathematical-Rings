@@ -14,61 +14,35 @@ import MatrixPackage.MatrixMap.InconsistentSizeException;
 import MatrixPackage.MatrixMap.InvalidLengthException;
 import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
 import MatrixPackage.MatrixMap.NonSquareException;
-import RingPackage.IntegerRing;
 import RingPackage.Ring;
 import RingPackage.Rings;
 
+/**
+ * This is a class representing a sparse matrix with each entry consisting of an Indexes object as keys and generic T values (barring zeros).
+ * @author Vidyut Veedgav
+ */
 public final class SparseMatrixMap<T> implements Matrix<T> {
 
     private final Map<Indexes, T>  matrix; //a field representing the matrix
     private final Indexes size; //a field representing the size of the matrix
     private final Ring<T> ring; //a field representing a ring used for intermediate operations
-    //private final List<Indexes> nonZeroIndexes; //a field representing the indexes which are mapped to nonzero values
 
     /**
-     * constructor
+     * Constructor for the matrix, called by the static factory methods (instance, constant, identity).
+     * Sets the size field by iterating through the Indexes objects in the key set and finding the greatest index. This occurs upon instantiation.
+     * @param matrix the Map object representing the underlying data structure.
+     * @param ring the Ring object used to represent the zero of type T and aid in intermediate operations. 
      */
     private SparseMatrixMap(Map<Indexes, T> matrix, Ring<T> ring) {
         //setting class fields
         this.matrix = matrix;
         this.size = Collections.max(matrix.keySet());
         this.ring = ring;
-        
-        /*
-        //creates a list of the non zero indexes in the matrix
-        nonZeroIndexes = matrix.keySet().stream()
-                                .filter(key -> !value(key).equals(ring.zero()))
-                                .collect(Collectors.toList());
-        */
-    }
-
-    /* Methods to use in case of a change in implementation */
-/*
-    /**
-     * finds the intersection of nonzero indexes between this matrix and another
-     * @param other
-     * @return
-     *
-    private List<Indexes> intersectionNonZeroIndexes(SparseMatrixMap<T> other) {
-        List<Indexes> intersection = new ArrayList<>(this.nonZeroIndexes);
-        intersection.retainAll(other.nonZeroIndexes);
-        return intersection;
     }
 
     /**
-     * finds the union of nonzero indexes between this matrix and another
-     * @param other
-     * @return
-     *
-    private List<Indexes> unionNonZeroIndexes(SparseMatrixMap<T> other) {
-        Set<Indexes> resultSet = new HashSet<>(nonZeroIndexes);
-        resultSet.addAll(other.nonZeroIndexes);
-        return new ArrayList<>(resultSet);
-    }
-*/
-
-    /**
-     * a method to get the size of this SparseMatrixMap
+     * Gets the matrix size.
+     * @return the greatest index of the matrix, computed by the constructor upon instantiation.
      */
     @Override
     public Indexes size() {
@@ -76,9 +50,9 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to return the value of this SparseMatrixMap at a particular index
-     * OPTION 1: add ring param to the interface method
-     * OPTION 2: overload value method
+     * Returns the value of this SparseMatrixMap at the specified Indexes object in the argument.
+     * @param indexes the Indexes object containing the row and column of the desired return value.
+     * @return the corresponding value mapped by indexes; zero if the value is null at the specified index.
      */
     @Override
     public T value(Indexes index) {
@@ -91,12 +65,17 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a foundational instance method for the SparseMatrixMap
-     * @param <S>
-     * @param rows
-     * @param columns
-     * @param valueMapper
-     * @return
+     * Creates an instance of a SparseMatrixMap by creating a stream of Indexes from (0, 0) to the specified rows and columns, 
+     * and mapping each Indexes object in the stream to a specified value defined by the valueMapper function. If that value is zero, it is not added as an entry to the SparseMatrixMap.
+     * @param <S> the static type S.
+     * @param rows the number of rows the SparseMatrixMap should have. 
+     * @param columns the number of columns the SparseMatrixMap should have. 
+     * @param ring the Ring object used to represent the zero of type S and aid in intermediate operations. 
+     * @param valueMapper a functional interface which uses a lambda expression to set the values of each Indexes object in the MatrixMap.
+     * The expression works as follows: ((index) -> index.rows + index.column). In this example, each index is mapped to a value representing
+     * the sum of its row and column, but it can be mapped to anything of type S.
+     * @return a new SparseMatrixMap with the specified size and populated by the user defined function.
+     * @throws InvalidLengthException a precondition is that the rows and columns in the argument must be valid.
      */
     public static <S> SparseMatrixMap<S> instance(int rows, int columns,  Ring<S> ring, Function<Indexes, S> valueMapper) {
 
@@ -120,11 +99,16 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * overloading the instance method to accept an Indexes object as a parameter
-     * @param <S>
-     * @param size
-     * @param valueMapper
-     * @return a MatrixMap
+     * Creates an instance of a SparseMatrixMap by creating a stream of Indexes from (0, 0) to the specified Indexes size,
+     * and mapping each Indexes object in the stream to a specified value defined by the valueMapper function. If that value is zero, it is not added as an entry to the SparseMatrixMap.
+     * @param <S> the static type S.
+     * @param size the Indexes object containing the number of rows and columns that the SparseMatrixMap should have.
+     * @param ring the Ring object used to represent the zero of type S and aid in intermediate operations. 
+     * @param valueMapper a functional interface which uses a lambda expression to set the values of each Indexes object in the MatrixMap.
+     * The expression works as follows: ((index) -> index.rows + index.column). In this example, each index is mapped to a value representing
+     * the sum of its row and column, but it can be mapped to anything of type S.
+     * @return a new SparseMatrixMap with the specified size and populated by the user defined function.
+     * @throws InvalidLengthException a precondition is that the size in the argument must be valid.
      */
     public static <S> SparseMatrixMap<S> instance(Indexes size, Ring<S> ring, Function<Indexes, S> valueMapper) {
 
@@ -138,13 +122,15 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to return a new sparse matrix populated with a constant non-zero value
-     * throws IllegalArgumentException in case the user tries to pass in 0
-     * @param <S>
-     * @param size
-     * @param ring
-     * @param value
-     * @return
+     * Creates an instance of a SparseMatrixMap by creating a stream of Indexes from (0, 0) to the specified int size which represents both the rows and columns of the SparseMatrixMap, 
+     * and mapping each and every Indexes object in the stream to the S value passed into the argument, unless that value is zero. This represents a constant matrix.
+     * @param <S> the static type S.
+     * @param size the integer value representing both the number of rows and columns in this SparseMatrixMap.
+     * @param ring the Ring object used to represent the zero of type S and aid in intermediate operations. 
+     * @param value the value that the MatrixMap is being populated with. 
+     * @return a new MatrixMap with the specified size and populated with the specifeid value at each index. 
+     * @throws IllegalArgumentException a precondition is that the SparseMatrixMap cannot be populated with a constant value of zero.
+     * @throws InvalidLengthException a precondition is that the size in the argument must be valid.
      */
     public static <S> SparseMatrixMap<S> constant(int size, Ring<S> ring, S value) {
 
@@ -162,12 +148,12 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to return a new square sparse matrix populated with the identity along the diagonal
-     * @param <S>
-     * @param size
-     * @param zero
-     * @param identity
-     * @return a new MatrixMap
+     * Creates an instance of a SparseMatrixMap by creating a stream of Indexes from (0, 0) to the specified int size which represents both the rows and columns of the SparseMatrixMap, 
+     * and only mapping Indexes object to the specified identity if it lies on the diagonal. This represents an identity matrix.
+     * @param <S> the static type S.
+     * @param size the integer value representing both the number of rows and columns in this SparseMatrixMap.
+     * @param ring the Ring object used to represent the zero and multiplicative identity of type S and aid in intermediate operations. 
+     * @return a new SparseMatrixMap representing an identity matrix, populated with the identity along the diagonal, and no other entries. 
      */
     public static <S> SparseMatrixMap<S> identity(int size, Ring<S> ring) {
 
@@ -180,7 +166,12 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
 
 
     /**
-     * a method to add this matrix to another
+     * Computes Matrix addition by creating a new instance of a SparseMatrixMap, and using the specified BinaryOperator interface in the argument to apply addition between this SparseMatrixMap and the other Matrix. 
+     * One unobvious precondition is that the apply method of the BinaryOperator should model addition, perhaps using a Ring object. 
+     * @param other the other Matrix being added
+     * @param plus the BinaryOperator interface which computes the addition of each element in the addend Matrices
+     * @return a new SparseMatrixMap which is the sum of this MatrixMap and the other Matrix. 
+     * @throws InconsistentSizeException a precondition is that the two matrices being added must be of equal size. 
      */
     @Override
     public Matrix<T> plus(Matrix<T> other, BinaryOperator<T> plus) {
@@ -193,13 +184,15 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
 
         return instance(this.size(), this.ring, (index) -> plus.apply(this.value(index), other.value(index)));
     }
-
+    
     /**
-     * a method to multiply this matrix with another
-     * UNFINISHED, DON'T KNOW WHAT TO DO HERE LOLZ
+     * Computes Matrix multiplication by creating a new instance of a SparseMatrixMap, and using the specified Ring object to compute the intermediate operations of matrix multiplication. 
+     * @param other the other Matrix being multiplied.
+     * @param ring a Ring object used for intermediate operations, further defined in the getProductAtIndex method.
+     * @return a new MatrixMap which is the product of this MatrixMap and the other Matrix. 
+     * @throws NonSquareException a precondition is that both factor matrices must be square matrices. 
+     * @throws InconsistentSizeException a precondition is that they must be of equal size. 
      */
-
-    //find intersection, for each value at intersection indexes, compute the product
     @Override
     public SparseMatrixMap<T> times(Matrix<T> other, Ring<T> ring) {
         
@@ -215,20 +208,19 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
         int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)
         return instance(this.size(), this.ring, (index) -> { //creates an instance of a matrix containing the product
 
-            return getProductAtIndex(other, ring, length, index);
+            return getProductAtIndex(other, ring, length, index); //a subroutine to compite the product at each specific index of the matrix
         });    
     }
 
     /**
-     * a subroutine which conducts multiplication and computes the resulting value at each index of the matrix
-     * @param other
-     * @param ring
-     * @param length
-     * @param index
-     * @return
+     * Conducts the matrix multiplication operation and computes the resulting value at each index of the matrix.
+     * @param other the other Matrix being multiplied.
+     * @param ring a Ring object used for intermediate operations.
+     * @param length the length of the matrix dimentions. It can be either a row or column since the matrices being multiplied must both be squares.
+     * @param index the Indexes object which represents the index of the product being computed.
+     * @return the T product of matrix multiplication between this and another matrix at the specified index. 
      */
     private T getProductAtIndex(Matrix<T> other, Ring<T> ring, int length, Indexes index) {
-    
         List<T> products = new ArrayList<>();
         //indexes until length is reached and adds to the product list the element at the row of this and column of other
         for (int i = 0; i <= length; i++) {
@@ -237,11 +229,11 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
         return Rings.sum(products, ring); //sums the elements of the product list
     }
 
-    
-
     /**
-     * a method to override the toString method
-     *
+     * Returns a string representation of the object that "textually represents" a SparseMatrixMap object.
+     * @return a string consisting of each entry (Indexes: value)in the matrix, laid out in order top to bottom and left to right such that it accurately represents a sparse matrix. If the value is zero at a given index, the text representation is a series of spaces.
+     * 
+     */
     @Override
     public String toString() {
 
@@ -268,21 +260,12 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
         }
         return sb.toString();
     }
-    */
 
     /**
-     * toString method for SparseMatrixMap
-     *
-    @Override
-    public String toString() {
-        return "SparseMatrixMap [matrix=" + matrix + ", size=" + size + ", ring=" + ring + "]";
-    }
-    */
-
-    /**
-     * a method to convert this matrix to a standard matrix
-     * @param ring
-     * @return
+     * Converts this SparseMatrixMap to a MatrixMap by creating an instance of a MatrixMap and mapping each value of this MatrixMap to its counterpart, while mapping null entries to zero.
+     * This ensures that if this SparseMatrixMap does not contains an entry, it is created as a zero upon instantiation of a MatrixMap.
+     * @param ring a Ring object used to represent the zero of data type T when creating a MatrixMap
+     * @return a new MatrixMap containting all entries of this SparseMatrixMap, with the addition of mappings to zero. 
      */
     public MatrixMap<T> convertToStandard(Ring<T> ring) {
 
@@ -293,59 +276,4 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
             return (!matrix.containsKey(index) ? ring.zero() : value(index));
         });
     }
-
-    /**
-     * main method
-     * @param args
-     *
-    public static void main(String[] args) {
-        
-        Ring<Integer> ring = new IntegerRing();
-
-        //sparse = SparseMatrixMap.constant(2, ring, 1);
-        //System.out.println(sparse);
-
-        //sparse = SparseMatrixMap.identity(2, ring);
-
-        //System.out.println(SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column())));
-        //System.out.println(SparseMatrixMap.instance(2, 2, ring, (index) -> (index.column())).convertToStandard(ring));
-        //System.out.println(MatrixMap.instance(2, 2, (index) -> (index.column())).convertToSparse(ring));
-
-
-        //OPERATION TESTING
-
-        System.out.println("***************************************************");
-        System.out.println("STANDARD MATRIX MAP:");
-        Matrix<Integer> m1 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.row());
-        Matrix<Integer> m2 = MatrixMap.instance(new Indexes(2, 2), (index) -> index.column());
-        System.out.println("Matrix 1: ");
-        System.out.println(m1);
-        System.out.println("Matrix 2: ");
-        System.out.println(m2);
-        System.out.println("***************************************************");
-        System.out.println("*ADDITION*");
-        System.out.println("Sum: ");
-        System.out.println(MatrixRing.instance(ring).sum(m1, m2));
-        System.out.println("*MULTIPLICATION*");
-        System.out.println("Product: ");
-        System.out.println(MatrixRing.instance(ring).product(m1, m2));
-
-        System.out.println("***************************************************");
-        System.out.println("SPARSE MATRIX MAP:");
-        Matrix<Integer> s1 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.row());
-        Matrix<Integer> s2 = SparseMatrixMap.instance(new Indexes(2, 2), ring, (index) -> index.column());
-        System.out.println("Matrix 1: ");
-        System.out.println(s1);
-        System.out.println("Matrix 2: ");
-        System.out.println(s2);
-        System.out.println("***************************************************");
-        System.out.println("*ADDITION*");
-        System.out.println("Sum: ");
-        System.out.println(MatrixRing.instance(ring).sum(s1, s2));
-        System.out.println("*MULTIPLICATION*");
-        System.out.println("Product: ");
-        System.out.println(MatrixRing.instance(ring).product(s1, s2));
-        System.out.println("***************************************************");
-    }
-    */
 }

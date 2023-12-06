@@ -3,13 +3,14 @@ package RingPackage;
 import java.util.Objects;
 
 /**
+ * This is a class to demonstrate the concept of Rings on Doubles
  * @author Vidyut Veedgav
- * a class to demonstrate the concept of Rings on Doubles
  */
 public class DoubleRing implements Ring<Double>{
 
     /**
-     * overriding the zero method
+     * Returns the zero property of data type Double
+     * @return zero of type Double
      */
     @Override
     public Double zero() {
@@ -17,7 +18,8 @@ public class DoubleRing implements Ring<Double>{
     }
 
     /**
-     * overriding the identity method
+     * Returns the multiplicative identity property of data type Double
+     * @return the identity of type Double
      */
     @Override
     public Double identity() {
@@ -25,7 +27,10 @@ public class DoubleRing implements Ring<Double>{
     }
 
     /**
-     * overriding the sum method
+     * Returns the sum of two objects of type Double
+     * @param x the first addend
+     * @param y the second addend
+     * @return a new Double object representing the sum of x and y
      */
     @Override
     public Double sum(Double x, Double y) {
@@ -37,7 +42,10 @@ public class DoubleRing implements Ring<Double>{
     }
 
     /**
-     * overriding the product
+     * Returns the product of two objects of type Double
+     * @param x the first factor
+     * @param y the second factor
+     * @return a new Double object representing the product of x and y
      */
     @Override
     public Double product(Double x, Double y) {

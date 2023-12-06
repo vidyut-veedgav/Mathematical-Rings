@@ -124,7 +124,8 @@ $ANT_HOME/lib must contain (see Ant-JUnit and JaCoCo installation guides):
     <mkdir dir="${doc.dir}"/>
     <javadoc destdir="${doc.dir}" package="yes">
       <fileset dir="${src.dir}" defaultexcludes="yes">
-	<exclude name="**/*Test.java"/>
+	      <exclude name="**/*Test.java"/>
+        <exclude name="**/RingPackage/README.md"/>
       </fileset>
     </javadoc>
   </target>

@@ -1,13 +1,12 @@
 package RingPackage;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * a class defining the operation of polynomial interpolation
+ * This is a class defining the operation of polynomial interpolation
+ * @author Vidyut Veedgav
  */
 public class InterpolatingPolynomial {
 
@@ -25,6 +24,12 @@ Output:
 */
 
 /*interpolatePolynomial(list of roots)*/
+/**
+ * Interpolates a Polynomial given its list of roots.
+ * @param rootList the list of roots.
+ * @param ring a Ring object used for intermediate operations.
+ * @return a new List of coefficients representing the interpolated polynomial.
+ */
 public static List<Integer> interpolatePolynomial(List<Integer> rootList, Ring<Integer> ring) {
 
 	/*if list of roots is null, throw an appropriate exception*/

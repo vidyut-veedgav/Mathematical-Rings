@@ -5,17 +5,17 @@ import java.util.Objects;
 import java.util.function.BinaryOperator;
 
 /**
+ * This is a class defining behavior for ring operations
  * @author Vidyut Veedgav
- * a class defining behavior for ring operations
  */
 public final class Rings<T> {
     
     /**
-     * a method to reduce elements of a list by conducting an externally defined operation
-     * @param <T>
-     * @param args
-     * @param zero
-     * @param accumulator
+     * Reduces elements of a list to a sinle element by sequentially conducting an externally defined operation on the accumulation of a List
+     * @param <T> the static type T
+     * @param args the list of arguments being reduced
+     * @param zero the zero of data type T
+     * @param accumulator the BinaryOperator interface which specifies the behavior of the reduce function (add the elements, multiply the elements, etc.)
      * @return a single value which is the result of the reduction
      */
     public static <T> T reduce(List<T> args, T zero, BinaryOperator<T> accumulator) {
@@ -46,11 +46,11 @@ public final class Rings<T> {
     }
 
     /**
-     * a method to reduce a list by summing its elements
-     * @param <T>
-     * @param args
-     * @param ring
-     * @return a reduction based on addition
+     * Reduces a list by summing its elements
+     * @param <T> the static type T
+     * @param args the list of arguments being summed
+     * @param ring the Ring object used for the addition operation on elemnts in args
+     * @return a new T element representing the sum of all elements in args
      */
     public static <T> T sum(List<T> args, Ring<T> ring) {
 
@@ -62,11 +62,11 @@ public final class Rings<T> {
     }
 
     /**
-     * a method to reduce a list by multiplying its elements
-     * @param <T>
-     * @param args
-     * @param ring
-     * @return a reduction based on multiplication
+     * Reduces a list by multiplying its elements
+     * @param <T> the static type T
+     * @param args the list of arguments being multiplied
+     * @param ring the Ring object used for the multiplication operation on elemnts in args
+     * @return a new T element representing the product of all elements in args
      */
     public static <T> T product(List<T> args, Ring<T> ring) {
 

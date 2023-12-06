@@ -6,28 +6,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import MatrixPackage.MatrixMap.InvalidLengthException.Cause;
-import RingPackage.IntegerRing;
 import RingPackage.Ring;
 import RingPackage.Rings;
 
 /**
+ * This is a class representing a standard matrix with each entry consisting of an Indexes object as keys and generic T values
  * @author Vidyut Veedgav
- * a class representing a matrix map class
  */
 public final class MatrixMap<T> implements Matrix<T> { 
     
-    private final Map<Indexes, T>  matrix; //a field representing the matrix
-    private final Indexes size;
+    private final Map<Indexes, T>  matrix; //a field representing the matrix itself
+    private final Indexes size; //a field representing the size of the matrix in Indexes form
     
     /**
-     * a constructor for the matrix
-     * @param matrix
+     * Constructor for the matrix, called by the static factory methods (instance, constant, identity).
+     * Sets the size field by iterating through the Indexes objects in the key set and finding the greatest index. This occurs upon instantiation.
+     * @param matrix the Map object representing the underlying data structure.
      */
     private MatrixMap(Map<Indexes, T> matrix) {
         this.matrix = matrix;
@@ -35,23 +34,24 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a getter method for the map used for testing
-     * @return an immutable copy of the matrix, which can be used for containment testing
+     * Gets the internal Map object of the matrix.
+     * @return An immutable copy of the matrix, which can be used for containment testing.
      */
     protected Map<Indexes, T> getMap() {
         return Map.copyOf(matrix);
     }
 
     /**
-     * a method to return the matrix size by finding the greatest key in the keySet
-     * @return
+     * Gets the matrix size.
+     * @return the greatest index of the matrix, computed by the constructor upon instantiation.
      */
     public Indexes size() {
         return size;
     }
 
     /**
-     * a method to override the toString method
+     * Returns a string representation of the object that "textually represents" a MatrixMap.
+     * @return a string consisting of each entry (Indexes: value)in the matrix, laid out in order top to bottom and left to right such that it accurately represents a matrix.
      */
     @Override
     public String toString() {
@@ -76,9 +76,9 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to return the element at the given indexes
-     * FOUNDATION METHOD FOR OTHER TWO VALUE METHODS
-     * @return the corresponding value
+     * Returns the value of this MatrixMap at the specified Indexes object in the argument.
+     * @param indexes the Indexes object containing the row and column of the desired return value.
+     * @return the corresponding value mapped by indexes
      */
     public T value(Indexes indexes) {
 
@@ -88,33 +88,34 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * overloading the value method to account for unique indexes
-     * @return the corresponding value
+     * Returns the value of this MatrixMap at the specified row and column in the argument.
+     * @param indexes the row and column of the desired return value in this MatrixMap.
+     * @return the corresponding value mapped by the index at (row, column).
      */
     public T value(int row, int column) {
         return value(new Indexes(row, column));
     }
     
     /**
-     * a nested class to aid error handling by defining protocols for controlling the matrix lengths
+     * This is a nested Exception class to aid error handling by defining protocols for controlling Matrix lengths.
      */
     static class InvalidLengthException extends Exception {
 
         /**
-         * an enum to define the possible values of the exception's cause
+         * Defines the possible values of a Matrix, which could be subject to an invalid length.
          */
         enum Cause {
             ROW, 
             COLUMN
         }
     
-        private Cause cause; //a private variable declaring the cause
-        private Integer length; //a private variable declaring the length
+        private Cause cause; //a private variable declaring the cause of the error
+        private Integer length; //a private variable declaring the length value being examined
 
         /**
-         * a constructor for the InvalidLengthException
-         * @param cause
-         * @param length
+         * Constructor for the InvalidLengthException.
+         * @param cause either ROW or COLUMN, as specified in the enumerated type, Cause.
+         * @param length the length value being examined.
          */
         public InvalidLengthException(Cause cause, Integer length) {
 
@@ -127,26 +128,27 @@ public final class MatrixMap<T> implements Matrix<T> {
         }
 
         /**
-         * getter for the cause
-         * @return the cause
+         * Gets the cause of the InvalidLengthException.
+         * @return either ROW or COLUMN, if one of them violates the specified length constraints.
          */
         public Cause cause() {
             return cause;
         }
 
         /**
-         * a getter for the length
-         * @return the length
+         * Gets the length of the value being examined by the InvalidLengthException.
+         * @return the integer value of the either the row or column of a Matrix object.
          */
         public Integer length() {
             return length;
         }
 
         /**
-         * a method to check if the length is positive and throw an exception otherwise
-         * @param cause
-         * @param length
-         * @return the length
+         * Checks if the specified length is positive and throws a new IllegalArgumentException with the cause of InvalidLengthException otherwise.
+         * @param cause the specified ROW or COLUMN value.
+         * @param length the specified length being checked.
+         * @return the length (argument) if it is positive; a new IllegalArgumentException otherwise.
+         * @throws IllegalArgumentException
          */
         public static int requireNonEmpty(Cause cause, int length) {
 
@@ -162,13 +164,16 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to create an instance of a MatrixMap using a defined valueMapper function
-     * THE FOUNDATIONAL METHOD FOR CREATING MATRIX INSTANCES
-     * @param <S>
-     * @param rows
-     * @param columns
-     * @param valueMapper
-     * @return a new MatrixMap
+     * Creates an instance of a MatrixMap by creating a stream of Indexes from (0, 0) to the specified rows and columns, 
+     * and mapping each Indexes object in the stream to a specified value defined by the valueMapper function.
+     * @param <S> the static type S.
+     * @param rows the number of rows the MatrixMap should have. 
+     * @param columns the number of columns the MatrixMap should have. 
+     * @param valueMapper a functional interface which uses a lambda expression to set the values of each Indexes object in the MatrixMap.
+     * The expression works as follows: ((index) -> index.rows + index.column). In this example, each index is mapped to a value representing
+     * the sum of its row and column, but it can be mapped to anything of type S.
+     * @return a new MatrixMap with the specified size and populated by the user defined function.
+     * @throws InvalidLengthException a precondition is that the rows and columns in the argument must be valid.
      */
     public static <S> MatrixMap<S> instance(int rows, int columns, Function<Indexes, S> valueMapper) {
 
@@ -188,11 +193,15 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * overloading the instance method to accept an Indexes object as a parameter
-     * @param <S>
-     * @param size
-     * @param valueMapper
-     * @return a MatrixMap
+     * Creates an instance of a MatrixMap by creating a stream of Indexes from (0, 0) to the specified Indexes size, 
+     * and mapping each Indexes object in the stream to a specified value defined by the valueMapper function.
+     * @param <S> the static type S.
+     * @param size the Indexes object containing the number of rows and columns that the MatrixMap should have.
+     * @param valueMapper a functional interface which uses a lambda expression to set the values of each Indexes object in the MatrixMap.
+     * The expression works as follows: ((index) -> index.rows + index.column). In this example, each index is mapped to a value representing
+     * the sum of its row and column, but it can be mapped to anything of type S.
+     * @return a new MatrixMap with the specified size and populated by the user defined function.
+     * @throws InvalidLengthException a precondition is that the size in the argument must be valid.
      */
     public static <S> MatrixMap<S> instance(Indexes size, Function<Indexes, S> valueMapper) {
 
@@ -205,11 +214,13 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to populate a MatrixMap using constant values
-     * @param <S>
-     * @param size
-     * @param value
-     * @return a new MatrixMap
+     * Creates an instance of a MatrixMap by creating a stream of Indexes from (0, 0) to the specified int size which represents both the rows and columns of the MatrixMap, 
+     * and mapping each and every Indexes object in the stream to the S value passed into the argument. This represents a constant matrix.
+     * @param <S> the static type S.
+     * @param size the integer value representing both the number of rows and columns in this MatrixMap.
+     * @param value the value that the MatrixMap is being populated with. 
+     * @return a new MatrixMap with the specified size and populated with the specifeid value at each index. 
+     * @throws InvalidLengthException a precondition is that the size in the argument must be valid.
      */
     public static <S> MatrixMap<S> constant(int size, S value) {
 
@@ -221,12 +232,13 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to return a new square matrix populated with the identity along the diagonal and zero otherwise
-     * @param <S>
-     * @param size
-     * @param zero
-     * @param identity
-     * @return a new MatrixMap
+     * Creates an instance of a MatrixMap by creating a stream of Indexes from (0, 0) to the specified int size which represents both the rows and columns of the MatrixMap, 
+     * and mapping each Indexes object to the specified identity if it lies on the diagonal, and zero otherwise. This represents an identity matrix.
+     * @param <S> the static type S.
+     * @param size the integer value representing both the number of rows and columns in this MatrixMap.
+     * @param zero the value representing zero for type S
+     * @param identity the value representing the multiplicative identity for type S
+     * @return a new MatrixMap representing an identity matrix, populated with the identity along the diagonal; zero otherwise
      */
     public static <S> MatrixMap<S> identity(int size, S zero, S identity) {
 
@@ -239,10 +251,12 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to populate a MatrixMap instance from the values in the two-dimentional matrix
-     * @param <S>
-     * @param matrix
-     * @return a new MatrixMap
+     * Creates an instance of a MatrixMap by creating a stream of Indexes from (0, 0) to the length of the row and column dimentions of the two dimentional array being passed into the argument, 
+     * and mapping each Indexes object to the value at the corresponding index in the argument matrix. 
+     * @param <S> the static type S.
+     * @param matrix the two-dimentional array that this method constructs a MatrixMap from
+     * @return a new MatrixMap representing the matrix in array form passed into the argument
+     * @throws InvalidLengthException a precondition is that the length of the outer and inner arrays of matrix in the argument must be valid.
      */
     public static <S> MatrixMap<S> from(S[][] matrix) {
 
@@ -254,7 +268,7 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a nested class to aid error handling
+     * This is a nested Exception class to aid error handling by defining protocols for controlling Matrix sizes.
      */
     static class InconsistentSizeException extends Exception {
 
@@ -262,9 +276,9 @@ public final class MatrixMap<T> implements Matrix<T> {
         private Indexes otherIndex; //stores the other Index
 
         /**
-         * constructor
-         * @param thisIndex
-         * @param otherIndex
+         * Constructor for the InconsistentSizeException object. 
+         * @param thisIndex the current Index of this Matrix.
+         * @param otherIndex the other Index of another Matrix.
          */
         public InconsistentSizeException(Indexes thisIndex, Indexes otherIndex) {
 
@@ -277,27 +291,28 @@ public final class MatrixMap<T> implements Matrix<T> {
         }
 
         /**
-         * getter for the thisIndex field
-         * @return
+         * Gets the current Index of this Matrix.
+         * @return an Indexes object representing the specified index of this Matrix
          */
         public Indexes getThisIndex() {
             return thisIndex;
         }
 
         /**
-         * a getter for the otherIndex field
-         * @return
+         * Gets the other Index of another Matrix.
+         * @return an Indexes object representing the specified index of the other Matrix
          */
         public Indexes getOtherIndex() {
             return otherIndex;
         }
 
         /**
-         * a method which checks if two matrixes are the same size
-         * @param <T>
-         * @param thisMatrix
-         * @param otherMatrix
-         * @return
+         * Checks if two matrices are the same size by comparing the Indexes objects representing their sizes. 
+         * If they are not the same size, an IllegalArgumentException is thrown with the cause, InconsistentSizeException. 
+         * @param <T> the static type T.
+         * @param thisMatrix the first Matrix being compared.
+         * @param otherMatrix the second Matrix being compared.
+         * @return the Indexes object representing the size of this Matrix if it is equal to the size of the other Matrix; a new IllegalArgumentException otherwise.
          * @throws IllegalArgumentException
          */
         public static <T> Indexes requireMatchingSize(Matrix<T> thisMatrix, Matrix<T> otherMatrix) {
@@ -314,8 +329,8 @@ public final class MatrixMap<T> implements Matrix<T> {
         }
     }
 
-    /**s
-     * a nested class used to check if a matrix is a square
+    /**
+     * This a nested Exception class to aid error handling, used to check if a Matrix object represents a square matrix. 
      */
 
     static class NonSquareException extends Exception {
@@ -323,8 +338,8 @@ public final class MatrixMap<T> implements Matrix<T> {
         private final Indexes indexes; //instance field storing the index to be checked
 
         /**
-         * constructor
-         * @param indexes
+         * Constructor for the NonSquareException. 
+         * @param indexes the Indexes object which is used to determine of the Matrix object is a square matrix or not. This should be the size of a Matrix.
          */
         public NonSquareException(Indexes indexes) {
 
@@ -334,17 +349,20 @@ public final class MatrixMap<T> implements Matrix<T> {
         }
 
         /**
-         * a getter for the indexes method
-         * @return
+         * Gets the Indexes used to determine if the Matrix is a square or not, as defined by the constructor.
+         * @return the Indexes object set upon instantiation. 
          */
         public Indexes getIndexes() {
             return indexes;
         }
 
         /**
-         * a method to throw an exception if the index that is passed in is not on the diagonal of the matrix
-         * @param indexes should be the size of the matrix
-         * @return
+         * Checks if the index that is passed into the argument is on the diagonal of the matrix. 
+         * In other words, this method checks if the row and column of the Indexes object are equal, which would indicate that the Matrix is indeed square.
+         * If not, this method throws an IllegalStateException with the cause, NonSquareException.
+         * @param indexes the Indexes object which should represent the size of the object.
+         * @return a new IllegalStateException if the Indexes object is not on the diagonal; the Indexes object otherwise. 
+         * @throws IllegalStateException
          */
         public static Indexes requireDiagonal(Indexes indexes) {
 
@@ -360,10 +378,12 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to support matrix addition
-     * @param other
-     * @param plus
-     * @return
+     * Computes Matrix addition by creating a new instance of a MatrixMap, and using the specified BinaryOperator interface in the argument to apply addition between this MatrixMap and the other. 
+     * One unobvious precondition is that the apply method of the BinaryOperator should model addition, perhaps using a Ring object. 
+     * @param other the other Matrix being added
+     * @param plus the BinaryOperator interface which computes the addition of each element in the addend Matrices
+     * @return a new MatrixMap which is the sum of this MatrixMap and the other Matrix. 
+     * @throws InconsistentSizeException a precondition is that the two matrices being added must be of equal size. 
      */
     public MatrixMap<T> plus(Matrix<T> other, BinaryOperator<T> plus) {
 
@@ -378,8 +398,12 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to support matrix multiplication
-     * @return
+     * Computes Matrix multiplication by creating a new instance of a MatrixMap, and using the specified Ring object to compute the intermediate operations of matrix multiplication. 
+     * @param other the other Matrix being multiplied.
+     * @param ring a Ring object used for intermediate operations, further defined in the getProductAtIndex method.
+     * @return a new MatrixMap which is the product of this MatrixMap and the other Matrix. 
+     * @throws NonSquareException a precondition is that both factor matrices must be square matrices. 
+     * @throws InconsistentSizeException a precondition is that they must be of equal size. 
      */
     public MatrixMap<T> times(Matrix<T> other, Ring<T> ring) {
 
@@ -394,17 +418,17 @@ public final class MatrixMap<T> implements Matrix<T> {
         int length = this.size().row(); //sets the length of the matrixes by accessing the row of the size of this index (can be row or column from either matrix)
         return instance(this.size(), (index) -> { //creates an instance of a matrix containing the product
 
-            return getProductAtIndex(other, ring, length, index);
+            return getProductAtIndex(other, ring, length, index); //a subroutine to compite the product at each specific index of the matrix
         });
     }
 
     /**
-     * a subroutine which conducts multiplication and computes the resulting value at each index of the matrix
-     * @param other
-     * @param ring
-     * @param length
-     * @param index
-     * @return
+     * Conducts the matrix multiplication operation and computes the resulting value at each index of the matrix.
+     * @param other the other Matrix being multiplied.
+     * @param ring a Ring object used for intermediate operations.
+     * @param length the length of the matrix dimentions. It can be either a row or column since the matrices being multiplied must both be squares.
+     * @param index the Indexes object which represents the index of the product being computed.
+     * @return the T product of matrix multiplication between this and another matrix at the specified index. 
      */
     private T getProductAtIndex(Matrix<T> other, Ring<T> ring, int length, Indexes index) {
         List<T> products = new ArrayList<>();
@@ -416,8 +440,10 @@ public final class MatrixMap<T> implements Matrix<T> {
     }
 
     /**
-     * a method to convert this matrix to a sparse matrix
-     * @return
+     * Converts this MatrixMap to a SparseMatrixMap by creating an instance of a SparseMatrixMap and mapping each value of this MatrixMap to its counterpart.
+     * This ensures that if this MatrixMap contains a zero, it is eliminated upon instantiation of a SparseMatrixMap.
+     * @param ring a Ring object used to represent the zero of data type T when creating a SparseMatrixMap
+     * @return a new SparseMatricMap containting all entries of this MatrixMap, except for mappings to zero. 
      */
     public SparseMatrixMap<T> convertToSparse(Ring<T> ring) {
 
@@ -425,63 +451,5 @@ public final class MatrixMap<T> implements Matrix<T> {
         Objects.requireNonNull(ring, "ring cannot be null");
         return SparseMatrixMap.instance(this.size(), ring, (index) -> this.value(index));
     }
-
-    /**
-     * main method
-     * @param args
-     *
-    public static void main(String[] args) {
-
-        Scanner input = new Scanner(System.in);
-        System.out.println("Enter Matrix Size");
-        Integer size = Integer.valueOf(input.nextLine());
-        System.out.println("SIZE = " + size);
-     
-        System.out.println("Matrix One Values:");
-        Map<Indexes, Integer> indexMap = new HashMap<>();
-        for (int i = 0; i <= size; i++) {
-            for (int j = 0; j <= size; j++) {
-                Indexes index = new Indexes(i, j);
-                System.out.println("Value at: " + index.toString());
-                indexMap.put(index, Integer.valueOf(input.nextLine()));
-            }
-        }
-        MatrixMap<Integer> m1 = MatrixMap.instance(new Indexes(size, size), (index) -> indexMap.get(index));
-        System.out.println("MATRIX 1: ");
-        System.out.println(m1.toString());
-
-        System.out.println("Matrix Two Values:");
-        Map<Indexes, Integer> indexMap2 = new HashMap<>();
-        for (int i = 0; i <= size; i++) {
-            for (int j = 0; j <= size; j++) {
-                Indexes index = new Indexes(i, j);
-                System.out.println("Value at: " + index.toString());
-                indexMap2.put(index, Integer.valueOf(input.nextLine()));
-            }
-        }
-        MatrixMap<Integer> m2 = MatrixMap.instance(new Indexes(size, size), (index) -> indexMap2.get(index));
-        System.out.println("MATRIX 1: ");
-        System.out.println(m1.toString());
-
-        System.out.println("ADD or MULTIPLY ([A/M])");
-        String addOrMultiply = input.nextLine();
-
-        input.close();
-
-        Ring<Integer> intRing = new IntegerRing();
-
-        if (addOrMultiply.equals("A")) {
-            MatrixMap<Integer> sum = m1.plus(m2, (x, y) -> intRing.sum(x, y));
-            System.out.println(sum);
-        }
-        else if (addOrMultiply.equals("M")) {
-            MatrixMap<Integer> product = m1.times(m2, intRing);
-            System.out.println(product);
-        }
-        else {
-            System.out.println("Invalid selection");
-        }
-    }  
-    */
 }
 

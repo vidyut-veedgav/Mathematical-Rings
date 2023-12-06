@@ -159,11 +159,26 @@ public final class SparseMatrixMap<T> implements Matrix<T> {
 
         //null check
         Objects.requireNonNull(ring, "ring cannot be null");
+        InvalidLengthException.requireNonEmpty(Cause.ROW, size); //checks if the rows are valid
+        InvalidLengthException.requireNonEmpty(Cause.COLUMN, size); //checks if the columns are valid
+
+        Map<Indexes, S> matrix = new HashMap<>(); //creating the map
+        List<Indexes> indexes = Indexes.stream(size, size).filter(index -> index.areDiagonal()).collect(Collectors.toList()); //creating a list of indexes
+
+        //populating the map with the applied mappings at each index, excluding mappings to zero
+        for (Indexes index : indexes) {
+            S value = ring.identity();
+            matrix.put(index, value);
+        }
+        return new SparseMatrixMap<>(Map.copyOf(matrix), ring);
+        /* 
+        //null check
+        Objects.requireNonNull(ring, "ring cannot be null");
 
         //calling the foundational instance method
         return instance(size, size, ring, (index) -> (index.areDiagonal()) ? ring.identity() : ring.zero());
+        */
     }
-
 
     /**
      * Computes Matrix addition by creating a new instance of a SparseMatrixMap, and using the specified BinaryOperator interface in the argument to apply addition between this SparseMatrixMap and the other Matrix. 

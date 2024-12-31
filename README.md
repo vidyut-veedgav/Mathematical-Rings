@@ -1,4 +1,4 @@
-# Mathematical Rings Implementation in Java
+# Mathematical Rings in Java
 
 ## Overview
 This project implements various mathematical ring structures in Java, providing a robust framework for algebraic computations. It includes implementations for different types of rings including integers, polynomials, and matrices.
